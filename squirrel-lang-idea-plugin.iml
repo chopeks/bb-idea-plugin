@@ -22,6 +22,5 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" scope="PROVIDED" name="SQUIRREL_SDK" level="project" />
   </component>
 </module>
