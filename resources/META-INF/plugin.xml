@@ -23,7 +23,10 @@
 
     <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
 
+
     <extensions defaultExtensionNs="com.intellij">
+        <lang.elementManipulator forClass="com.sqide.psi.impl.SquirrelIdImpl"
+                                 implementationClass="com.sqide.psi.impl.manipulator.SquirrelIdManipulator"/>
         <!-- Add your extensions here -->
         <fileTypeFactory implementation="com.sqide.SquirrelFileTypeFactory"/>
         <lang.parserDefinition language="Squirrel" implementationClass="com.sqide.SquirrelParserDefinition"/>

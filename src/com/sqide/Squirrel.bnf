@@ -8,6 +8,7 @@
   psiImplClassSuffix="Impl"
   psiPackage="com.sqide.psi"
   psiImplPackage="com.sqide.psi.impl"
+  psiImplUtilClass="com.sqide.psi.impl.SquirrelPsiImplUtil"
 
   elementTypeHolderClass="com.sqide.SquirrelTokenTypes"
   elementTypeClass="com.sqide.psi.SquirrelElementType"
@@ -184,7 +185,7 @@ VarDeclarationList ::= VarItem (',' VarItem)*
 VarItem ::= Id VarInit?
 VarInit ::= '=' ExpressionWithNoComma
 
-FunctionDeclaration ::= function FunctionName Parameters FunctionBody  {pin=1}
+FunctionDeclaration ::= function FunctionName Parameters FunctionBody  {pin=1 mixin="com.sqide.psi.impl.SquirrelNamedElementImpl" implements="com.sqide.psi.SquirrelNamedElement" methods=[getNameIdentifier setName]}
 FunctionName ::= Id ('::' (Id | constructor))*
 FunctionBody ::= StatementOrEmpty
 Parameters ::= '(' ParameterList? ')'
@@ -343,4 +344,4 @@ Literal ::=
   | true | false
   | null
 
-Id ::= '::'? IDENTIFIER { name="identifier" }
+Id ::= '::'? IDENTIFIER { name="identifier" methods=[getReference]}
