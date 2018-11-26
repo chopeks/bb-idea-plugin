@@ -5,7 +5,9 @@ plugins {
 
 allprojects {
     apply plugin: 'java'
-    tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
 
     sourceSets {
         main {
@@ -31,56 +33,5 @@ idea {
     }
     module {
         generatedSourceDirs += file('gen')
-    }
-}
-
-apply plugin: 'org.jetbrains.grammarkit'
-import org.jetbrains.grammarkit.tasks.*
-grammarKit {
-    // version of IntelliJ patched JFlex (see bintray link below), Default is 1.7.0-1
-    jflexRelease = '1.7.0-1'
-
-    // tag or short commit hash of Grammar-Kit to use (see link below). Default is 2017.1.6
-    grammarKitRelease = '6452fde524'
-
-    task generateSquirrellParser(type: GenerateParser) {
-        // source bnf file
-        source = 'src/com/sqide/Squirrel.bnf'
-
-        // optional, task-specific root for the generated files. Default: none
-        targetRoot = 'gen'
-        pathToParser = "/com/sqide/SquirrelParser.java"
-        pathToPsiRoot = "/com/sqide/psi"
-
-        // if set, plugin will remove a parser output file and psi output directory before generating new ones. Default: false
-        purgeOldFiles = true
-    }
-
-    task generateSquirrellLexer(type: GenerateLexer) {
-        // source flex file
-        source = "src/com/sqide/lexer/SquirrelLexer.flex"
-
-        // target directory for lexer
-        targetDir = "gen/com/sqide/lexer/"
-
-        // target classname, target file will be targetDir/targetClass.java
-        targetClass = "_SquirrelLexer"
-
-        // if set, plugin will remove a lexer output file before generating new one. Default: false
-        purgeOldFiles = true
-    }
-
-    task generateSquirrellDocLexer(type: GenerateLexer) {
-        // source flex file
-        source = "src/com/sqide/lexer/SquirrelDocLexer.flex"
-
-        // target directory for lexer
-        targetDir = "gen/com/sqide/lexer/"
-
-        // target classname, target file will be targetDir/targetClass.java
-        targetClass = "_SquirreDoclLexer"
-
-        // if set, plugin will remove a lexer output file before generating new one. Default: false
-        purgeOldFiles = true
     }
 }
