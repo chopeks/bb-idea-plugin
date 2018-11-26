@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/squirrel-lang-idea-plugin.iml" filepath="$PROJECT_DIR$/squirrel-lang-idea-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/squirrel-lang-idea-plugin.main.iml" filepath="$PROJECT_DIR$/.idea/modules/squirrel-lang-idea-plugin.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/squirrel-lang-idea-plugin.test.iml" filepath="$PROJECT_DIR$/.idea/modules/squirrel-lang-idea-plugin.test.iml" />
     </modules>
   </component>
 </project>
