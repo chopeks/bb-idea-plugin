@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.grammarkit' version '2018.2.2'
 }
 
+version = System.getenv().getOrDefault("BUILD_NUMBER", "LOCAL")
+
 allprojects {
     apply plugin: 'java'
     tasks.withType(JavaCompile) {
