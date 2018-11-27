@@ -1,7 +1,5 @@
 #!/bin/bash
 
-export VERSION=$BUILD_NUMBER
-
 if [[ ! -d "idea" ]]; then
     if [[ ! -f "ideaIC-2018.3.zip" ]]; then
         echo "Downloading idea"
