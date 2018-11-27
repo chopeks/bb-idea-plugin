@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ ! -d "idea" ]; then
-    curl https://cache-redirector.jetbrains.com/www.jetbrains.com/intellij-repository/releases/com/jetbrains/intellij/idea/ideaIC/2018.3/ideaIC-2018.3.zip
+    wget https://cache-redirector.jetbrains.com/www.jetbrains.com/intellij-repository/releases/com/jetbrains/intellij/idea/ideaIC/2018.3/ideaIC-2018.3.zip
     unzip ideaIC-2018.3.zip -d idea
 fi
 
