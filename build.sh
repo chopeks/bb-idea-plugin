@@ -1,8 +1,11 @@
 #!/bin/bash
 
+if [ ! -f "ideaIC-2018.3.zip" ]; then
+    wget -q https://cache-redirector.jetbrains.com/www.jetbrains.com/intellij-repository/releases/com/jetbrains/intellij/idea/ideaIC/2018.3/ideaIC-2018.3.zip
+fi
+
 if [ ! -d "idea" ]; then
-    wget https://cache-redirector.jetbrains.com/www.jetbrains.com/intellij-repository/releases/com/jetbrains/intellij/idea/ideaIC/2018.3/ideaIC-2018.3.zip
-    unzip ideaIC-2018.3.zip -d idea
+    unzip -q ideaIC-2018.3.zip -d idea
 fi
 
 rm -rf gen
