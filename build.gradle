@@ -5,6 +5,14 @@ plugins {
 
 version = System.getenv().getOrDefault("BUILD_NUMBER", "LOCAL")
 
+apply plugin: 'idea'
+
+idea {
+    module {
+        // https://github.com/gradle/kotlin-dsl/issues/537/
+        excludeDirs = excludeDirs + file("testData") + file("deps") + file("out")
+    }
+}
 allprojects {
     apply plugin: 'java'
     tasks.withType(JavaCompile) {
@@ -26,14 +34,10 @@ allprojects {
         localPath 'idea'
         pluginName 'Squirrel'
     }
-}
 
-apply plugin: 'idea'
-idea {
-    project {
-        vcs = 'Git'
-    }
-    module {
-        generatedSourceDirs += file('gen')
+    idea {
+        module {
+            generatedSourceDirs.add(file("src/gen"))
+        }
     }
 }

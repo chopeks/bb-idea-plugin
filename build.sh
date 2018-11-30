@@ -1,12 +1,13 @@
 #!/bin/bash
+IDEA_VERSION=183.4284.148
 
 if [[ ! -d "idea" ]]; then
     if [[ ! -f "ideaIC-2018.3.zip" ]]; then
         echo "Downloading idea"
-        wget -q https://cache-redirector.jetbrains.com/www.jetbrains.com/intellij-repository/releases/com/jetbrains/intellij/idea/ideaIC/2018.3/ideaIC-2018.3.zip
+        wget -q "https://www.jetbrains.com/intellij-repository/releases/com/jetbrains/intellij/idea/ideaIC/$IDEA_VERSION/ideaIC-$IDEA_VERSION.zip"
     fi
     echo "unzipping idea"
-    unzip -q ideaIC-2018.3.zip -d idea
+    unzip -q "ideaIC-$IDEA_VERSION.zip" -d idea
 fi
 
 rm -rf gen
