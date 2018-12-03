@@ -1,4 +1,5 @@
-@include ackermann.nut
+@include "ackermann.nut"
+@include "generators.nut"
 
 local n;
 
