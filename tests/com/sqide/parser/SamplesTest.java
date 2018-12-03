@@ -53,6 +53,9 @@ public class SamplesTest extends ParsingTestCase {
     public void testTailstate() {
         doTest(true);
     }
+    public void testInclude() {
+        doTest(true);
+    }
 
     @Override
     protected String getTestDataPath() {

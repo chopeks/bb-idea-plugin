@@ -147,7 +147,8 @@ private StatementWithSemi ::= Statement delimiter { pin=1 recoverWhile=statement
 private statement_recover ::= !(<<eof>> | delimiter | '{' | '}' | const | enum | local | function | class | return | break | continue | yield | throw | for | foreach | while | do | if | else | switch | case | default | try | catch)
 
 Statement ::=
-    Block
+    IncludeDeclaration
+    | Block
     | ExpressionStatement
     | ConstDeclaration
     | EnumDeclaration
@@ -168,6 +169,8 @@ Statement ::=
     | ContinueStatement
     | YieldStatement
     | ThrowStatement
+
+IncludeDeclaration ::= '@include' IDENTIFIER DOT 'nut' {pin=1}
 
 private StatementOrEmpty ::= Statement | ';'
 
