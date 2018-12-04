@@ -134,9 +134,9 @@
 //    g = "234"
 //}
 
-SquirrelFile ::= !<<eof>>  IncludeDeclaration* Statements
+SquirrelFile ::= !<<eof>> Statements
 
-private semi ::= '<NL>' | ';' {name="semicolon"}
+private semi ::= SEMICOLON_SYNTHETIC | ';' {name="semicolon"}
 private multisemi ::= semi+ {name="semicolon"}
 private delimiter ::= multisemi | &'}' | <<eof>> | <<prevIsBrace>>
 
@@ -147,7 +147,8 @@ private StatementWithSemi ::= Statement delimiter { pin=1 recoverWhile=statement
 private statement_recover ::= !(<<eof>> | delimiter | '{' | '}' | const | enum | local | function | class | return | break | continue | yield | throw | for | foreach | while | do | if | else | switch | case | default | try | catch | '@include')
 
 Statement ::=
-    Block
+    IncludeDeclaration
+    | Block
     | ExpressionStatement
     | ConstDeclaration
     | EnumDeclaration
@@ -169,12 +170,12 @@ Statement ::=
     | YieldStatement
     | ThrowStatement
 
-IncludeDeclaration ::= '@include' STRING ';'? {pin=1}
 
 private StatementOrEmpty ::= Statement | ';'
 
 Block ::= '{' Statements? '}' {pin=1}
 
+IncludeDeclaration ::= "@include" STRING {pin=1 name="include"}
 ConstDeclaration ::= const Id '=' Literal {pin=1}
 
 EnumDeclaration ::= enum Id '{' EnumItemDeclarations? '}' {pin=1}
