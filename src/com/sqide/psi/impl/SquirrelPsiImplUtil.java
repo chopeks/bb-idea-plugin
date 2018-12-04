@@ -9,10 +9,12 @@ import com.intellij.util.indexing.FileBasedIndex;
 import com.sqide.SquirrelFileType;
 import com.sqide.psi.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.SystemIndependent;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SquirrelPsiImplUtil {
 
@@ -31,15 +33,27 @@ public class SquirrelPsiImplUtil {
         return element.getFunctionName();
     }
 
+    private static ConcurrentHashMap<String, Collection<VirtualFile>> projectFiles = new ConcurrentHashMap<>();
+
 
     public static PsiReference getReference(SquirrelId element) {
-        return new SquirrelFunctionDeclarationPsiReferenceBase(element);
+        @SystemIndependent String projectFilePath = element.getProject().getProjectFilePath();
+        if (!projectFiles.contains(projectFilePath)) {
+            projectFiles.putIfAbsent(projectFilePath,
+                    FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, SquirrelFileType.INSTANCE,
+                            GlobalSearchScope.allScope(element.getProject())));
+        }
+
+        return new SquirrelFunctionDeclarationPsiReferenceBase(element, projectFiles.get(projectFilePath));
     }
 
     public static class SquirrelFunctionDeclarationPsiReferenceBase extends PsiPolyVariantReferenceBase<PsiElement> {
 
-        SquirrelFunctionDeclarationPsiReferenceBase(PsiElement element) {
+        private Collection<VirtualFile> virtualFiles;
+
+        SquirrelFunctionDeclarationPsiReferenceBase(PsiElement element, Collection<VirtualFile> virtualFiles) {
             super(element);
+            this.virtualFiles = virtualFiles;
         }
 
         @NotNull
@@ -54,9 +68,7 @@ public class SquirrelPsiImplUtil {
             List<ResolveResult> result = new ArrayList<>();
             String id = myElement.getText();
 
-            Collection<VirtualFile> virtualFiles =
-                    FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, SquirrelFileType.INSTANCE,
-                            GlobalSearchScope.allScope(myElement.getProject()));
+
 
             for (VirtualFile vf : virtualFiles) {
 
@@ -96,7 +108,7 @@ public class SquirrelPsiImplUtil {
                                 Collection<SquirrelClassMember> variables = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelClassMember.class);
                                 for (SquirrelClassMember member : variables) {
                                     PsiElement variable = member.getKey();
-                                    if (variable!= null) {
+                                    if (variable != null) {
                                         if (id.equals(variable.getText())) {
                                             result.add(new PsiElementResolveResult(variable));
                                         }
