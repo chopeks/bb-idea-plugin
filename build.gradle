@@ -22,7 +22,7 @@ allprojects {
     sourceSets {
         main {
             java.srcDirs 'src', 'gen'
-            resources.srcDirs 'resources', 'pluginResources'
+            resources.srcDirs 'resources', 'pluginResources', 'src'
         }
         test {
             java.srcDir 'tests'
