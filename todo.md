@@ -1,9 +1,12 @@
-* make for in UI
-
-* fix settings - bundle issue
-
+* includes can have ;
+* includes don't always come first
 * make includes clickable
+* enums constants
 
+
+---
 * support {} syntax
 
-* only look for identifiers in included files
+---
+
+ 

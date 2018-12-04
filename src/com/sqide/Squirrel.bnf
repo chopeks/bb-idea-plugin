@@ -169,7 +169,7 @@ Statement ::=
     | YieldStatement
     | ThrowStatement
 
-IncludeDeclaration ::= '@include' STRING {pin=1}
+IncludeDeclaration ::= '@include' STRING ';'? {pin=1}
 
 private StatementOrEmpty ::= Statement | ';'
 
