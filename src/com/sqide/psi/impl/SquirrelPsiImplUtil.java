@@ -83,6 +83,34 @@ public class SquirrelPsiImplUtil {
                                     }
                                 }
                             }
+                            if (result.isEmpty()) {
+                                Collection<SquirrelVarItem> methodDeclarations = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelVarItem.class);
+                                for (SquirrelVarItem methodDeclaration : methodDeclarations) {
+                                    PsiElement variable = methodDeclaration.getId().getIdentifier();
+                                    if (id.equals(variable.getText())) {
+                                        result.add(new PsiElementResolveResult(variable));
+                                    }
+                                }
+                            }
+                            if (result.isEmpty()) {
+                                Collection<SquirrelClassDeclaration> className = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelClassDeclaration.class);
+                                for (SquirrelClassDeclaration classDeclaration : className) {
+                                    SquirrelClassName idList = classDeclaration.getClassNameList().get(0);
+                                    if (id.equals(idList.getText())) {
+                                        result.add(new PsiElementResolveResult(idList));
+                                    }
+                                }
+                            }
+                            if (result.isEmpty()) {
+                                Collection<SquirrelConstDeclaration> className = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelConstDeclaration.class);
+                                for (SquirrelConstDeclaration classDeclaration : className) {
+                                    SquirrelId idList = classDeclaration.getId();
+                                    if (id.equals(idList.getText())) {
+                                        result.add(new PsiElementResolveResult(idList));
+                                    }
+                                }
+                            }
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
