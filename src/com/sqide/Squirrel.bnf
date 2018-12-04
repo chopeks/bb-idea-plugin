@@ -175,7 +175,7 @@ private StatementOrEmpty ::= Statement | ';'
 
 Block ::= '{' Statements? '}' {pin=1}
 
-IncludeDeclaration ::= "@include" STRING {pin=1 name="include"}
+IncludeDeclaration ::= "@include" STRING {pin=1 name="include" methods=[getReference]}
 ConstDeclaration ::= const Id '=' Literal {pin=1}
 
 EnumDeclaration ::= enum Id '{' EnumItemDeclarations? '}' {pin=1}
@@ -188,7 +188,7 @@ VarDeclarationList ::= VarItem (',' VarItem)*
 VarItem ::= Id VarInit?
 VarInit ::= '=' ExpressionWithNoComma
 
-FunctionDeclaration ::= function FunctionName Parameters FunctionBody  {pin=1 mixin="com.sqide.psi.impl.SquirrelNamedElementImpl" implements="com.sqide.psi.SquirrelNamedElement" methods=[getNameIdentifier setName]}
+FunctionDeclaration ::= function FunctionName Parameters FunctionBody  {pin=1}
 FunctionName ::= Id ('::' (Id | constructor))*
 FunctionBody ::= StatementOrEmpty
 Parameters ::= '(' ParameterList? ')'

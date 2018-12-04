@@ -1,5 +1,6 @@
 package com.sqide.psi.impl;
 
+import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.search.FileTypeIndex;
@@ -11,6 +12,8 @@ import com.sqide.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.SystemIndependent;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -19,18 +22,19 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class SquirrelPsiImplUtil {
-
-    public static PsiElement setName(SquirrelFunctionDeclaration element, String newName) {
-        return element;
-    }
-
-    public static PsiElement getNameIdentifier(SquirrelFunctionDeclaration element) {
-        return element.getFunctionName();
-    }
-
     private static ConcurrentHashMap<String, Collection<VirtualFile>> projectFiles = new ConcurrentHashMap<>();
     private static ConcurrentHashMap<SquirrelId, SquirrelFunctionDeclarationPsiReferenceBase> lookups = new ConcurrentHashMap<>();
 
+    public static PsiReference getReference(SquirrelIncludeDeclaration includeElement) {
+        String includeLocation = includeElement.getString().getText().replaceAll("\"", "");
+        String thisFile = includeElement.getContainingFile().getVirtualFile().getParent().getPath();
+        Path resolve = Paths.get(thisFile).resolve(includeLocation).toAbsolutePath().normalize();
+
+        VirtualFile file = LocalFileSystem.getInstance().findFileByIoFile(resolve.toFile());
+        PsiFile file1 = PsiManager.getInstance(includeElement.getProject()).findFile(file);
+
+        return new SquirrelFilePsiReferenceBase(includeElement, file1);
+    }
 
     public static PsiReference getReference(SquirrelId element) {
         @SystemIndependent String projectFilePath = Objects.requireNonNull(element.getProject().getProjectFilePath());
@@ -44,6 +48,28 @@ public class SquirrelPsiImplUtil {
             lookups.putIfAbsent(element, new SquirrelFunctionDeclarationPsiReferenceBase(element, projectFiles.get(projectFilePath)));
         }
         return lookups.get(element);
+    }
+
+    public static class SquirrelFilePsiReferenceBase extends PsiPolyVariantReferenceBase<PsiElement> {
+
+        private final PsiFile reference;
+
+        SquirrelFilePsiReferenceBase(@NotNull PsiElement psiElement, PsiFile reference) {
+            super(psiElement);
+            this.reference = reference;
+        }
+
+        @NotNull
+        @Override
+        public Object[] getVariants() {
+            return new Object[0];
+        }
+
+        @NotNull
+        @Override
+        public ResolveResult[] multiResolve(boolean b) {
+            return new ResolveResult[]{new PsiElementResolveResult(reference)};
+        }
     }
 
     public static class SquirrelFunctionDeclarationPsiReferenceBase extends PsiPolyVariantReferenceBase<PsiElement> {
