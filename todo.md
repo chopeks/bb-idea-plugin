@@ -1,11 +1,9 @@
-* build locally without intellij
+* make for in UI
 
-* set up teamcity build
+* fix settings - bundle issue
 
-* repository for plugin?
+* make includes clickable
 
-* improvements:
-    * method calls
-    * imports
-    * variables
-    *
+* support {} syntax
+
+* only look for identifiers in included files
