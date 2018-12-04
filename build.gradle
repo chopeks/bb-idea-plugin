@@ -31,6 +31,7 @@ allprojects {
 
     apply plugin: 'org.jetbrains.intellij'
     intellij {
+        patchPluginXml.sinceBuild = '131'
         localPath 'idea'
         pluginName 'Squirrel'
     }
