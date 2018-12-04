@@ -57,6 +57,10 @@ public class SamplesTest extends ParsingTestCase {
         doTest(true);
     }
 
+    public void testInlineJson() {
+        doTest(true);
+    }
+
     @Override
     protected String getTestDataPath() {
         return "../squirrel-lang-idea-plugin/testData";
