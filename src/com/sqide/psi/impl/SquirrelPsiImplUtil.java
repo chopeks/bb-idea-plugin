@@ -31,9 +31,13 @@ public class SquirrelPsiImplUtil {
         Path resolve = Paths.get(thisFile).resolve(includeLocation).toAbsolutePath().normalize();
 
         VirtualFile file = LocalFileSystem.getInstance().findFileByIoFile(resolve.toFile());
-        PsiFile file1 = PsiManager.getInstance(includeElement.getProject()).findFile(file);
+        if (file == null) {
+            return null;
+        } else {
+            PsiFile file1 = PsiManager.getInstance(includeElement.getProject()).findFile(file);
 
-        return new SquirrelFilePsiReferenceBase(includeElement, file1);
+            return new SquirrelFilePsiReferenceBase(includeElement, file1);
+        }
     }
 
     public static PsiReference getReference(SquirrelId element) {
