@@ -109,7 +109,9 @@ public class SquirrelPsiImplUtil {
         private ResolveResult[] lookup() {
             List<ResolveResult> result = new ArrayList<>();
 
-            searchInFile(result, myElement.getContainingFile().getVirtualFile());
+            paramSearch(result);
+            if (result.isEmpty())
+                searchInFile(result, myElement.getContainingFile().getVirtualFile());
 
             if (result.isEmpty())
                 for (VirtualFile vf : allFilesInProject) {
@@ -119,22 +121,24 @@ public class SquirrelPsiImplUtil {
             return result.toArray(new ResolveResult[0]);
         }
 
+        private void paramSearch(List<ResolveResult> result) {
+            String id = myElement.getText();
+            Collection<SquirrelParameter> parameterDeclarations = PsiTreeUtil.findChildrenOfType(myElement.getContainingFile(), SquirrelParameter.class);
+            for (SquirrelParameter param : parameterDeclarations) {
+                SquirrelId id1 = param.getId();
+
+                if (id.equals(id1.getText()) && PsiTreeUtil.isAncestor(param.getParent().getParent().getParent(), myElement, false)) {
+                    result.add(new PsiElementResolveResult(param));
+                }
+            }
+        }
+
         private void searchInFile(List<ResolveResult> result, VirtualFile vf) {
             try {
                 SquirrelFile squirrelFile = (SquirrelFile) PsiManager.getInstance(myElement.getProject()).findFile(vf);
                 if (squirrelFile != null) {
                     try {
                         String id = myElement.getText();
-
-                        if (result.isEmpty()) {
-                            Collection<SquirrelParameter> parameterDeclarations = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelParameter.class);
-                            for (SquirrelParameter param : parameterDeclarations) {
-                                SquirrelId id1 = param.getId();
-                                if (id.equals(id1.getText())) {
-                                    result.add(new PsiElementResolveResult(param));
-                                }
-                            }
-                        }
 
                         if (result.isEmpty()) {
                             Collection<SquirrelVarItem> variables = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelVarItem.class);
