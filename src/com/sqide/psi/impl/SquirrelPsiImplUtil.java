@@ -1,5 +1,11 @@
 package com.sqide.psi.impl;
 
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
@@ -14,10 +20,7 @@ import org.jetbrains.annotations.SystemIndependent;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -41,11 +44,14 @@ public class SquirrelPsiImplUtil {
     }
 
     public static PsiReference getReference(SquirrelId element) {
-        @SystemIndependent String projectFilePath = Objects.requireNonNull(element.getProject().getProjectFilePath());
+        boolean inTestSourceContent = ProjectRootManager.getInstance(element.getProject()).getFileIndex().isInTestSourceContent(element.getContainingFile().getVirtualFile());
+        String projectFilePath = Objects.requireNonNull(element.getProject().getProjectFilePath()) + inTestSourceContent;
+
         if (!projectFiles.containsKey(projectFilePath)) {
-            projectFiles.putIfAbsent(projectFilePath,
-                    FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, SquirrelFileType.INSTANCE,
-                            GlobalSearchScope.allScope(element.getProject())));
+            Collection<VirtualFile> containingFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, SquirrelFileType.INSTANCE,
+                    GlobalSearchScope.moduleRuntimeScope(ModuleUtil.findModuleForPsiElement(element), inTestSourceContent));
+
+            projectFiles.putIfAbsent(projectFilePath, containingFiles);
         }
 
         if (!lookups.containsKey(element)) {
