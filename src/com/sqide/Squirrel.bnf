@@ -352,7 +352,7 @@ Json ::= JsonObject | JsonArray
 JsonArray ::= '[' [!']' JsonValue (!']' ',' JsonValue) *] ']' {pin(".*")=1}
 JsonObject ::= '{' [!'}' JsonProp (!'}' ',' JsonProp) *] '}' {pin(".*")=1}
 JsonProp ::= STRING ':' JsonValue {pin=1 recoverWhile=JsonRecover}
-JsonValue ::= Literal | SimpleRefExpression | Json
+JsonValue ::= Literal | ReferenceExpression | Json
 private JsonRecover ::= !(',' | ']' | '}' | '[' | '{')
 
 Id ::= '::'? IDENTIFIER { name="identifier" methods=[getReference]}
