@@ -8,12 +8,15 @@
 
 ### Features
 - Control+b for 
+    - parameters
     - variables
     - constants
     - functions
     - methods
+    - classes
     - class members
     - enum constants
+    - includes
     
 ### Build Locally
 

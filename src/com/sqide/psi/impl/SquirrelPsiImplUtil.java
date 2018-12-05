@@ -108,6 +108,7 @@ public class SquirrelPsiImplUtil {
         @NotNull
         private ResolveResult[] lookup() {
             List<ResolveResult> result = new ArrayList<>();
+
             searchInFile(result, myElement.getContainingFile().getVirtualFile());
 
             if (result.isEmpty())
@@ -124,24 +125,17 @@ public class SquirrelPsiImplUtil {
                 if (squirrelFile != null) {
                     try {
                         String id = myElement.getText();
-                        Collection<SquirrelFunctionDeclaration> functionDeclarations = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelFunctionDeclaration.class);
-                        for (SquirrelFunctionDeclaration functionDeclaration : functionDeclarations) {
-                            SquirrelFunctionName functionName1 = functionDeclaration.getFunctionName();
-                            if (functionName1 != null) {
-                                if (id.equals(functionName1.getText())) {
-                                    result.add(new PsiElementResolveResult(functionName1));
-                                }
-                            }
-                        }
+
                         if (result.isEmpty()) {
-                            Collection<SquirrelMethodDeclaration> methodDeclarations = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelMethodDeclaration.class);
-                            for (SquirrelMethodDeclaration methodDeclaration : methodDeclarations) {
-                                SquirrelFunctionName methodName1 = methodDeclaration.getFunctionName();
-                                if (id.equals(methodName1.getText())) {
-                                    result.add(new PsiElementResolveResult(methodName1));
+                            Collection<SquirrelParameter> parameterDeclarations = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelParameter.class);
+                            for (SquirrelParameter param : parameterDeclarations) {
+                                SquirrelId id1 = param.getId();
+                                if (id.equals(id1.getText())) {
+                                    result.add(new PsiElementResolveResult(param));
                                 }
                             }
                         }
+
                         if (result.isEmpty()) {
                             Collection<SquirrelVarItem> variables = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelVarItem.class);
                             for (SquirrelVarItem methodDeclaration : variables) {
@@ -151,6 +145,29 @@ public class SquirrelPsiImplUtil {
                                 }
                             }
                         }
+
+                        if (result.isEmpty()) {
+                            Collection<SquirrelFunctionDeclaration> functionDeclarations = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelFunctionDeclaration.class);
+                            for (SquirrelFunctionDeclaration functionDeclaration : functionDeclarations) {
+                                SquirrelFunctionName functionName1 = functionDeclaration.getFunctionName();
+                                if (functionName1 != null) {
+                                    if (id.equals(functionName1.getText())) {
+                                        result.add(new PsiElementResolveResult(functionName1));
+                                    }
+                                }
+                            }
+                        }
+
+                        if (result.isEmpty()) {
+                            Collection<SquirrelMethodDeclaration> methodDeclarations = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelMethodDeclaration.class);
+                            for (SquirrelMethodDeclaration methodDeclaration : methodDeclarations) {
+                                SquirrelFunctionName methodName1 = methodDeclaration.getFunctionName();
+                                if (id.equals(methodName1.getText())) {
+                                    result.add(new PsiElementResolveResult(methodName1));
+                                }
+                            }
+                        }
+
                         if (result.isEmpty()) {
                             Collection<SquirrelConstDeclaration> className = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelConstDeclaration.class);
                             for (SquirrelConstDeclaration constDeclaration : className) {
@@ -180,6 +197,7 @@ public class SquirrelPsiImplUtil {
                                 }
                             }
                         }
+
                         if (result.isEmpty()) {
                             Collection<SquirrelClassDeclaration> className = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelClassDeclaration.class);
                             for (SquirrelClassDeclaration classDeclaration : className) {
