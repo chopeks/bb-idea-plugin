@@ -22,7 +22,7 @@
 ```
 Produces the zip under build/distribution
 
-For developing in Intellij, just open as is: don't try to get gradle to generate the idea files for you (or link the gradle build to the project).
+For developing in Intellij, just do file->new->project->Intellij Plugin Project and point to the directory where this project is checked out. Don't try to get gradle to generate the idea files for you (or link the gradle build to the project).
 
 To re-generate the gen src from intellij click Control+Shift+g from the Squirrel.bnf file. 
 
