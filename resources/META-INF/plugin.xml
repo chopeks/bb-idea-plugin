@@ -29,6 +29,8 @@
                                  implementationClass="com.sqide.psi.impl.manipulator.SquirrelIdManipulator"/>
         <lang.elementManipulator forClass="com.sqide.psi.impl.SquirrelIncludeDeclarationImpl"
                                  implementationClass="com.sqide.psi.impl.manipulator.SquirrelIncludeDeclarationManipulator"/>
+        <lang.elementManipulator forClass="com.sqide.psi.impl.SquirrelStringLiteralImpl"
+                                 implementationClass="com.sqide.psi.impl.manipulator.SquirrelStringLiteralManipulator"/>
         <!-- Add your extensions here -->
         <fileTypeFactory implementation="com.sqide.SquirrelFileTypeFactory"/>
         <lang.parserDefinition language="Squirrel" implementationClass="com.sqide.SquirrelParserDefinition"/>

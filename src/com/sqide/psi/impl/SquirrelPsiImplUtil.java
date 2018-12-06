@@ -41,6 +41,30 @@ public class SquirrelPsiImplUtil {
         }
     }
 
+    public static PsiReference getReference(SquirrelStringLiteral element) {
+        PsiElement statement = PsiTreeUtil.findFirstParent(element, elem -> elem instanceof SquirrelExpressionStatement);
+        if (statement == null) {
+            return null;
+        }
+
+        String statementText = statement.getText();
+        if (!statementText.startsWith("device.send") && !statementText.startsWith("agent.send") && !statementText.startsWith("device.on") && !statementText.startsWith("agent.on")) {
+            return null;
+        }
+
+
+        String projectFilePath = Objects.requireNonNull(element.getProject().getProjectFilePath()) + false;
+
+        if (!projectFiles.containsKey(projectFilePath)) {
+            Collection<VirtualFile> containingFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, SquirrelFileType.INSTANCE,
+                    GlobalSearchScope.moduleRuntimeScope(ModuleUtil.findModuleForPsiElement(element), false));
+
+            projectFiles.putIfAbsent(projectFilePath, containingFiles);
+        }
+
+        return new AgentDeviceReference(element, statementText, projectFiles.get(projectFilePath));
+    }
+
     public static PsiReference getReference(SquirrelId element) {
         boolean inTestSourceContent = ProjectRootManager.getInstance(element.getProject()).getFileIndex().isInTestSourceContent(element.getContainingFile().getVirtualFile());
         String projectFilePath = Objects.requireNonNull(element.getProject().getProjectFilePath()) + inTestSourceContent;
@@ -225,6 +249,37 @@ public class SquirrelPsiImplUtil {
                 e.printStackTrace();
                 throw e;
             }
+        }
+    }
+
+    private static class AgentDeviceReference extends PsiPolyVariantReferenceBase<PsiElement> {
+
+        private final String statementText;
+        private Collection<VirtualFile> virtualFiles;
+
+        AgentDeviceReference(SquirrelStringLiteral element, String statementText, Collection<VirtualFile> virtualFiles) {
+            super(element);
+            this.statementText = statementText;
+            this.virtualFiles = virtualFiles;
+        }
+
+        @NotNull
+        @Override
+        public ResolveResult[] multiResolve(boolean b) {
+            for (VirtualFile vf : virtualFiles) {
+                SquirrelFile squirrelFile = (SquirrelFile) PsiManager.getInstance(myElement.getProject()).findFile(vf);
+                Collection<SquirrelExpressionStatement> childrenOfType = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelExpressionStatement.class);
+
+                for (SquirrelExpressionStatement squirrelExpressionStatement : childrenOfType) {
+                    String prefix = (statementText.startsWith("agent") ? "device" : "agent") + "." + (statementText.contains("send") ? "on" : "send") + "(" + myElement.getText();
+                    if (squirrelExpressionStatement.getText().startsWith(prefix)) {
+                        return new ResolveResult[]{
+                                new PsiElementResolveResult(squirrelExpressionStatement)};
+                    }
+                }
+
+            }
+            return new PsiElementResolveResult[0];
         }
     }
 }

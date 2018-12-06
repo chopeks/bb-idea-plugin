@@ -344,15 +344,17 @@ JsonExpression ::= Json
 Literal ::=
     '-'? INT
   | '-'? FLOAT
-  | STRING
+  | StringLiteral
   | true | false
   | null
+
+StringLiteral ::= STRING {methods =[getReference]}
 
 Json ::= JsonObject | JsonArray
 JsonArray ::= '[' [!']' JsonValue (!']' ',' JsonValue) *] ']' {pin(".*")=1}
 JsonObject ::= '{' [!'}' JsonProp (!'}' ',' JsonProp) *] '}' {pin(".*")=1}
 JsonProp ::= STRING ':' JsonValue {pin=1 recoverWhile=JsonRecover}
-JsonValue ::= Literal | ReferenceExpression | Json
+JsonValue ::= Literal | Expression | Json
 private JsonRecover ::= !(',' | ']' | '}' | '[' | '{')
 
 Id ::= '::'? IDENTIFIER { name="identifier" methods=[getReference]}
