@@ -1,11 +1,8 @@
-* make includes clickable
+* be smarter about local declarations
+    - top level or within the same block
 
 ---
 
 ---
-* support {} syntax
-* enums constants
-* includes don't always come first
-* ~includes can have ;~ too hard
 
  
