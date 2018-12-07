@@ -17,6 +17,7 @@
     - class members
     - enum constants
     - includes
+    - just from agent.on -> device.send (and agent.send -> device.on)
     
 ### Build Locally
 
