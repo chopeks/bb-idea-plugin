@@ -2,6 +2,7 @@ package com.sqide.psi.impl;
 
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
@@ -42,7 +43,13 @@ public class SquirrelPsiImplUtil {
     }
 
     public static PsiReference getReference(SquirrelStringLiteral element) {
-        PsiElement statement = PsiTreeUtil.findFirstParent(element, elem -> elem instanceof SquirrelExpressionStatement);
+        PsiElement statement = PsiTreeUtil.findFirstParent(element, new Condition<PsiElement>() {
+            @Override
+            public boolean value(PsiElement psiElement) {
+                return psiElement instanceof SquirrelExpressionStatement;
+            }
+        });
+
         if (statement == null) {
             return null;
         }
