@@ -2,7 +2,7 @@
 
 ### Local installation
 - Uninstall the Squirrel ide plugin
-- Download the latest Squirrel-<version>.zip from [teamcity](https://teamcity.kiwipowered.com/viewLog.html?buildId=lastSuccessful&buildTypeId=FruitFirmware_SquirrelIdeaPlugin&tab=artifacts)
+- Download the latest Squirrel-<version>.zip from the releases page.
 - Open settings, plugins, click "install plugin from disk", and choose the zip file from 2. 
 
 
