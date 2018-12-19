@@ -36,5 +36,5 @@ There are a few tests from the original plugin, but nothing new. The SamplesTest
 
 - For performance the files and element->resolution are cached. New files/ new usages will need a restart to start appearing. I'm happy with this trade off for the moment: being quick enough to browse is more important that being 
 - The synthetic semi colon detection is broken in some cases. Add semi-colons to includes and local variables if Intellij shows red. It sometimes stops the references from being resolved.
-- Inline json is not supported.    
+ 
       

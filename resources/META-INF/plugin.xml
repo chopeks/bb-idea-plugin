@@ -2,10 +2,14 @@
     <id>com.sqide.test</id>
     <name>Squirrel</name>
     <version>1.0.1</version>
-    <vendor email="neochief@shvetsgroup.com" url="http://shvetsgroup.com">Shvets Group</vendor>
+    <vendor email="technology@kiwipowered.com" url="http://kiwipowered.com">KiWi power</vendor>
 
     <description><![CDATA[
-      Squirrel language support.
+      Squirrel language support, with navigation (Ctrl+B)
+
+      Github: https://github.com/kiwipower/squirrel-lang-idea-plugin
+
+      Fork of https://github.com/shvetsgroup/squirrel-lang-idea-plugin
     ]]></description>
 
     <change-notes><![CDATA[
