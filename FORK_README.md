@@ -2,7 +2,7 @@
 
 ### Local installation
 - Uninstall the Squirrel ide plugin
-- Download the latest Squirrel-<version>.zip from the releases page.
+- Download the latest Squirrel-<version>.zip from the [releases page](../../releases).
 - Open settings, plugins, click "install plugin from disk", and choose the zip file from 2. 
 
 
