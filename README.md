@@ -1,6 +1,6 @@
 ## Kiwi Power's Fork on the Squirrel Idea plugin
 
-Kiwi power's fork of [squireel plugin for intellij](https://github.com/shvetsgroup/squirrel-lang-idea-plugin) 
+Kiwi power's fork of [Shvetsgroup's Squirrel plugin for intellij](https://github.com/shvetsgroup/squirrel-lang-idea-plugin) 
 
 See original [README.md](../ORIGINAL_README.md)
 
