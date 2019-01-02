@@ -6,7 +6,7 @@ See original [README.md](ORIGINAL_README.md)
 
 ### Local installation
 - Uninstall the Squirrel ide plugin
-- Download the latest Squirrel-<version>.zip from the [releases page](../../releases).
+- Download the latest Squirrel-KiwiPowerFork-<version>.zip from the [releases page](../../releases).
 - Open settings, plugins, click "install plugin from disk", and choose the zip file from 2. 
 
 ### Features
