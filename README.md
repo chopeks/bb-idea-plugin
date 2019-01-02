@@ -1,52 +1,41 @@
-### Original Readme
-See also [FORK_README.md](/FORK_README.md)
+## Kiwi Power's Fork on the Squirrel Idea plugin
 
-## Original
+Kiwi power's fork of [squireel plugin for intellij](https://github.com/shvetsgroup/squirrel-lang-idea-plugin) 
 
-This plugin is in early development stage. It has a basic feature set implemented, which allow basic use with
-Intellij IDEA or IDEA based IDEs, such as PHPStorm, PyCharm, CLion, etc.
+See original [README.md](../ORIGINAL_README.md)
 
-Currently, I don't spend much time working on it, so if you want to help with any todo item, then go for it, send a PR
-and I'll review it.
+### Local installation
+- Uninstall the Squirrel ide plugin
+- Download the latest Squirrel-<version>.zip from the [releases page](../../releases).
+- Open settings, plugins, click "install plugin from disk", and choose the zip file from 2. 
 
-Plugin page on JetBrains repository:
-https://plugins.jetbrains.com/plugin/8412
+### Features
+- Control+b for 
+    - parameters
+    - variables
+    - constants
+    - functions
+    - methods
+    - classes
+    - class members
+    - enum constants
+    - includes
+    - just from agent.on -> device.send (and agent.send -> device.on)
+    
+### Build Locally
 
-## Contribution guide
+```bash
+ ./build.sh 
+```
+Produces the zip under build/distribution
 
-### Preparation
+For developing in Intellij, just do file->new->project->Intellij Plugin Project and point to the directory where this project is checked out. Don't try to get gradle to generate the idea files for you (or link the gradle build to the project).
 
-1. Download IntelliJ IDEA Community edition binaries from https://www.jetbrains.com/idea/
-2. Download IntelliJ IDEA Community edition sources from https://github.com/JetBrains/intellij-community and place them
-   into ../idea directory. Make sure you download sources tagged for the same build as your IDEA executable (check the
-   build number in Help box of IDEA).
+To re-generate the gen src from intellij click Control+Shift+g from the Squirrel.bnf file. 
 
-### Running plugin
+There are a few tests from the original plugin, but nothing new. The SamplesTest is useful for seeing what AST is produced from some squirrel code.
 
-1. Run build.sh to build the plugin. The should be a Bash run profile for this if you have bash plugin installed.
-2. Launch "Plugin" run configuration to test it in IDEA.
+### Known bugs
 
-# Features
-
-0. Creation of Squirrel projects.
-1. Syntax highlight.
-2. Auto formatting.
-3. Indentation.
-4. Folding.
-5. Running scripts using menu items.
-
-# TODO:
-
-0. debugger (code has some basic implementation, but much more work required to finish it)
-1. automatically setup sdk?
-2. download compiler from the web?
-3. make compiler?
-5. add debugger configuration (is it possible to download it?)
-6. SquirrelSDKType Configurable
-8. Test PATH detection on windows.
-9. Custom icons for run config.
-10. run configuration with C program.
-
-# Known issues
-
-1. Increment and decrement operators should always go in the same line with it's identifier.
+- For performance the files and element->resolution are cached. New files/ new usages will need a restart to start appearing. I'm happy with this trade off for the moment: being quick enough to browse is more important that being 
+- The synthetic semi colon detection is broken in some cases. Add semi-colons to includes and local variables if Intellij shows red. It sometimes stops the references from being resolved.
