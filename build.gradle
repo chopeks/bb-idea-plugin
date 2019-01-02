@@ -33,7 +33,7 @@ allprojects {
     intellij {
         patchPluginXml.sinceBuild = '131'
         localPath 'idea'
-        pluginName 'Squirrel'
+        pluginName 'Squirrel-KiwiPowerFork'
     }
 
     idea {
