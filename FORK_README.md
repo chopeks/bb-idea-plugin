@@ -1,4 +1,4 @@
-## Sam's Fork on the Squirrel Idea plugin
+## Kiwi Power's Fork on the Squirrel Idea plugin
 
 ### Local installation
 - Uninstall the Squirrel ide plugin
