@@ -2,7 +2,7 @@
 
 Kiwi power's fork of [Shvetsgroup's Squirrel plugin for intellij](https://github.com/shvetsgroup/squirrel-lang-idea-plugin) 
 
-See original [README.md](../ORIGINAL_README.md)
+See original [README.md](ORIGINAL_README.md)
 
 ### Local installation
 - Uninstall the Squirrel ide plugin
