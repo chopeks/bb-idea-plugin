@@ -9,6 +9,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.sqide.SquirrelFileType;
 import com.sqide.psi.*;
@@ -144,6 +145,7 @@ public class SquirrelPsiImplUtil {
         private ResolveResult[] lookup() {
             List<ResolveResult> result = new ArrayList<>();
 
+            variableSearch(result);
             paramSearch(result);
             if (result.isEmpty())
                 searchInFile(result, myElement.getContainingFile().getVirtualFile());
@@ -154,6 +156,30 @@ public class SquirrelPsiImplUtil {
                 }
 
             return result.toArray(new ResolveResult[0]);
+        }
+
+        private void variableSearch(List<ResolveResult> result) {
+            String id = myElement.getText();
+
+            SquirrelVarItem variable = null;
+            Collection<SquirrelVarItem> variables = PsiTreeUtil.findChildrenOfType(myElement.getContainingFile(), SquirrelVarItem.class);
+            for (SquirrelVarItem variableDeclaration : variables) {
+                PsiElement v = variableDeclaration.getId().getIdentifier();
+                if (id.equals(v.getText())) {
+                    PsiElement parentFunction = PsiTreeUtil.findFirstParent(v, new Condition<PsiElement>() {
+                        @Override
+                        public boolean value(PsiElement psiElement) {
+                            return psiElement instanceof SquirrelFunctionDeclaration || psiElement instanceof SquirrelMethodDeclaration;
+                        }
+                    });
+
+                    if (PsiTreeUtil.isAncestor(parentFunction, myElement, true))
+                        variable = variableDeclaration;
+                }
+            }
+
+            if (variable != null)
+                result.add(new PsiElementResolveResult(variable));
         }
 
         private void paramSearch(List<ResolveResult> result) {
@@ -179,8 +205,11 @@ public class SquirrelPsiImplUtil {
                             Collection<SquirrelVarItem> variables = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelVarItem.class);
                             for (SquirrelVarItem methodDeclaration : variables) {
                                 PsiElement variable = methodDeclaration.getId().getIdentifier();
+                                //only top level locals only
                                 if (id.equals(variable.getText())) {
-                                    result.add(new PsiElementResolveResult(variable));
+                                    SquirrelLocalDeclaration localDeclaration = PsiTreeUtil.getParentOfType(variable, SquirrelLocalDeclaration.class);
+                                    if (localDeclaration != null && localDeclaration.getParent() instanceof SquirrelFile)
+                                        result.add(new PsiElementResolveResult(variable));
                                 }
                             }
                         }
