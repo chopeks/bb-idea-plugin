@@ -1,6 +1,12 @@
+# OS
 .DS_Store
-.idea/workspace.xml
-.idea/shelf
+
+# IntelliJ
+.idea/*
+!.idea/runConfigurations
+
+# gradle
+.gradle
+build
 out
 gen
-squirrel-lang-idea-plugin.jar
