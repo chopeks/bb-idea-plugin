@@ -1,41 +1,57 @@
-<idea-plugin version="2">
+<idea-plugin url="https://github.com/kiwipower/squirrel-lang-idea-plugin">
     <id>com.sqide.test</id>
     <name>Squirrel</name>
-    <version>1.0.1</version>
-    <vendor email="technology@kiwipowered.com" url="http://kiwipowered.com">KiWi power</vendor>
+    <version>1.2.0</version>
+    <vendor email="technology@kiwipowered.com" url="https://www.kiwipowered.com/">KiWi Power</vendor>
 
     <description><![CDATA[
-      Squirrel language support, with navigation (Ctrl+B)
+        <a href="https://github.com/kiwipower/squirrel-lang-idea-plugin">Github</a> | <a href="https://github.com/kiwipower/squirrel-lang-idea-plugin/issues">Issues</a>
 
-      Github: https://github.com/kiwipower/squirrel-lang-idea-plugin
+        Features
+        <ul>
+            <li>Adds syntax highlighting for the <a href="http://squirrel-lang.org/">Squirrel</a> language
+            <li>Support for ElectricImp <a href="https://github.com/electricimp/Builder">Builder</a> <a href="https://developer.electricimp.com/tools/builder#include">@include</a> file navigation</li>
+            <li>Support for ElectricImp <a href="https://developer.electricimp.com/api/agent">agent</a>.on → <a href="https://developer.electricimp.com/api/device">device</a>.send and agent.send → device.on</li>
+        </ul>
 
-      Fork of https://github.com/shvetsgroup/squirrel-lang-idea-plugin
+        Fork <a href="https://github.com/shvetsgroup/squirrel-lang-idea-plugin">shvetsgroup/squirrel-lang-idea-plugin</a>
     ]]></description>
 
     <change-notes><![CDATA[
+        v1.2.0
+
+        Enhances navigation using Ctrl+B ⌘+B, Ctrl+Click ⌘+Click for:
+
+        <ul>
+            <li>parameters</li>
+            <li>variables</li>
+            <li>constants</li>
+            <li>functions</li>
+            <li>methods</li>
+            <li>classes</li>
+            <li>class members</li>
+            <li>enum constants</li>
+            <li>ElectricImp @include</li>
+            <li>ElectricImp agent.on → device.send and agent.send → device.on</li>
+        </ul>
+
+        v1.0.1
     ]]>
     </change-notes>
 
-    <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+    <!-- see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="131"/>
 
-    <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
-         on how to target different products -->
-    <!-- uncomment to enable plugin in all products
-    <depends>com.intellij.modules.lang</depends>
-    -->
+    <!-- see https://http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html on how to target different products -->
+    <!-- uncomment to enable plugin in all products -->
+    <!--<depends>com.intellij.modules.lang</depends>-->
 
     <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
 
-
     <extensions defaultExtensionNs="com.intellij">
-        <lang.elementManipulator forClass="com.sqide.psi.impl.SquirrelIdImpl"
-                                 implementationClass="com.sqide.psi.impl.manipulator.SquirrelIdManipulator"/>
-        <lang.elementManipulator forClass="com.sqide.psi.impl.SquirrelIncludeDeclarationImpl"
-                                 implementationClass="com.sqide.psi.impl.manipulator.SquirrelIncludeDeclarationManipulator"/>
-        <lang.elementManipulator forClass="com.sqide.psi.impl.SquirrelStringLiteralImpl"
-                                 implementationClass="com.sqide.psi.impl.manipulator.SquirrelStringLiteralManipulator"/>
-        <!-- Add your extensions here -->
+        <lang.elementManipulator forClass="com.sqide.psi.impl.SquirrelIdImpl" implementationClass="com.sqide.psi.impl.manipulator.SquirrelIdManipulator"/>
+        <lang.elementManipulator forClass="com.sqide.psi.impl.SquirrelIncludeDeclarationImpl" implementationClass="com.sqide.psi.impl.manipulator.SquirrelIncludeDeclarationManipulator"/>
+        <lang.elementManipulator forClass="com.sqide.psi.impl.SquirrelStringLiteralImpl" implementationClass="com.sqide.psi.impl.manipulator.SquirrelStringLiteralManipulator"/>
         <fileTypeFactory implementation="com.sqide.SquirrelFileTypeFactory"/>
         <lang.parserDefinition language="Squirrel" implementationClass="com.sqide.SquirrelParserDefinition"/>
         <lang.syntaxHighlighterFactory language="Squirrel" implementationClass="com.sqide.highlighting.SquirrelSyntaxHighlighterFactory"/>
@@ -64,13 +80,9 @@
         <xdebugger.breakpointType implementation="com.sqide.debugger.xdebug.breakpoint.SquirrelBreakpointType"/>
     </extensions>
 
-    <application-components>
-        <!-- Add your application components here -->
-    </application-components>
+    <application-components/>
 
-    <project-components>
-        <!-- Add your project components here -->
-    </project-components>
+    <project-components/>
 
     <actions>
         <action id="Squirrel.NewSquirrelFile" class="com.sqide.actions.NewSquirrelFileAction"
