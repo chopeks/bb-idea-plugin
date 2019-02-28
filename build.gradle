@@ -13,6 +13,7 @@ apply plugin: 'org.jetbrains.grammarkit'
 
 import org.jetbrains.grammarkit.tasks.GenerateParser
 import org.jetbrains.grammarkit.tasks.GenerateLexer
+import org.jetbrains.intellij.tasks.RunIdeTask
 
 grammarKit {
     // version of IntelliJ patched JFlex
@@ -114,4 +115,10 @@ idea {
         excludeDirs += [file("out"), file("gen")]
         generatedSourceDirs.add(file('src/gen'))
     }
+}
+
+// until v0.4.4 released
+// see https://github.com/JetBrains/gradle-intellij-plugin/releases
+tasks.withType(RunIdeTask) {
+    jbreVersion('jbrex8u202b1483.4')
 }
