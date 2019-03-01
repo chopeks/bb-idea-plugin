@@ -18,13 +18,13 @@
     SEMICOLON_SYNTHETIC  =  '<NL>'
 
     RBRACE               =  '}'
-    RBRACKET               =  ']'
+    RBRACKET             =  ']'
     RPAREN               =  ')'
     PLUS_PLUS            =  '++'
     MINUS_MINUS          =  '--'
 
     LBRACE               =  '{'
-    LBRACKET               =  '['
+    LBRACKET             =  '['
     LPAREN               =  '('
     DOUBLE_COLON         =  '::'
     COLON                =  ':'
@@ -137,7 +137,7 @@
 SquirrelFile ::= !<<eof>> Statements
 
 private semi ::= SEMICOLON_SYNTHETIC | ';' {name="semicolon"}
-private multisemi ::= semi+ {name="semicolon"}
+private multisemi ::= semi + {name="semicolon"}
 private delimiter ::= multisemi | &'}' | <<eof>> | <<prevIsBrace>>
 
 private Statements ::= multisemi? StatementWithSemi*
