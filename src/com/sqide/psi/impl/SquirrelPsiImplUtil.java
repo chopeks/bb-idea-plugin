@@ -3,19 +3,38 @@ package com.sqide.psi.impl;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementResolveResult;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiPolyVariantReferenceBase;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveResult;
 import com.intellij.psi.search.FileTypeIndex;
+import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.sqide.SquirrelFileType;
-import com.sqide.psi.*;
+import com.sqide.psi.SquirrelClassDeclaration;
+import com.sqide.psi.SquirrelClassMember;
+import com.sqide.psi.SquirrelClassName;
+import com.sqide.psi.SquirrelConstDeclaration;
+import com.sqide.psi.SquirrelEnumItem;
+import com.sqide.psi.SquirrelExpressionStatement;
+import com.sqide.psi.SquirrelFile;
+import com.sqide.psi.SquirrelFunctionDeclaration;
+import com.sqide.psi.SquirrelFunctionName;
+import com.sqide.psi.SquirrelId;
+import com.sqide.psi.SquirrelIncludeDeclaration;
+import com.sqide.psi.SquirrelLocalDeclaration;
+import com.sqide.psi.SquirrelMethodDeclaration;
+import com.sqide.psi.SquirrelParameter;
+import com.sqide.psi.SquirrelStringLiteral;
+import com.sqide.psi.SquirrelVarItem;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,17 +48,18 @@ public class SquirrelPsiImplUtil {
     private static ConcurrentHashMap<SquirrelId, SquirrelFunctionDeclarationPsiReferenceBase> lookups = new ConcurrentHashMap<>();
 
     public static PsiReference getReference(SquirrelIncludeDeclaration includeElement) {
-        String includeLocation = includeElement.getString().getText().replaceAll("\"", "");
-        String thisFile = includeElement.getContainingFile().getVirtualFile().getParent().getPath();
-        Path resolve = Paths.get(thisFile).resolve(includeLocation).toAbsolutePath().normalize();
+        if (includeElement.getString() == null) {
+            return null;
+        }
 
-        VirtualFile file = LocalFileSystem.getInstance().findFileByIoFile(resolve.toFile());
-        if (file == null) {
+        String includeLocation = includeElement.getString().getText().replaceAll("\"", "");
+        String filename = Paths.get(includeLocation).getFileName().toString();
+        PsiFile[] psiFiles = FilenameIndex.getFilesByName(includeElement.getProject(), filename, GlobalSearchScope.allScope(includeElement.getProject()));
+
+        if (psiFiles.length == 0) {
             return null;
         } else {
-            PsiFile file1 = PsiManager.getInstance(includeElement.getProject()).findFile(file);
-
-            return new SquirrelFilePsiReferenceBase(includeElement, file1);
+            return new SquirrelFilePsiReferenceBase(includeElement, psiFiles[0]);
         }
     }
 

@@ -85,7 +85,8 @@ public interface SquirrelTokenTypesSets {
             BREAK_STATEMENT,
             CONTINUE_STATEMENT,
             YIELD_STATEMENT,
-            THROW_STATEMENT
+            THROW_STATEMENT,
+            INCLUDE_DIRECTIVE
     );
 
 

@@ -7,7 +7,7 @@ repositories {
     mavenCentral()
 }
 
-version = System.getenv().getOrDefault('BUILD_NUMBER', '1.2.0')
+version = System.getenv().getOrDefault('BUILD_NUMBER', '1.2.1')
 
 apply plugin: 'org.jetbrains.grammarkit'
 
@@ -121,4 +121,9 @@ idea {
 // see https://github.com/JetBrains/gradle-intellij-plugin/releases
 tasks.withType(RunIdeTask) {
     jbreVersion('jbrex8u202b1483.4')
+}
+
+dependencies {
+    testCompile("org.mockito:mockito-core:2.1.0")
+    testCompile("org.assertj:assertj-core:3.11.1")
 }

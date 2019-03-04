@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/kiwipower/squirrel-lang-idea-plugin">
     <id>com.sqide.test</id>
     <name>Squirrel</name>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <vendor email="technology@kiwipowered.com" url="https://www.kiwipowered.com/">KiWi Power</vendor>
 
     <description><![CDATA[
@@ -18,10 +18,32 @@
     ]]></description>
 
     <change-notes><![CDATA[
+        v1.2.1
+        <br/>
+        <br/>
+        <b>New features</b>
+        <br/>
+        <br/>
+        Refactor @include as a token:
+        <ul>
+            <li>improve parsing speed</li>
+            <li>remove restriction for directives being relative paths - can now specify paths from the root</li>
+            <li>now appears as a keyword</li>
+            <li>lays groundwork for adding @include once</li>
+        </ul>
+
+        <b>Fixes</b>
+        <ul>
+            <li>NPE searching for non-existent files no longer crashes plugin</li>
+        </ul>
+
         v1.2.0
-
+        <br/>
+        <br/>
+        <b>New features</b>
+        <br/>
+        <br/>
         Enhances navigation using Ctrl+B ⌘+B, Ctrl+Click ⌘+Click for:
-
         <ul>
             <li>parameters</li>
             <li>variables</li>
