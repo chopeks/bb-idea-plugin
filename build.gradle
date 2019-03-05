@@ -1,5 +1,5 @@
 plugins {
-    id "org.jetbrains.intellij" version "0.4.2"
+    id "org.jetbrains.intellij" version "0.4.4"
     id 'org.jetbrains.grammarkit' version '2018.3'
 }
 
@@ -115,12 +115,6 @@ idea {
         excludeDirs += [file("out"), file("gen")]
         generatedSourceDirs.add(file('src/gen'))
     }
-}
-
-// until v0.4.4 released
-// see https://github.com/JetBrains/gradle-intellij-plugin/releases
-tasks.withType(RunIdeTask) {
-    jbreVersion('jbrex8u202b1483.4')
 }
 
 dependencies {
