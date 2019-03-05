@@ -1,4 +1,5 @@
 package com.sqide.lexer;
+
 import java.util.*;
 import com.intellij.lexer.*;
 import com.intellij.psi.TokenType;
@@ -208,6 +209,7 @@ return LBRACE;
   "foreach"            { pushState(PREVENT_SS_AFTER_PARENTHESES); return FOREACH; }
   "in"                 { return IN; }
   "@include"           { return INCLUDE_DIRECTIVE; }
+  "@include once"      { return INCLUDE_DIRECTIVE; }
 
   // We need to track state of these two in order to place correct synthetic semicolons.
   // Let's consider following code:

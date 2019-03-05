@@ -6,12 +6,13 @@
 
     <description><![CDATA[
         <a href="https://github.com/kiwipower/squirrel-lang-idea-plugin">Github</a> | <a href="https://github.com/kiwipower/squirrel-lang-idea-plugin/issues">Issues</a>
-
+        <br/>
+        <br/>
         Features
         <ul>
             <li>Adds syntax highlighting for the <a href="http://squirrel-lang.org/">Squirrel</a> language
-            <li>Support for ElectricImp <a href="https://github.com/electricimp/Builder">Builder</a> <a href="https://developer.electricimp.com/tools/builder#include">@include</a> file navigation</li>
-            <li>Support for ElectricImp <a href="https://developer.electricimp.com/api/agent">agent</a>.on → <a href="https://developer.electricimp.com/api/device">device</a>.send and agent.send → device.on</li>
+            <li>Support for Electric Imp <a href="https://github.com/electricimp/Builder">Builder</a> <a href="https://developer.electricimp.com/tools/builder#include">@include</a> (optional <b>once</b>) file navigation</li>
+            <li>Support for Electric Imp <a href="https://developer.electricimp.com/api/agent">agent</a>.on → <a href="https://developer.electricimp.com/api/device">device</a>.send and agent.send → device.on</li>
         </ul>
 
         Fork <a href="https://github.com/shvetsgroup/squirrel-lang-idea-plugin">shvetsgroup/squirrel-lang-idea-plugin</a>
@@ -24,12 +25,12 @@
         <b>New features</b>
         <br/>
         <br/>
-        Refactor @include as a token:
+        Refactor @include as a token to:
         <ul>
             <li>improve parsing speed</li>
             <li>remove restriction for directives being relative paths - can now specify paths from the root</li>
-            <li>now appears as a keyword</li>
-            <li>lays groundwork for adding @include once</li>
+            <li>appear as a keyword</li>
+            <li>add support for <b>@include once</b></li>
         </ul>
 
         <b>Fixes</b>
@@ -53,8 +54,8 @@
             <li>classes</li>
             <li>class members</li>
             <li>enum constants</li>
-            <li>ElectricImp @include</li>
-            <li>ElectricImp agent.on → device.send and agent.send → device.on</li>
+            <li>Electric Imp @include</li>
+            <li>Electric Imp agent.on → device.send and agent.send → device.on</li>
         </ul>
 
         v1.0.1

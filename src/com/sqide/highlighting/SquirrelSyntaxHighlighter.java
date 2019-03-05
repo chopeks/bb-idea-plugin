@@ -37,6 +37,7 @@ public class SquirrelSyntaxHighlighter extends SyntaxHighlighterBase {
         fillMap(ATTRIBUTES, SquirrelTokenTypesSets.NUMBERS, NUMBER);
         fillMap(ATTRIBUTES, SquirrelTokenTypesSets.STRING_LITERALS, STRING);
         fillMap(ATTRIBUTES, DIRECTIVE, SquirrelTokenTypes.INCLUDE_DIRECTIVE);
+        fillMap(ATTRIBUTES, ONCE, SquirrelTokenTypes.ONCE);
     }
 
     @NotNull

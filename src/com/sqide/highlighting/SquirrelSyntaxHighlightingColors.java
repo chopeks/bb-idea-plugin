@@ -25,6 +25,7 @@ public class SquirrelSyntaxHighlightingColors {
   public static final TextAttributesKey COMMA = createTextAttributesKey("SQ_COMMA", DefaultLanguageHighlighterColors.COMMA);
   public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("SQ_BAD_TOKEN", HighlighterColors.BAD_CHARACTER);
   public static final TextAttributesKey DIRECTIVE = createTextAttributesKey("SQ_DIRECTIVE", DefaultLanguageHighlighterColors.KEYWORD);
+  public static final TextAttributesKey ONCE = createTextAttributesKey("SQ_ONCE", DefaultLanguageHighlighterColors.KEYWORD);
   private SquirrelSyntaxHighlightingColors() {
   }
 }

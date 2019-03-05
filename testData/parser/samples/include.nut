@@ -1,7 +1,7 @@
 print("\n");
 
 @include "ackermann.nut";
-@include "generators.nut";
+@include once "generators.nut";
 
 local n;
 
