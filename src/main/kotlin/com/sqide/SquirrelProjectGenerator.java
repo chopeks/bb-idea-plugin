@@ -25,12 +25,6 @@ public class SquirrelProjectGenerator implements DirectoryProjectGenerator {
 
     @Nullable
     @Override
-    public Object showGenerationSettings(VirtualFile baseDir) throws ProcessCanceledException {
-        return null;
-    }
-
-    @Nullable
-    @Override
     public Icon getLogo() {
         return SquirrelIcons.SQUIRREL;
     }
@@ -40,9 +34,9 @@ public class SquirrelProjectGenerator implements DirectoryProjectGenerator {
         ApplicationManager.getApplication().runWriteAction(
                 new Runnable() {
                     public void run() {
-                        final ModifiableRootModel modifiableModel = ModifiableModelsProvider.SERVICE.getInstance().getModuleModifiableModel(module);
+                        final ModifiableRootModel modifiableModel = ModifiableModelsProvider.getInstance().getModuleModifiableModel(module);
                         SquirrelModuleBuilder.setupProject(modifiableModel, baseDir);
-                        ModifiableModelsProvider.SERVICE.getInstance().commitModuleModifiableModel(modifiableModel);
+                        ModifiableModelsProvider.getInstance().commitModuleModifiableModel(modifiableModel);
                     }
                 });
     }

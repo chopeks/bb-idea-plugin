@@ -63,7 +63,7 @@
     </change-notes>
 
     <!-- see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="131"/>
+    <idea-version since-build="232"/>
 
     <!-- see https://http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html on how to target different products -->
     <!-- uncomment to enable plugin in all products -->
@@ -87,7 +87,7 @@
         <directoryProjectGenerator implementation="com.sqide.SquirrelProjectGenerator"/>
 
         <sdkType implementation="com.sqide.sdk.SquirrelSdkType"/>
-        <projectService serviceInterface="com.sqide.sdk.SquirrelSdkService" serviceImplementation="com.sqide.sdk.SquirrelSdkService" overrides="false"/>
+        <projectService serviceImplementation="com.sqide.sdk.SquirrelSdkService" overrides="false"/>
         <library.presentationProvider implementation="com.sqide.sdk.SquirrelSdkLibraryPresentationProvider"/>
         <editorNotificationProvider implementation="com.sqide.inspections.WrongSdkConfigurationNotificationProvider"/>
 

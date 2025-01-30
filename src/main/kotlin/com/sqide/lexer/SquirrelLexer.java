@@ -5,6 +5,7 @@ import com.intellij.lexer.Lexer;
 import com.intellij.lexer.MergeFunction;
 import com.intellij.lexer.MergingLexerAdapterBase;
 import com.intellij.psi.tree.IElementType;
+import com.sqide._SquirrelLexer;
 
 import static com.sqide.SquirrelTokenTypes.*;
 import static com.sqide.SquirrelTokenTypesSets.*;
@@ -19,8 +20,8 @@ public class SquirrelLexer extends MergingLexerAdapterBase {
         return new FlexAdapter(new _SquirrelLexer() {
             public void reset(final CharSequence buffer, final int start, final int end, final int initialState) {
                 super.reset(buffer, start, end, initialState);
-                myLeftParenCount = 0;
-                myStateStack.clear();
+//                myLeftParenCount = 0;
+//                myStateStack.clear();
             }
         });
     }
