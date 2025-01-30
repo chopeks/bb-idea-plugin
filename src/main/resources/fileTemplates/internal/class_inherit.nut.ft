@@ -1,0 +1,6 @@
+this.${NAME} <- ::inherit("${SCRIPT_PATH}/", {
+    m = {},
+    function create() {
+
+    }
+});

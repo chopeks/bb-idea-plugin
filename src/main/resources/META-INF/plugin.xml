@@ -1,64 +1,20 @@
-<idea-plugin url="https://github.com/kiwipower/squirrel-lang-idea-plugin">
-    <id>com.sqide.test</id>
-    <name>Squirrel</name>
-    <version>1.2.1</version>
-    <vendor email="technology@kiwipowered.com" url="https://www.kiwipowered.com/">KiWi Power</vendor>
+<idea-plugin url="https://github.com/chopeks/bb-idea-plugin">
+    <id>com.chopeks.bbmodding</id>
+    <name>BB Modding</name>
+    <version>1.0.0</version>
+    <vendor email="dont@bother.me" url="https://www.lol.wtf/">chopeks</vendor>
 
     <description><![CDATA[
-        <a href="https://github.com/kiwipower/squirrel-lang-idea-plugin">Github</a> | <a href="https://github.com/kiwipower/squirrel-lang-idea-plugin/issues">Issues</a>
-        <br/>
-        <br/>
         Features
         <ul>
             <li>Adds syntax highlighting for the <a href="http://squirrel-lang.org/">Squirrel</a> language
-            <li>Support for Electric Imp <a href="https://github.com/electricimp/Builder">Builder</a> <a href="https://developer.electricimp.com/tools/builder#include">@include</a> (optional <b>once</b>) file navigation</li>
-            <li>Support for Electric Imp <a href="https://developer.electricimp.com/api/agent">agent</a>.on → <a href="https://developer.electricimp.com/api/device">device</a>.send and agent.send → device.on</li>
         </ul>
 
         Fork <a href="https://github.com/shvetsgroup/squirrel-lang-idea-plugin">shvetsgroup/squirrel-lang-idea-plugin</a>
     ]]></description>
 
     <change-notes><![CDATA[
-        v1.2.1
-        <br/>
-        <br/>
-        <b>New features</b>
-        <br/>
-        <br/>
-        Refactor @include as a token to:
-        <ul>
-            <li>improve parsing speed</li>
-            <li>remove restriction for directives being relative paths - can now specify paths from the root</li>
-            <li>appear as a keyword</li>
-            <li>add support for <b>@include once</b></li>
-        </ul>
 
-        <b>Fixes</b>
-        <ul>
-            <li>NPE searching for non-existent files no longer crashes plugin</li>
-        </ul>
-
-        v1.2.0
-        <br/>
-        <br/>
-        <b>New features</b>
-        <br/>
-        <br/>
-        Enhances navigation using Ctrl+B ⌘+B, Ctrl+Click ⌘+Click for:
-        <ul>
-            <li>parameters</li>
-            <li>variables</li>
-            <li>constants</li>
-            <li>functions</li>
-            <li>methods</li>
-            <li>classes</li>
-            <li>class members</li>
-            <li>enum constants</li>
-            <li>Electric Imp @include</li>
-            <li>Electric Imp agent.on → device.send and agent.send → device.on</li>
-        </ul>
-
-        v1.0.1
     ]]>
     </change-notes>
 
@@ -72,6 +28,9 @@
     <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <!-- file creation support -->
+        <createFromTemplateHandler implementation="com.sqide.actions.NewSquirrelCreateFromTemplateHandler"/>
+
         <lang.elementManipulator forClass="com.sqide.psi.impl.SquirrelIdImpl" implementationClass="com.sqide.psi.impl.manipulator.SquirrelIdManipulator"/>
         <lang.elementManipulator forClass="com.sqide.psi.impl.SquirrelIncludeDeclarationImpl" implementationClass="com.sqide.psi.impl.manipulator.SquirrelIncludeDeclarationManipulator"/>
         <lang.elementManipulator forClass="com.sqide.psi.impl.SquirrelStringLiteralImpl" implementationClass="com.sqide.psi.impl.manipulator.SquirrelStringLiteralManipulator"/>
@@ -109,7 +68,7 @@
 
     <actions>
         <action id="Squirrel.NewSquirrelFile" class="com.sqide.actions.NewSquirrelFileAction"
-                text="Squirrel file" description="Create new Squirrel file">
+                text="Squirrel File" description="Create new Squirrel file">
             <add-to-group group-id="NewGroup" relative-to-action="NewFile" anchor="after"/>
         </action>
     </actions>

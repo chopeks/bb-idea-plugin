@@ -1,68 +1,73 @@
-package com.sqide.actions;
+package com.sqide.actions
 
-import com.intellij.CommonBundle;
-import com.intellij.ide.actions.CreateElementActionBase;
-import com.intellij.ide.actions.CreateFileAction;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.io.FileUtilRt;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.sqide.SquirrelBundle;
-import com.sqide.SquirrelFileType;
-import com.sqide.SquirrelIcons;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.ide.actions.CreateFileFromTemplateAction
+import com.intellij.ide.actions.CreateFileFromTemplateDialog
+import com.intellij.ide.fileTemplates.DefaultCreateFromTemplateHandler
+import com.intellij.ide.fileTemplates.FileTemplate
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.InputValidatorEx
+import com.intellij.openapi.util.NlsContexts
+import com.intellij.psi.PsiDirectory
+import com.intellij.psi.PsiElement
+import com.sqide.SquirrelFileType
+import com.sqide.SquirrelIcons
+import javax.swing.Icon
 
-/**
- * Action to create a new Bash file from a template.
- * <p/>
- * The template data is stored in resources/fileTemplates/internal/Bash Script.sh.ft
- *
- * @author Joachim Ansorg
- */
-public class NewSquirrelFileAction extends CreateElementActionBase {
-    public NewSquirrelFileAction() {
-        super(SquirrelBundle.message("newfile.menu.action.text"), SquirrelBundle.message("newfile.menu.action.description"), SquirrelIcons.NUT_FILE);
+object NewSquirrelFileNameValidator : InputValidatorEx {
+  override fun getErrorText(inputString: String): String? {
+    if (inputString.trim().isEmpty()) {
+      return "Empty file name"
     }
+    return null
+  }
 
-    static String computeFilename(String inputFilename) {
-        String usedExtension = FileUtilRt.getExtension(inputFilename);
-        boolean withExtension = !usedExtension.isEmpty();
+  override fun checkInput(inputString: String): Boolean = true
 
-        return withExtension ? inputFilename : (inputFilename + "." + SquirrelFileType.EXTENSION);
+  override fun canClose(inputString: String): Boolean = getErrorText(inputString) == null
+}
+
+class NewSquirrelFileAction : CreateFileFromTemplateAction("Squirrel File", "Creates new Squirrel files", SquirrelIcons.NUT_FILE) {
+  override fun getActionName(directory: PsiDirectory?, newName: String, templateName: String?) = "Squirrel File"
+
+  override fun buildDialog(project: Project, directory: PsiDirectory, builder: CreateFileFromTemplateDialog.Builder) {
+    builder.setTitle("New Squirrel File")
+    SquirrelFileTemplate.entries.forEach {
+      builder.addKind(it)
     }
+    builder.setValidator(NewSquirrelFileNameValidator)
+  }
 
-    protected String getDialogPrompt() {
-        return SquirrelBundle.message("newfile.dialog.prompt");
+  override fun startInWriteAction(): Boolean = false
+
+  override fun hashCode(): Int = 0
+
+  override fun equals(other: Any?): Boolean = other is NewSquirrelFileAction
+
+  private fun CreateFileFromTemplateDialog.Builder.addKind(it: SquirrelFileTemplate) =
+    addKind(it.title, it.icon, it.fileName)
+
+  enum class SquirrelFileTemplate(@NlsContexts.ListItem val title: String, val icon: Icon, val fileName: String) {
+    Empty("Empty .nut File", SquirrelIcons.NUT_FILE, "empty"),
+    Class("New BB Class", SquirrelIcons.NUT_FILE, "class"),
+    ClassInherit("New BB Class with inheritance", SquirrelIcons.NUT_FILE, "class_inherit"),
+  }
+}
+
+class NewSquirrelCreateFromTemplateHandler : DefaultCreateFromTemplateHandler() {
+  override fun prepareProperties(props: MutableMap<String, Any>) {
+    val dirPath = props[FileTemplate.ATTRIBUTE_DIR_PATH] as? String
+    if (!dirPath.isNullOrEmpty()) {
+      // let's add current directory to template variables
+      props["SCRIPT_PATH"] = dirPath.split('/').let {
+        if ("scripts" in it) {
+          it.slice(it.indexOf("scripts")..<it.size)
+        } else {
+          it
+        }
+      }.joinToString("/")
     }
+  }
 
-    protected String getDialogTitle() {
-        return SquirrelBundle.message("newfile.dialog.title");
-    }
-
-    protected String getCommandName() {
-        return SquirrelBundle.message("newfile.command.name");
-    }
-
-    protected String getActionName(PsiDirectory directory, String newName) {
-        return SquirrelBundle.message("newfile.menu.action.text");
-    }
-
-    @NotNull
-    protected final PsiElement[] invokeDialog(final Project project, final PsiDirectory directory) {
-        final MyInputValidator validator = new MyInputValidator(project, directory);
-        Messages.showInputDialog(project, getDialogPrompt(), getDialogTitle(), Messages.getQuestionIcon(), "", validator);
-
-        return validator.getCreatedElements();
-    }
-
-    @NotNull
-    protected PsiElement[] create(String newName, PsiDirectory directory) throws Exception {
-        CreateFileAction.MkDirs mkdirs = new CreateFileAction.MkDirs(newName, directory);
-        return new PsiElement[]{mkdirs.directory.createFile(computeFilename(mkdirs.newName))};
-    }
-
-    protected String getErrorTitle() {
-        return CommonBundle.getErrorTitle();
-    }
+  override fun handlesTemplate(template: FileTemplate): Boolean =
+    template.isTemplateOfType(SquirrelFileType.INSTANCE)
 }
