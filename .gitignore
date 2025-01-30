@@ -2,7 +2,6 @@
 .DS_Store
 
 # IntelliJ
-.idea/*
 !.idea/runConfigurations
 
 # gradle
