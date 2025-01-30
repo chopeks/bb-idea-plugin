@@ -20,6 +20,6 @@ public class SquirrelParserUtil extends GeneratedParserUtilBase {
             }
         }
 
-        return type != null && (type == RBRACE || type == SEMICOLON || type == SEMICOLON_SYNTHETIC);
+        return (type == RBRACE || type == SEMICOLON || type == SEMICOLON_SYNTHETIC);
     }
 }
