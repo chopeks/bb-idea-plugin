@@ -1,14 +1,12 @@
 package com.chopeks.runner;
 
 import com.chopeks.SquirrelBundle;
-import com.chopeks.debugger.SquirrelDebugRunningState;
 import com.chopeks.sdk.SquirrelSdkService;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configuration.AbstractRunConfiguration;
 import com.intellij.execution.configuration.EnvironmentVariablesComponent;
 import com.intellij.execution.configurations.*;
-import com.intellij.execution.executors.DefaultDebugExecutor;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.util.ProgramParametersUtil;
 import com.intellij.openapi.components.PathMacroManager;
@@ -63,12 +61,7 @@ public class SquirrelRunConfiguration extends AbstractRunConfiguration implement
 
     @Nullable
     public RunProfileState getState(@NotNull Executor executor, @NotNull ExecutionEnvironment env) throws ExecutionException {
-        if (DefaultDebugExecutor.EXECUTOR_ID.equals(env.getExecutor().getId())) {
-            return new SquirrelDebugRunningState(this, env);
-        }
-        else {
-            return new SquirrelRunningState(this, env);
-        }
+        return new SquirrelRunningState(this, env);
     }
 
     @Override

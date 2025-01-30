@@ -48,7 +48,6 @@
         <sdkType implementation="com.chopeks.sdk.SquirrelSdkType"/>
         <projectService serviceImplementation="com.chopeks.sdk.SquirrelSdkService" overrides="false"/>
         <library.presentationProvider implementation="com.chopeks.sdk.SquirrelSdkLibraryPresentationProvider"/>
-        <editorNotificationProvider implementation="com.chopeks.inspections.WrongSdkConfigurationNotificationProvider"/>
 
         <projectConfigurable groupId="language" provider="com.chopeks.configuration.SquirrelConfigurableProvider" dynamic="true"/>
 
@@ -56,10 +55,6 @@
         <programRunner implementation="com.chopeks.runner.SquirrelRunner"/>
         <configurationType implementation="com.chopeks.runner.SquirrelConfigurationType"/>
         <runConfigurationProducer implementation="com.chopeks.runner.SquirrelRunConfigProducer"/>
-
-        <!-- debug -->
-        <programRunner implementation="com.chopeks.debugger.SquirrelDebugRunner"/>
-        <xdebugger.breakpointType implementation="com.chopeks.debugger.xdebug.breakpoint.SquirrelBreakpointType"/>
     </extensions>
 
     <application-components/>
