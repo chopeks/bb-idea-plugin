@@ -24,12 +24,12 @@ public class SquirrelParserDefinition implements ParserDefinition {
     }
 
     @Override
-    public PsiParser createParser(Project project) {
+    public @NotNull PsiParser createParser(Project project) {
         return new SquirrelParser();
     }
 
     @Override
-    public IFileElementType getFileNodeType() {
+    public @NotNull IFileElementType getFileNodeType() {
         return SquirrelTokenTypesSets.SQUIRREL_FILE;
     }
 
@@ -61,12 +61,12 @@ public class SquirrelParserDefinition implements ParserDefinition {
     }
 
     @Override
-    public PsiFile createFile(FileViewProvider viewProvider) {
+    public @NotNull PsiFile createFile(@NotNull FileViewProvider viewProvider) {
         return new SquirrelFile(viewProvider);
     }
 
     @Override
-    public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {
+    public @NotNull SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {
         return SpaceRequirements.MAY;
     }
 }
