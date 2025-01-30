@@ -1,5 +1,6 @@
 package com.chopeks.actions
 
+import com.chopeks.SquirrelBundle
 import com.chopeks.SquirrelFileType
 import com.chopeks.SquirrelIcons
 import com.intellij.ide.actions.CreateFileFromTemplateAction
@@ -24,11 +25,12 @@ object NewSquirrelFileNameValidator : InputValidatorEx {
 	override fun canClose(inputString: String): Boolean = getErrorText(inputString) == null
 }
 
-class NewSquirrelFileAction : CreateFileFromTemplateAction("Squirrel File", "Creates new Squirrel files", SquirrelIcons.NUT_FILE) {
-	override fun getActionName(directory: PsiDirectory?, newName: String, templateName: String?) = "Squirrel File"
+class NewSquirrelFileAction : CreateFileFromTemplateAction(SquirrelBundle.message("newfile.command.name"), SquirrelBundle.message("newfile.dialog.prompt"), SquirrelIcons.NUT_FILE) {
+	override fun getActionName(directory: PsiDirectory?, newName: String, templateName: String?) =
+		SquirrelBundle.message("newfile.command.name")
 
 	override fun buildDialog(project: Project, directory: PsiDirectory, builder: CreateFileFromTemplateDialog.Builder) {
-		builder.setTitle("New Squirrel File")
+		builder.setTitle(SquirrelBundle.message("newfile.dialog.title"))
 		SquirrelFileTemplate.entries.forEach {
 			builder.addKind(it)
 		}
@@ -45,9 +47,9 @@ class NewSquirrelFileAction : CreateFileFromTemplateAction("Squirrel File", "Cre
 		addKind(it.title, it.icon, it.fileName)
 
 	enum class SquirrelFileTemplate(@NlsContexts.ListItem val title: String, val icon: Icon, val fileName: String) {
-		Empty("Empty .nut File", SquirrelIcons.NUT_FILE, "empty"),
-		Class("New BB Class", SquirrelIcons.NUT_FILE, "class"),
-		ClassInherit("New BB Class with inheritance", SquirrelIcons.NUT_FILE, "class_inherit"),
+		Empty(SquirrelBundle.message("newfile.list.empty"), SquirrelIcons.NUT_FILE, "empty"),
+		Class(SquirrelBundle.message("newfile.list.class"), SquirrelIcons.NUT_FILE, "class"),
+		ClassInherit(SquirrelBundle.message("newfile.list.class_inherit"), SquirrelIcons.NUT_FILE, "class_inherit"),
 	}
 }
 
