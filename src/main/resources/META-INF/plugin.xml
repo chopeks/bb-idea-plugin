@@ -28,13 +28,13 @@
     <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <fileType name="Squirrel" implementationClass="com.chopeks.SquirrelFileType" extensions="nut"/>
         <!-- file creation support -->
         <createFromTemplateHandler implementation="com.chopeks.actions.NewSquirrelCreateFromTemplateHandler"/>
 
         <lang.elementManipulator forClass="com.chopeks.psi.impl.SquirrelIdImpl" implementationClass="com.chopeks.psi.impl.manipulator.SquirrelIdManipulator"/>
         <lang.elementManipulator forClass="com.chopeks.psi.impl.SquirrelIncludeDeclarationImpl" implementationClass="com.chopeks.psi.impl.manipulator.SquirrelIncludeDeclarationManipulator"/>
         <lang.elementManipulator forClass="com.chopeks.psi.impl.SquirrelStringLiteralImpl" implementationClass="com.chopeks.psi.impl.manipulator.SquirrelStringLiteralManipulator"/>
-        <fileTypeFactory implementation="com.chopeks.SquirrelFileTypeFactory"/>
         <lang.parserDefinition language="Squirrel" implementationClass="com.chopeks.SquirrelParserDefinition"/>
         <lang.syntaxHighlighterFactory language="Squirrel" implementationClass="com.chopeks.highlighting.SquirrelSyntaxHighlighterFactory"/>
         <lang.foldingBuilder language="Squirrel" implementationClass="com.chopeks.folding.SquirrelFoldingBuilder"/>
