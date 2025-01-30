@@ -1,4 +1,4 @@
-package com.sqide.formatter;
+package com.chopeks.formatter;
 
 import static com.intellij.psi.codeStyle.CommonCodeStyleSettings.*;
 

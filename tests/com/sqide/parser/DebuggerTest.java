@@ -1,8 +1,8 @@
-package com.sqide.parser;
+package com.chopeks.parser;
 
 import com.intellij.testFramework.ParsingTestCase;
 import com.intellij.testFramework.PlatformLiteFixture;
-import com.sqide.SquirrelParserDefinition;
+import com.chopeks.SquirrelParserDefinition;
 
 import java.io.BufferedReader;
 import java.io.IOException;

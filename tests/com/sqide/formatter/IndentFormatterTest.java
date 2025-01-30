@@ -1,4 +1,4 @@
-package com.sqide.formatter;
+package com.chopeks.formatter;
 
 public class IndentFormatterTest extends AbstractSquirrelFormatterTest {
     @Override

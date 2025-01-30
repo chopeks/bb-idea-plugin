@@ -1,8 +1,8 @@
 <idea-plugin version="2">
   <extensions defaultExtensionNs="com.intellij">
-    <moduleType id="SQUIRREL_MODULE" implementationClass="com.sqide.SquirrelModuleType"/>
-    <moduleConfigurationEditorProvider implementation="com.sqide.configuration.SquirrelModuleEditorsProvider" order="first"/>
-    <projectStructureDetector implementation="com.sqide.project.SquirrelProjectStructureDetector"/>
-    <projectService serviceInterface="com.sqide.sdk.SquirrelSdkService" serviceImplementation="com.sqide.sdk.SquirrelIdeaSdkService" overrides="true"/>
+      <moduleType id="SQUIRREL_MODULE" implementationClass="com.chopeks.SquirrelModuleType"/>
+      <moduleConfigurationEditorProvider implementation="com.chopeks.configuration.SquirrelModuleEditorsProvider" order="first"/>
+      <projectStructureDetector implementation="com.chopeks.project.SquirrelProjectStructureDetector"/>
+      <projectService serviceInterface="com.chopeks.sdk.SquirrelSdkService" serviceImplementation="com.chopeks.sdk.SquirrelIdeaSdkService" overrides="true"/>
   </extensions>
 </idea-plugin>

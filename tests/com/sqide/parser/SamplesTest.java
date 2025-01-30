@@ -1,7 +1,7 @@
-package com.sqide.parser;
+package com.chopeks.parser;
 
 import com.intellij.testFramework.ParsingTestCase;
-import com.sqide.SquirrelParserDefinition;
+import com.chopeks.SquirrelParserDefinition;
 
 public class SamplesTest extends ParsingTestCase {
     public SamplesTest() {

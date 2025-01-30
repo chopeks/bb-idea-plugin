@@ -1,10 +1,10 @@
-package com.sqide.formatter;
+package com.chopeks.formatter;
 
 import com.intellij.psi.codeStyle.*;
-import com.sqide.SquirrelLanguage;
-import com.sqide.formatter.settings.SquirrelCodeStyleSettings;
+import com.chopeks.SquirrelLanguage;
+import com.chopeks.formatter.settings.SquirrelCodeStyleSettings;
 import com.intellij.psi.formatter.FormatterTestCase;
-import com.sqide.formatter.settings.SquirrelLanguageCodeStyleSettingsProvider;
+import com.chopeks.formatter.settings.SquirrelLanguageCodeStyleSettingsProvider;
 
 import java.lang.reflect.Field;
 
