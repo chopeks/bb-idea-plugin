@@ -97,7 +97,9 @@ object SquirrelTokenTypesSets {
 		SquirrelTokenTypes.INSTANCEOF,
 		SquirrelTokenTypes.TRUE,
 		SquirrelTokenTypes.FALSE,
-		SquirrelTokenTypes.NULL
+		SquirrelTokenTypes.NULL,
+		SquirrelTokenTypes.THIS,
+		SquirrelTokenTypes.DOUBLE_COLON,
 	)
 	val OPERATORS: TokenSet = TokenSet.create(
 		SquirrelTokenTypes.RBRACE,
@@ -108,7 +110,6 @@ object SquirrelTokenTypesSets {
 		SquirrelTokenTypes.LBRACE,
 		SquirrelTokenTypes.LBRACKET,
 		SquirrelTokenTypes.LPAREN,
-		SquirrelTokenTypes.DOUBLE_COLON,
 		SquirrelTokenTypes.COLON,
 		SquirrelTokenTypes.SEMICOLON,
 		SquirrelTokenTypes.COMMA,

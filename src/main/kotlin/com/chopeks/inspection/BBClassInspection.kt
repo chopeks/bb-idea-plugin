@@ -7,6 +7,7 @@ import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiRecursiveElementVisitor
+import com.intellij.psi.util.PsiTreeUtil
 
 @Suppress("InspectionDescriptionNotFoundInspection")
 class BBClassInspection : LocalInspectionTool() {
@@ -33,9 +34,7 @@ class BBClassInspection : LocalInspectionTool() {
 	}
 
 	private fun checkClassName(file: PsiFile, problemDescriptors: MutableList<ProblemDescriptor>, manager: InspectionManager, isOnTheFly: Boolean) {
-		if (file.children.isEmpty())
-			return
-		val expression = file.children.firstOrNull()
+		val expression = PsiTreeUtil.findChildOfType(file, SquirrelExpressionStatement::class.java)
 		if (expression !is SquirrelExpressionStatement)
 			return
 		val assign = expression.children.firstOrNull()
@@ -47,7 +46,7 @@ class BBClassInspection : LocalInspectionTool() {
 			return // reference should be first
 		if (assign.children[1] !is SquirrelAssignmentOperator)
 			return // assignment should be second
-		val className = assign.children[0].children.lastOrNull() ?: return
+		val className = assign.children[0].children.lastOrNull()?.children?.firstOrNull { it is SquirrelStdIdentifier } ?: return
 		val assigned = assign.children[2]
 		if (assigned is SquirrelTableExpression) { // new object case
 			if (className.text != file.name.split(".").first()) {

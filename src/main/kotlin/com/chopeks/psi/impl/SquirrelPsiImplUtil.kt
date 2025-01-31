@@ -123,8 +123,8 @@ object SquirrelPsiImplUtil {
 			var variable: SquirrelVarItem? = null
 			val variables = PsiTreeUtil.findChildrenOfType(myElement!!.containingFile, SquirrelVarItem::class.java)
 			for (variableDeclaration in variables) {
-				val v = variableDeclaration.id.identifier
-				if (id == v.text) {
+				val v = variableDeclaration.id.stdIdentifier
+				if (id == v?.text) {
 					val parentFunction = PsiTreeUtil.findFirstParent(v) { psiElement -> psiElement is SquirrelFunctionDeclaration || psiElement is SquirrelMethodDeclaration }
 
 					if (PsiTreeUtil.isAncestor(parentFunction, myElement!!, true)) variable = variableDeclaration
@@ -156,11 +156,11 @@ object SquirrelPsiImplUtil {
 						if (result.isEmpty()) {
 							val variables = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelVarItem::class.java)
 							for (methodDeclaration in variables) {
-								val variable = methodDeclaration.id.identifier
+								val variable = methodDeclaration.id.stdIdentifier
 								//only top level locals only
-								if (id == variable.text) {
+								if (id == variable?.text) {
 									val localDeclaration = PsiTreeUtil.getParentOfType(variable, SquirrelLocalDeclaration::class.java)
-									if (localDeclaration != null && localDeclaration.parent is SquirrelFile) result.add(PsiElementResolveResult(variable))
+									if (localDeclaration != null && localDeclaration.parent is SquirrelFile) result.add(PsiElementResolveResult(variable!!))
 								}
 							}
 						}

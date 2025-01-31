@@ -65,6 +65,7 @@
     QUESTION             =  '?'
     AT                   =  '@'
     DOT                  =  '.'
+    THIS                  =  'this'
 
     SINGLE_LINE_COMMENT = "regexp:(//|#)[^\r\n]*"
     MULTI_LINE_COMMENT = "regexp:/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*(\*+/)"
@@ -186,7 +187,6 @@ VarItem ::= Id VarInit?
 VarInit ::= '=' ExpressionWithNoComma
 
 FunctionDeclaration ::= function FunctionName Parameters FunctionBody  {pin=1}
-FunctionName ::= Id ('::' (Id | constructor))*
 FunctionBody ::= StatementOrEmpty
 Parameters ::= '(' ParameterList? ')'
 ParameterList ::=
@@ -329,10 +329,10 @@ private TableItemSeparator ::= ',' | '<NL>'
 private KeyValuePairs ::= TableItem (TableItemSeparator* TableItem)* TableItemSeparator?
 TableItem ::= KeyValuePair | FunctionDeclaration
 private KeyValuePair ::= Key '=' ExpressionWithNoComma
-Key ::= Id | '[' Expression ']'
+Key ::= StdIdentifier | '[' Expression ']'
 
 private NamedElementExpression ::= SimpleRefExpression | ReferenceExpression | ArrayItemExpression
-ReferenceExpression ::= Expression '.' (Id | constructor)
+ReferenceExpression ::= Expression '.' Id
 
 SimpleRefExpression ::= Id PrefixOperator? {elementType=ReferenceExpression}
 LiteralExpression ::= Literal
@@ -354,4 +354,10 @@ JsonProp ::= STRING ':' JsonValue {pin=1 recoverWhile=JsonRecover}
 JsonValue ::= Literal | Expression | Json
 private JsonRecover ::= !(',' | ']' | '}' | '[' | '{')
 
-Id ::= '::'? IDENTIFIER { name="identifier" methods=[getReference]}
+GlobalReference ::= '::'
+ThisReference ::= THIS '.'
+
+FunctionName ::= StdIdentifier
+Id ::= ((GlobalReference | ThisReference)? StdIdentifier) | THIS
+
+StdIdentifier ::= IDENTIFIER { name="identifier" methods=[getReference]}
