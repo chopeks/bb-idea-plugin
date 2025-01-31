@@ -15,7 +15,6 @@
   tokenTypeClass="com.chopeks.psi.SquirrelTokenType"
 
   tokens = [
-    INCLUDE_DIRECTIVE    =  '@include'
     SEMICOLON_SYNTHETIC  =  '<NL>'
 
     RBRACE               =  '}'
@@ -147,9 +146,7 @@ private StatementWithSemi ::= Statement delimiter { pin=1 recoverWhile=statement
 
 private statement_recover ::= !(<<eof>> | delimiter | '{' | '}' | const | enum | local | function | class | return | break | continue | yield | throw | for | foreach | while | do | if | else | switch | case | default | try | catch | '@include')
 
-Statement ::=
-    IncludeDeclaration
-    | Block
+Statement ::= Block
     | ExpressionStatement
     | ConstDeclaration
     | EnumDeclaration
@@ -176,9 +173,6 @@ private StatementOrEmpty ::= Statement | ';'
 
 Block ::= '{' Statements? '}' {pin=1}
 
-private OnceDirective ::= once
-private IncludeDirective ::= INCLUDE_DIRECTIVE [OnceDirective]
-IncludeDeclaration ::= IncludeDirective STRING {pin=1 name="include" methods=[getReference]}
 ConstDeclaration ::= const Id '=' Literal {pin=1}
 
 EnumDeclaration ::= enum Id '{' EnumItemDeclarations? '}' {pin=1}

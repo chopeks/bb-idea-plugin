@@ -8,12 +8,9 @@ import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.*
 import com.intellij.psi.search.FileTypeIndex
-import com.intellij.psi.search.FilenameIndex
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.testFramework.utils.vfs.getPsiFile
 import com.intellij.util.indexing.FileBasedIndex
-import java.nio.file.Paths
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicReference
@@ -25,23 +22,6 @@ internal val LOG by lazy(LazyThreadSafetyMode.PUBLICATION) {
 object SquirrelPsiImplUtil {
 	private val projectFiles = ConcurrentHashMap<String, Collection<VirtualFile>>()
 	private val lookups = ConcurrentHashMap<SquirrelId, SquirrelFunctionDeclarationPsiReferenceBase>()
-
-	@JvmStatic
-	fun getReference(includeElement: SquirrelIncludeDeclaration): PsiReference? {
-		if (includeElement.string == null) {
-			return null
-		}
-
-		val includeLocation = includeElement.string!!.text.replace("\"".toRegex(), "")
-		val filename = Paths.get(includeLocation).fileName.toString()
-		val psiFiles = FilenameIndex.getVirtualFilesByName(filename, GlobalSearchScope.allScope(includeElement.project))
-
-		return if (psiFiles.isEmpty()) {
-			null
-		} else {
-			SquirrelFilePsiReferenceBase(includeElement, psiFiles.first().getPsiFile(includeElement.project))
-		}
-	}
 
 	@JvmStatic
 	fun getReference(element: SquirrelStringLiteral): PsiReference? {

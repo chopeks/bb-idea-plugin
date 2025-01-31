@@ -39,8 +39,6 @@ class SquirrelSyntaxHighlighter : SyntaxHighlighterBase() {
 			fillMap(ATTRIBUTES, SquirrelTokenTypesSets.KEYWORDS, SquirrelSyntaxHighlightingColors.KEYWORD)
 			fillMap(ATTRIBUTES, SquirrelTokenTypesSets.NUMBERS, SquirrelSyntaxHighlightingColors.NUMBER)
 			fillMap(ATTRIBUTES, SquirrelTokenTypesSets.STRING_LITERALS, SquirrelSyntaxHighlightingColors.STRING)
-			fillMap(ATTRIBUTES, SquirrelSyntaxHighlightingColors.DIRECTIVE, SquirrelTokenTypes.INCLUDE_DIRECTIVE)
-			fillMap(ATTRIBUTES, SquirrelSyntaxHighlightingColors.ONCE, SquirrelTokenTypes.ONCE)
 		}
 	}
 }

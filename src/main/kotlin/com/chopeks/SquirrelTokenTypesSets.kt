@@ -224,7 +224,6 @@ object SquirrelTokenTypesSets {
 		SquirrelTokenTypes.CONTINUE_STATEMENT,
 		SquirrelTokenTypes.YIELD_STATEMENT,
 		SquirrelTokenTypes.THROW_STATEMENT,
-		SquirrelTokenTypes.INCLUDE_DIRECTIVE
 	)
 
 
