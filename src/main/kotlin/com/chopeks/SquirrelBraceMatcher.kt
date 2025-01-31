@@ -13,15 +13,7 @@ class SquirrelBraceMatcher : PairedBraceMatcher {
 		BracePair(SquirrelTokenTypes.CLASS_ATTR_START, SquirrelTokenTypes.CLASS_ATTR_END, false),
 	)
 
-	override fun getPairs(): Array<BracePair> {
-		return bracePairs
-	}
-
-	override fun isPairedBracesAllowedBeforeType(lbraceType: IElementType, contextType: IElementType?): Boolean {
-		return true
-	}
-
-	override fun getCodeConstructStart(file: PsiFile, openingBraceOffset: Int): Int {
-		return openingBraceOffset
-	}
+	override fun getPairs() = bracePairs
+	override fun isPairedBracesAllowedBeforeType(lbraceType: IElementType, contextType: IElementType?) = true
+	override fun getCodeConstructStart(file: PsiFile, openingBraceOffset: Int) = openingBraceOffset
 }

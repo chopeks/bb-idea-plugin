@@ -66,9 +66,28 @@ public class SquirrelSdkConfigurable implements SearchableConfigurable, Configur
         }
         FileChooserDescriptor chooserDescriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor()
                 .withTitle(SquirrelBundle.message("squirrel.sdk.select.root.dir"));
-        mySdkPathField.addBrowseFolderListener(myProject, new MyBrowseFolderListener(chooserDescriptor));
+        mySdkPathField.addActionListener(new MyBrowseFolderListener(chooserDescriptor));
         listenForPathUpdate();
         Disposer.register(myDisposable, mySdkPathField);
+    }
+
+    private static void updateModules(@NotNull Project project, @NotNull Library lib, boolean remove) {
+        Module[] modules = ModuleManager.getInstance(project).getModules();
+        for (Module module : modules) {
+            ModifiableRootModel model = ModuleRootManager.getInstance(module).getModifiableModel();
+            if (!remove) {
+                if (model.findLibraryOrderEntry(lib) == null) {
+                    LibraryOrderEntry entry = model.addLibraryEntry(lib);
+                    entry.setScope(DependencyScope.PROVIDED);
+                }
+            } else {
+                LibraryOrderEntry entry = model.findLibraryOrderEntry(lib);
+                if (entry != null) {
+                    model.removeOrderEntry(entry);
+                }
+            }
+            model.commit();
+        }
     }
 
     @Override
@@ -157,25 +176,6 @@ public class SquirrelSdkConfigurable implements SearchableConfigurable, Configur
         return myComponent;
     }
 
-    private static void updateModules(@NotNull Project project, @NotNull Library lib, boolean remove) {
-        Module[] modules = ModuleManager.getInstance(project).getModules();
-        for (Module module : modules) {
-            ModifiableRootModel model = ModuleRootManager.getInstance(module).getModifiableModel();
-            if (!remove) {
-                if (model.findLibraryOrderEntry(lib) == null) {
-                    LibraryOrderEntry entry = model.addLibraryEntry(lib);
-                    entry.setScope(DependencyScope.PROVIDED);
-                }
-            } else {
-                LibraryOrderEntry entry = model.findLibraryOrderEntry(lib);
-                if (entry != null) {
-                    model.removeOrderEntry(entry);
-                }
-            }
-            model.commit();
-        }
-    }
-
     private void asyncUpdateSdkVersion(@NotNull final String sdkPath) {
         ApplicationManager.getApplication().assertIsDispatchThread();
         ((CardLayout) myVersionPanel.getLayout()).show(myVersionPanel, VERSION_GETTING);
@@ -237,19 +237,6 @@ public class SquirrelSdkConfigurable implements SearchableConfigurable, Configur
         Disposer.dispose(myDisposable);
     }
 
-    private class MyBrowseFolderListener extends ComponentWithBrowseButton.BrowseFolderActionListener<JTextField> {
-        public MyBrowseFolderListener(@NotNull FileChooserDescriptor descriptor) {
-            super(SquirrelBundle.message("squirrel.sdk.select.root.dir"), "", mySdkPathField, myProject, descriptor, TextComponentAccessor
-                    .TEXT_FIELD_WHOLE_TEXT);
-        }
-
-        @Nullable
-        @Override
-        protected VirtualFile getInitialFile() {
-            return ObjectUtils.chooseNotNull(super.getInitialFile(), SquirrelSdkUtil.suggestSdkDirectory());
-        }
-    }
-
     private void listenForPathUpdate() {
         final JTextField textField = mySdkPathField.getTextField();
         final Ref<String> prevPathRef = Ref.create(StringUtil.notNullize(textField.getText()));
@@ -264,5 +251,18 @@ public class SquirrelSdkConfigurable implements SearchableConfigurable, Configur
                 }
             }
         });
+    }
+
+    private class MyBrowseFolderListener extends ComponentWithBrowseButton.BrowseFolderActionListener<JTextField> {
+        public MyBrowseFolderListener(@NotNull FileChooserDescriptor descriptor) {
+            super(SquirrelBundle.message("squirrel.sdk.select.root.dir"), "", mySdkPathField, myProject, descriptor, TextComponentAccessor
+                    .TEXT_FIELD_WHOLE_TEXT);
+        }
+
+        @Nullable
+        @Override
+        protected VirtualFile getInitialFile() {
+            return ObjectUtils.chooseNotNull(super.getInitialFile(), SquirrelSdkUtil.suggestSdkDirectory());
+        }
     }
 }
