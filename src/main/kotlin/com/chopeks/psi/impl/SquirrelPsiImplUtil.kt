@@ -2,6 +2,7 @@ package com.chopeks.psi.impl
 
 import com.chopeks.SquirrelFileType
 import com.chopeks.psi.*
+import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.module.ModuleUtil
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.VirtualFile
@@ -16,6 +17,10 @@ import java.nio.file.Paths
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicReference
+
+internal val LOG by lazy(LazyThreadSafetyMode.PUBLICATION) {
+	logger<SquirrelPsiImplUtil>()
+}
 
 object SquirrelPsiImplUtil {
 	private val projectFiles = ConcurrentHashMap<String, Collection<VirtualFile>>()
@@ -68,22 +73,26 @@ object SquirrelPsiImplUtil {
 
 	@JvmStatic
 	fun getReference(element: SquirrelId): PsiReference? {
-		val inTestSourceContent = ProjectRootManager.getInstance(element.project).fileIndex.isInTestSourceContent(element.containingFile.virtualFile)
-		val projectFilePath = Objects.requireNonNull(element.project.projectFilePath) + inTestSourceContent
+		LOG.warn("getReference() called with: element = ${element.containingFile.name}")
+		try {
+			val inTestSourceContent = ProjectRootManager.getInstance(element.project).fileIndex.isInProject(element.containingFile.virtualFile)
+			val projectFilePath = Objects.requireNonNull(element.project.projectFilePath) + inTestSourceContent
 
-		if (!projectFiles.containsKey(projectFilePath)) {
-			val containingFiles = FileBasedIndex.getInstance().getContainingFiles(
-				FileTypeIndex.NAME, SquirrelFileType.INSTANCE,
-				GlobalSearchScope.moduleRuntimeScope(ModuleUtil.findModuleForPsiElement(element)!!, inTestSourceContent)
-			)
+			if (!projectFiles.containsKey(projectFilePath)) {
+				val containingFiles = FileBasedIndex.getInstance().getContainingFiles(
+					FileTypeIndex.NAME, SquirrelFileType.INSTANCE, GlobalSearchScope.moduleRuntimeScope(ModuleUtil.findModuleForPsiElement(element)!!, inTestSourceContent)
+				)
 
-			projectFiles.putIfAbsent(projectFilePath, containingFiles)
+				projectFiles.putIfAbsent(projectFilePath, containingFiles)
+			}
+
+			if (!lookups.containsKey(element)) {
+				lookups.putIfAbsent(element, SquirrelFunctionDeclarationPsiReferenceBase(element, projectFiles[projectFilePath]!!))
+			}
+			return lookups[element]
+		} catch (e: Exception) {
+			return null
 		}
-
-		if (!lookups.containsKey(element)) {
-			lookups.putIfAbsent(element, SquirrelFunctionDeclarationPsiReferenceBase(element, projectFiles[projectFilePath]!!))
-		}
-		return lookups[element]
 	}
 
 	class SquirrelFilePsiReferenceBase internal constructor(psiElement: PsiElement, private val reference: PsiFile) : PsiPolyVariantReferenceBase<PsiElement?>(psiElement) {

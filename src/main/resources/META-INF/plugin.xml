@@ -55,6 +55,9 @@
         <programRunner implementation="com.chopeks.runner.SquirrelRunner"/>
         <configurationType implementation="com.chopeks.runner.SquirrelConfigurationType"/>
         <runConfigurationProducer implementation="com.chopeks.runner.SquirrelRunConfigProducer"/>
+
+        <localInspection language="Squirrel" groupName="Squirrel" enabledByDefault="true" implementationClass="com.chopeks.inspection.TableInspection" displayName="Check tables"/>
+        <localInspection language="Squirrel" groupName="Squirrel" enabledByDefault="true" implementationClass="com.chopeks.inspection.BBClassInspection" displayName="Check BB classes"/>
     </extensions>
 
     <application-components/>
