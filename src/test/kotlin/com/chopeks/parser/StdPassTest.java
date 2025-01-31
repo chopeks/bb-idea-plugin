@@ -1,7 +1,7 @@
 package com.chopeks.parser;
 
-import com.intellij.testFramework.ParsingTestCase;
 import com.chopeks.SquirrelParserDefinition;
+import com.intellij.testFramework.ParsingTestCase;
 
 public class StdPassTest extends ParsingTestCase {
     public StdPassTest() {

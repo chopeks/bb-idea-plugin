@@ -1,6 +1,6 @@
 package com.chopeks.formatter;
 
-import static com.intellij.psi.codeStyle.CommonCodeStyleSettings.*;
+import static com.intellij.psi.codeStyle.CommonCodeStyleSettings.DO_NOT_WRAP;
 
 public class SpacingFormatterTest extends AbstractSquirrelFormatterTest {
     @Override

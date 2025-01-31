@@ -1,9 +1,9 @@
 package com.chopeks.psi.impl;
 
+import com.chopeks.psi.SquirrelIncludeDeclaration;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixture4TestCase;
-import com.chopeks.psi.SquirrelIncludeDeclaration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

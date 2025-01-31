@@ -1,12 +1,8 @@
 package com.chopeks.parser;
 
-import com.intellij.testFramework.ParsingTestCase;
 import com.intellij.testFramework.PlatformLiteFixture;
-import com.chopeks.SquirrelParserDefinition;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
