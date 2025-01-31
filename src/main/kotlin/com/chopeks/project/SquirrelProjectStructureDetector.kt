@@ -58,7 +58,7 @@ class SquirrelProjectStructureDetector : ProjectStructureDetector() {
 			if (modules.isEmpty()) {
 				modules = ArrayList()
 				for (root in roots) {
-					modules.add(ModuleDescriptor(root.directory, SquirrelModuleType.getInstance(), ContainerUtil.emptyList()))
+					modules.add(ModuleDescriptor(root.directory, SquirrelModuleType.instance, ContainerUtil.emptyList()))
 				}
 				projectDescriptor.modules = modules
 			}

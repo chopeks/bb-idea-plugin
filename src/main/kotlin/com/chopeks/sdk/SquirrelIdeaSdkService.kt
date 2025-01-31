@@ -62,7 +62,7 @@ class SquirrelIdeaSdkService(project: Project) : SquirrelSdkService(project) {
 	}
 
 	override fun isSquirrelModule(module: Module?): Boolean {
-		return module != null && ModuleUtil.getModuleType(module) === SquirrelModuleType.getInstance()
+		return module != null && ModuleUtil.getModuleType(module) === SquirrelModuleType.instance
 	}
 
 	private fun getSquirrelSdk(module: Module?): Sdk? {

@@ -10,7 +10,7 @@ import com.intellij.psi.PsiElement
 /**
  * Squirrel run config producer which looks at the current context to create a new run configuation.
  */
-class SquirrelRunConfigProducer : RunConfigurationProducer<SquirrelRunConfiguration>(SquirrelConfigurationType.getInstance()) {
+class SquirrelRunConfigProducer : RunConfigurationProducer<SquirrelRunConfiguration>(SquirrelConfigurationType.instance) {
 	override fun setupConfigurationFromContext(configuration: SquirrelRunConfiguration, context: ConfigurationContext, sourceElement: Ref<PsiElement>): Boolean {
 		val location = context.location ?: return false
 
