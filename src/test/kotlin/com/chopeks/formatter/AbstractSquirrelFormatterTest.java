@@ -1,14 +1,14 @@
 package com.chopeks.formatter;
 
-import com.intellij.psi.codeStyle.*;
 import com.chopeks.SquirrelLanguage;
 import com.chopeks.formatter.settings.SquirrelCodeStyleSettings;
-import com.intellij.psi.formatter.FormatterTestCase;
 import com.chopeks.formatter.settings.SquirrelLanguageCodeStyleSettingsProvider;
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import com.intellij.psi.formatter.FormatterTestCase;
 
 import java.lang.reflect.Field;
 
-import static com.intellij.psi.codeStyle.CommonCodeStyleSettings.*;
+import static com.intellij.psi.codeStyle.CommonCodeStyleSettings.END_OF_LINE;
 
 public abstract class AbstractSquirrelFormatterTest extends FormatterTestCase {
     public SquirrelCodeStyleSettings getSqSettings() {
