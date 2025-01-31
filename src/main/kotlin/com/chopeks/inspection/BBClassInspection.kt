@@ -33,33 +33,33 @@ class BBClassInspection : LocalInspectionTool() {
 	}
 
 	private fun checkClassName(file: PsiFile, problemDescriptors: MutableList<ProblemDescriptor>, manager: InspectionManager, isOnTheFly: Boolean) {
-		if (file.children.isNotEmpty()) {
-			val expression = file.children.firstOrNull()
-			if (expression !is SquirrelExpressionStatement)
+		if (file.children.isEmpty())
+			return
+		val expression = file.children.firstOrNull()
+		if (expression !is SquirrelExpressionStatement)
+			return
+		val assign = expression.children.firstOrNull()
+		if (assign !is SquirrelAssignExpression)
+			return
+		if (assign.children.size != 3)
+			return // not what we are looking for
+		if (assign.children[0] !is SquirrelReferenceExpression)
+			return // reference should be first
+		if (assign.children[1] !is SquirrelAssignmentOperator)
+			return // assignment should be second
+		val className = assign.children[0].children.lastOrNull() ?: return
+		val assigned = assign.children[2]
+		if (assigned is SquirrelTableExpression) { // new object case
+			if (className.text != file.name.split(".").first()) {
+				problemDescriptors.add(manager.error(className, "'${className.text}' is different than file name.", isOnTheFly))
+			}
+		} else if (assigned is SquirrelCallExpression) { // inheritance case
+			if (assigned.children[0] !is SquirrelReferenceExpression)
 				return
-			val assign = expression.children.firstOrNull()
-			if (assign !is SquirrelAssignExpression)
-				return
-			if (assign.children.size != 3)
-				return // not what we are looking for
-			if (assign.children[0] !is SquirrelReferenceExpression)
-				return // reference should be first
-			if (assign.children[1] !is SquirrelAssignmentOperator)
-				return // assignment should be second
-			val className = assign.children[0].children.lastOrNull() ?: return
-			val assigned = assign.children[2]
-			if (assigned is SquirrelTableExpression) { // new object case
-				if (className.text != file.name.split(".").first()) {
-					problemDescriptors.add(manager.error(className, "'${className.text}' is different than file name.", isOnTheFly))
-				}
-			} else if (assigned is SquirrelCallExpression) { // inheritance case
-				if (assigned.children[0] !is SquirrelReferenceExpression)
-					return
-				val reference = assigned.children[0].children.lastOrNull() ?: return
-				if (reference.text.endsWith("inherit") && className.text != file.name.split(".").first()) {
-					problemDescriptors.add(manager.error(className, "'${className.text}' is different than file name.", isOnTheFly))
-				}
-			} else return
-		}
+			val reference = assigned.children[0].children.lastOrNull() ?: return
+			if (reference.text.endsWith("inherit") && className.text != file.name.split(".").first()) {
+				problemDescriptors.add(manager.error(className, "'${className.text}' is different than file name.", isOnTheFly))
+			}
+		} else return
 	}
 }
