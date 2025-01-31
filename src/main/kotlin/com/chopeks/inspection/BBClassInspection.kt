@@ -1,5 +1,6 @@
 package com.chopeks.inspection
 
+import com.chopeks.SquirrelFileType
 import com.chopeks.psi.*
 import com.intellij.codeInspection.InspectionManager
 import com.intellij.codeInspection.LocalInspectionTool
@@ -34,19 +35,16 @@ class BBClassInspection : LocalInspectionTool() {
 	}
 
 	private fun checkClassName(file: PsiFile, problemDescriptors: MutableList<ProblemDescriptor>, manager: InspectionManager, isOnTheFly: Boolean) {
-		val expression = PsiTreeUtil.findChildOfType(file, SquirrelExpressionStatement::class.java)
-		if (expression !is SquirrelExpressionStatement)
+		if (!file.isBBClass)
 			return
-		val assign = expression.children.firstOrNull()
-		if (assign !is SquirrelAssignExpression)
-			return
-		if (assign.children.size != 3)
-			return // not what we are looking for
-		if (assign.children[0] !is SquirrelReferenceExpression)
-			return // reference should be first
-		if (assign.children[1] !is SquirrelAssignmentOperator)
-			return // assignment should be second
-		val className = assign.children[0].children.lastOrNull()?.children?.firstOrNull { it is SquirrelStdIdentifier } ?: return
+		checkInheritance(file, problemDescriptors, manager, isOnTheFly)
+
+		val assign = PsiTreeUtil.findChildOfType(file, SquirrelExpressionStatement::class.java)?.children?.firstOrNull()
+			?: return
+
+		val className = assign.children[0].children.lastOrNull()?.children?.firstOrNull { it is SquirrelStdIdentifier }
+			?: return
+
 		val assigned = assign.children[2]
 		if (assigned is SquirrelTableExpression) { // new object case
 			if (className.text != file.name.split(".").first()) {
@@ -60,5 +58,21 @@ class BBClassInspection : LocalInspectionTool() {
 				problemDescriptors.add(manager.error(className, "'${className.text}' is different than file name.", isOnTheFly))
 			}
 		} else return
+	}
+
+	private fun checkInheritance(file: PsiFile, problemDescriptors: MutableList<ProblemDescriptor>, manager: InspectionManager, isOnTheFly: Boolean) {
+		val script = file.inheritanceScript
+			?: return
+
+		val path = script.string.text.trim('\"')
+		if (path.endsWith(SquirrelFileType.EXTENSION, true)) {
+			problemDescriptors.add(manager.error(script, "Script path should not have .${SquirrelFileType.EXTENSION} extension", isOnTheFly))
+		}
+		if (path.startsWith("/") || path.startsWith("\\")) {
+			problemDescriptors.add(manager.error(script, "Script path should not start with / or \\", isOnTheFly))
+		}
+		if (!file.checkIfFileExists(script.string.text.trim('"') + ".nut")) {
+			problemDescriptors.add(manager.warn(script, "Script doesn't exist in current project", isOnTheFly))
+		}
 	}
 }

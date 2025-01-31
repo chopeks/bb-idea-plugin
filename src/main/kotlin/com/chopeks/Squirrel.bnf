@@ -360,4 +360,9 @@ ThisReference ::= THIS '.'
 FunctionName ::= StdIdentifier
 Id ::= ((GlobalReference | ThisReference)? StdIdentifier) | THIS
 
-StdIdentifier ::= IDENTIFIER { name="identifier" methods=[getReference]}
+StdIdentifier ::= IDENTIFIER {
+    name="identifier"
+    mixin="com.chopeks.psi.impl.SquirrelNamedElementImpl"
+    implements="com.chopeks.psi.SquirrelNamedElement"
+    methods=[getReference getNameIdentifier getName setName]
+}

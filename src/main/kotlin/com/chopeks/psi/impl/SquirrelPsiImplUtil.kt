@@ -15,6 +15,7 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicReference
 
+
 internal val LOG by lazy(LazyThreadSafetyMode.PUBLICATION) {
 	logger<SquirrelPsiImplUtil>()
 }
@@ -44,11 +45,30 @@ object SquirrelPsiImplUtil {
 				FileTypeIndex.NAME, SquirrelFileType.INSTANCE,
 				GlobalSearchScope.moduleRuntimeScope(ModuleUtil.findModuleForPsiElement(element)!!, false)
 			)
-
 			projectFiles.putIfAbsent(projectFilePath, containingFiles)
 		}
 
 		return AgentDeviceReference(element, statementText, projectFiles[projectFilePath]!!)
+	}
+
+	@JvmStatic
+	fun getReference(element: SquirrelStdIdentifier): PsiReference? {
+		return null
+	}
+
+	@JvmStatic
+	fun getNameIdentifier(element: SquirrelStdIdentifier): PsiElement? {
+		return element.node?.psi
+	}
+
+	@JvmStatic
+	fun getName(element: SquirrelStdIdentifier?): String? {
+		return element?.node?.text
+	}
+
+	@JvmStatic
+	fun setName(element: SquirrelStdIdentifier, newName: String): PsiElement {
+		return element // todo, i have no damn clue how to do that, calling element.setName causes recursion here
 	}
 
 	@JvmStatic
