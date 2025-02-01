@@ -1,7 +1,6 @@
 package com.chopeks.annotator
 
 import com.chopeks.psi.SquirrelStringLiteral
-import com.chopeks.psi.checkIfFileExists
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
@@ -17,17 +16,15 @@ class ScriptAndImageAnnotator : Annotator {
 	override fun annotate(element: PsiElement, holder: AnnotationHolder) {
 		if (element !is SquirrelStringLiteral)
 			return
-		var text = element.string.text.trim('"')
-		if (!text.startsWith("scripts/") && !text.startsWith("ui/"))
+		val text = element.string.text.trim('"')
+
+		val looksLikeFile = "/" in text && " " !in text
+		if (!looksLikeFile)
 			return
 
-		if (text.startsWith("scripts"))
-			text += ".nut"
+		val reference = element.reference?.resolve()
 
-		if (text.startsWith("ui/"))
-			text = "gfx/$text"
-
-		if (!element.containingFile.checkIfFileExists(text)) {
+		if (reference?.containingFile?.virtualFile == null) {
 			holder.newAnnotation(HighlightSeverity.WARNING, "It looks like defined file, but can't be found in current project.")
 				.highlightType(ProblemHighlightType.WARNING)
 				.range(element)

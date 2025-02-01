@@ -2,13 +2,13 @@ package com.chopeks.psi.impl
 
 import com.chopeks.SquirrelFileType
 import com.chopeks.psi.*
+import com.chopeks.psi.reference.SquirrelGfxReference
+import com.chopeks.psi.reference.SquirrelScriptReference
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.module.ModuleUtil
 import com.intellij.openapi.roots.ProjectRootManager
-import com.intellij.openapi.util.TextRange
 import com.intellij.openapi.util.io.toNioPathOrNull
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.openapi.vfs.findPsiFile
 import com.intellij.psi.*
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.GlobalSearchScope
@@ -29,24 +29,21 @@ object SquirrelPsiImplUtil {
 
 	@JvmStatic
 	fun getReference(element: SquirrelStringLiteral): PsiReference? {
-		var text = element.string.text.trim('"')
-		if (!text.startsWith("scripts/") && !text.startsWith("ui/"))
+		val text = element.string.text.trim('"')
+		val looksLikeFile = "/" in text && " " !in text
+		if (!looksLikeFile)
 			return null
 
-		if (text.startsWith("scripts"))
-			text += ".nut"
-
 		if (text.startsWith("ui/"))
-			text = "gfx/$text"
+			return element.containingFile.getFile(("gfx/$text").toNioPathOrNull())
+				?.let { SquirrelGfxReference(it, element) }
 
-		val file = element.containingFile.getFile(text.toNioPathOrNull())
-			?: return null
+		if (text.startsWith("scripts"))
+			return element.containingFile.getFile(("$text.nut").toNioPathOrNull())
+				?.let { SquirrelScriptReference(it, element) }
 
-		return object : PsiReferenceBase<SquirrelStringLiteral>(element) {
-			override fun resolve() = file.findPsiFile(element.project)
-			override fun getVariants() = emptyArray<Any>()
-			override fun getRangeInElement() = TextRange.allOf(element.string.text)
-		}
+		return element.containingFile.getFile(("scripts/$text.nut").toNioPathOrNull())
+			?.let { SquirrelScriptReference(it, element) }
 	}
 
 	@JvmStatic

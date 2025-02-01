@@ -1,8 +1,7 @@
 package com.chopeks.linemarker
 
 import com.chopeks.psi.SquirrelStringLiteral
-import com.chopeks.psi.checkIfFileExists
-import com.chopeks.psi.getFile
+import com.chopeks.psi.reference.SquirrelGfxReference
 import com.intellij.codeInsight.daemon.LineMarkerInfo
 import com.intellij.codeInsight.daemon.LineMarkerProvider
 import com.intellij.openapi.editor.markup.GutterIconRenderer
@@ -17,25 +16,21 @@ class GfxLineMarkerProvider : LineMarkerProvider {
 		if (element !is SquirrelStringLiteral)
 			return null
 
-		var text = element.string.text.trim('"')
-		if (!text.startsWith("ui/"))
+		val reference = element.reference
+		if (reference !is SquirrelGfxReference)
 			return null
 
-		if (text.startsWith("ui/"))
-			text = "gfx/$text"
+		val ref = reference.resolve()?.containingFile
+			?: return null
 
-		if (element.containingFile.checkIfFileExists(text)) {
-			return createGfxMarker(element, element.containingFile.getFile(text)!!)
-		}
-		return null
+		return createGfxMarker(element, ref.virtualFile)
 	}
 
 	private fun createGfxMarker(literal: SquirrelStringLiteral, file: VirtualFile): LineMarkerInfo<*> {
-		val icon = ImageIcon(file.inputStream.readAllBytes())
 		return LineMarkerInfo(
-			literal,
+			literal.string,
 			literal.textRange,
-			resizedIcon(icon, 24, 24),
+			resizedIcon(file.inputStream.readAllBytes()),
 			{ literal.string.text.trim('"') },
 			null,
 			GutterIconRenderer.Alignment.RIGHT,
@@ -43,8 +38,7 @@ class GfxLineMarkerProvider : LineMarkerProvider {
 		)
 	}
 
-	private fun resizedIcon(icon: ImageIcon, width: Int, height: Int): ImageIcon {
-		val image: Image = icon.image
-		return ImageIcon(image.getScaledInstance(width, height, Image.SCALE_SMOOTH))
+	private fun resizedIcon(icon: ByteArray): ImageIcon {
+		return ImageIcon(ImageIcon(icon).image.getScaledInstance(24, 24, Image.SCALE_SMOOTH))
 	}
 }
