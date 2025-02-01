@@ -12,7 +12,6 @@ class BBClassPsiStorage(
 	private val functionIds: HashMap<String, SquirrelStdIdentifier> = hashMapOf()
 
 	init {
-//		LOG.warn("created for ${file.virtualFile.path}")
 		superClass = setupInheritance(file)
 		// query first table, that's our class body
 		val classTable = PsiTreeUtil.findChildOfType(file, SquirrelTableExpression::class.java)
@@ -40,6 +39,7 @@ class BBClassPsiStorage(
 	}
 
 	fun getMTableRef(id: SquirrelStdIdentifier): SquirrelStdIdentifier? {
+
 		return mTableIds[id.text] ?: superClass?.getMTableRef(id)
 	}
 
@@ -57,5 +57,4 @@ class BBClassPsiStorage(
 		} ?: return null
 		return BBClassPsiStorage(scriptReference)
 	}
-
 }

@@ -8,6 +8,7 @@ import com.intellij.openapi.vfs.findFile
 import com.intellij.openapi.vfs.toNioPathOrNull
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
+import com.jetbrains.rd.framework.base.deepClonePolymorphic
 import okio.Path.Companion.toPath
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -22,10 +23,10 @@ import kotlin.io.path.exists
 val PsiFile.isBBClass: Boolean
 	get() {
 		// BB classes start with expression, but there can be comment as far I'm aware
-		val expressions = children.filterIsInstance<SquirrelExpressionStatement>()
+		val expressions = children.filterIsInstance<SquirrelExpressionStatement>().deepClonePolymorphic()
 		if (expressions.size > 1)
 			return false
-		val assign = expressions.first().children.firstOrNull()
+		val assign = expressions.firstOrNull()?.children?.firstOrNull()
 		if (assign !is SquirrelAssignExpression)
 			return false
 		if (assign.children.size != 3)
