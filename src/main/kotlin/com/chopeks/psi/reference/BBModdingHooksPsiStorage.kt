@@ -1,20 +1,22 @@
 package com.chopeks.psi.reference
 
 import com.chopeks.psi.*
-import com.chopeks.psi.impl.LOG
 import com.intellij.psi.util.PsiTreeUtil
 
 class BBModdingHooksPsiStorage(
-	wrapper: SquirrelCallExpression
+	wrapper: SquirrelCallExpression?
 ) {
 	private val superClass: BBClassPsiStorage?
 	private val mTableIds: HashMap<String, SquirrelStdIdentifier> = hashMapOf()
 	private val functionIds: HashMap<String, SquirrelStdIdentifier> = hashMapOf()
 
 	init {
-		LOG.warn("created for this ${wrapper.containingFile.virtualFile.path}")
-		superClass = setupInheritance(wrapper)
-		setupFields(wrapper)
+		if (wrapper != null) {
+			superClass = setupInheritance(wrapper)
+			setupFields(wrapper)
+		} else {
+			superClass = null
+		}
 	}
 
 	fun getMTableRef(id: SquirrelStdIdentifier): SquirrelStdIdentifier? {
@@ -25,13 +27,19 @@ class BBModdingHooksPsiStorage(
 		return functionIds[id.text] ?: superClass?.getFunctionRef(id)
 	}
 
+	fun getMTableFields(): List<SquirrelStdIdentifier> {
+		return mutableListOf<SquirrelStdIdentifier>().apply {
+			addAll(mTableIds.toList().map { it.second })
+			if (superClass != null)
+				addAll(superClass.getMTableFields())
+		}
+	}
+
 	private fun setupFields(wrapper: SquirrelCallExpression) {
-		// query first table, that's our class body
 		val hookBody = PsiTreeUtil.findChildOfType(wrapper, SquirrelFunctionBody::class.java)
 			?: return
 
 		val expressions = PsiTreeUtil.findChildrenOfType(hookBody, SquirrelAssignExpression::class.java)
-		LOG.warn("${expressions.size} expressions found")
 		for (expression in expressions) {
 			val leftExpr = expression.expressionList.firstOrNull()
 				?: continue

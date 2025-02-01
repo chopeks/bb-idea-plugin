@@ -44,6 +44,8 @@
         <langCodeStyleSettingsProvider implementation="com.chopeks.formatter.settings.SquirrelLanguageCodeStyleSettingsProvider"/>
         <directoryProjectGenerator implementation="com.chopeks.SquirrelProjectGenerator"/>
 
+        <!-- code completion -->
+        <completion.contributor language="Squirrel" implementationClass="com.chopeks.codecompletion.SquirrelCompletionContributor"/>
         <!-- annotators-->
         <annotator language="Squirrel" implementationClass="com.chopeks.annotator.ScriptAndImageAnnotator"/>
         <!-- line markers -->
