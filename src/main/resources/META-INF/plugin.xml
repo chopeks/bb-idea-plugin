@@ -7,7 +7,7 @@
     <description><![CDATA[
         Features
         <ul>
-            <li>Adds syntax highlighting for the <a href="http://squirrel-lang.org/">Squirrel</a> language
+            <li>Adds syntax highlighting for the <a href="https://squirrel-lang.org/">Squirrel</a> language
         </ul>
 
         Fork <a href="https://github.com/shvetsgroup/squirrel-lang-idea-plugin">shvetsgroup/squirrel-lang-idea-plugin</a>
@@ -43,17 +43,6 @@
         <codeStyleSettingsProvider implementation="com.chopeks.formatter.settings.SquirrelCodeStyleSettingsProvider"/>
         <langCodeStyleSettingsProvider implementation="com.chopeks.formatter.settings.SquirrelLanguageCodeStyleSettingsProvider"/>
         <directoryProjectGenerator implementation="com.chopeks.SquirrelProjectGenerator"/>
-
-        <sdkType implementation="com.chopeks.sdk.SquirrelSdkType"/>
-        <projectService serviceImplementation="com.chopeks.sdk.SquirrelSdkService" overrides="false"/>
-        <library.presentationProvider implementation="com.chopeks.sdk.SquirrelSdkLibraryPresentationProvider"/>
-
-        <projectConfigurable groupId="language" provider="com.chopeks.configuration.SquirrelConfigurableProvider" dynamic="true"/>
-
-        <!-- runner -->
-        <programRunner implementation="com.chopeks.runner.SquirrelRunner"/>
-        <configurationType implementation="com.chopeks.runner.SquirrelConfigurationType"/>
-        <runConfigurationProducer implementation="com.chopeks.runner.SquirrelRunConfigProducer"/>
 
         <!-- annotators-->
         <annotator language="Squirrel" implementationClass="com.chopeks.annotator.ScriptAndImageAnnotator"/>

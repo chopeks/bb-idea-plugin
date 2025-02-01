@@ -2,7 +2,6 @@ package com.chopeks
 
 import com.chopeks.SquirrelBundle.message
 import com.chopeks.SquirrelModuleType.Companion.instance
-import com.chopeks.sdk.SquirrelSdkType
 import com.intellij.ide.util.projectWizard.ModuleBuilder
 import com.intellij.ide.util.projectWizard.WizardContext
 import com.intellij.openapi.Disposable
@@ -11,7 +10,6 @@ import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.options.ConfigurationException
-import com.intellij.openapi.projectRoots.SdkTypeId
 import com.intellij.openapi.roots.ModifiableRootModel
 import com.intellij.openapi.startup.StartupManager
 import com.intellij.openapi.vfs.VirtualFile
@@ -27,7 +25,6 @@ class SquirrelModuleBuilder : ModuleBuilder() {
 	override fun getModuleType() = instance
 	override fun getParentGroup() = SquirrelModuleType.MODULE_TYPE_ID
 	override fun getCustomOptionsStep(context: WizardContext, parentDisposable: Disposable) = null
-	override fun isSuitableSdkType(sdkType: SdkTypeId) = sdkType is SquirrelSdkType
 
 	@Throws(ConfigurationException::class)
 	override fun setupRootModel(modifiableRootModel: ModifiableRootModel) {
