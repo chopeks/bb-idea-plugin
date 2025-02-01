@@ -6,19 +6,29 @@ import com.chopeks.psi.impl.SquirrelReferenceExpressionImpl
 import com.chopeks.psi.isBBClass
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiReferenceBase
+import com.intellij.psi.PsiElementResolveResult
+import com.intellij.psi.PsiPolyVariantReferenceBase
+import com.intellij.psi.ResolveResult
 import com.intellij.psi.util.PsiTreeUtil
 
 class SquirrelStdIdReference(
 	element: SquirrelStdIdentifier
-) : PsiReferenceBase<SquirrelStdIdentifier>(element) {
-	override fun resolve(): PsiElement? {
-		if (element.containingFile.isBBClass)
-			return resolveForBBClass()
-		return resolveForModdingHooks()
+) : PsiPolyVariantReferenceBase<SquirrelStdIdentifier>(element) {
+	override fun getVariants() = emptyArray<Any>()
+	override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
+		val results = mutableListOf<ResolveResult>()
+
+		val ref = if (element.containingFile.isBBClass)
+			resolveForBBClass()
+		else
+			resolveForModdingHooks()
+
+		if (ref != null) {
+			results.add(PsiElementResolveResult(ref))
+		}
+		return results.toTypedArray()
 	}
 
-	override fun getVariants() = emptyArray<Any>()
 	override fun getRangeInElement() = TextRange.allOf(element.text)
 
 	private val qualifiedName: String?
