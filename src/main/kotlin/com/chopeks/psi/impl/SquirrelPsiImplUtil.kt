@@ -24,6 +24,9 @@ internal val LOG by lazy(LazyThreadSafetyMode.PUBLICATION) {
 }
 
 object SquirrelPsiImplUtil {
+	private val lookupScripts = ConcurrentHashMap<SquirrelStringLiteral, SquirrelScriptReference>()
+	private val lookupGfx = ConcurrentHashMap<SquirrelStringLiteral, SquirrelGfxReference>()
+
 	private val projectFiles = ConcurrentHashMap<String, Collection<VirtualFile>>()
 	private val lookups = ConcurrentHashMap<SquirrelId, SquirrelFunctionDeclarationPsiReferenceBase>()
 
@@ -35,15 +38,27 @@ object SquirrelPsiImplUtil {
 			return null
 
 		if (text.startsWith("ui/"))
-			return element.containingFile.getFile(("gfx/$text").toNioPathOrNull())
+			return lookupGfx[element] ?: element.containingFile.getFile(("gfx/$text").toNioPathOrNull())
 				?.let { SquirrelGfxReference(it, element) }
+				?.also {
+					if (!lookupGfx.containsKey(element))
+						lookupGfx.putIfAbsent(element, it)
+				}
 
 		if (text.startsWith("scripts"))
-			return element.containingFile.getFile(("$text.nut").toNioPathOrNull())
+			return lookupScripts[element] ?: element.containingFile.getFile(("$text.nut").toNioPathOrNull())
 				?.let { SquirrelScriptReference(it, element) }
+				?.also {
+					if (!lookupScripts.containsKey(element))
+						lookupScripts.putIfAbsent(element, it)
+				}
 
-		return element.containingFile.getFile(("scripts/$text.nut").toNioPathOrNull())
+		return lookupScripts[element] ?: element.containingFile.getFile(("scripts/$text.nut").toNioPathOrNull())
 			?.let { SquirrelScriptReference(it, element) }
+			?.also {
+				if (!lookupScripts.containsKey(element))
+					lookupScripts.putIfAbsent(element, it)
+			}
 	}
 
 	@JvmStatic

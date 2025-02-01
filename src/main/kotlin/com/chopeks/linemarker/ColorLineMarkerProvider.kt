@@ -29,7 +29,7 @@ class ColorLineMarkerProvider : LineMarkerProvider {
 			targetColor = "#$color"
 
 		return LineMarkerInfo(
-			literal,
+			literal.string,
 			literal.textRange,
 			ColorIcon(10, parseColor(targetColor)),
 			{ targetColor },
