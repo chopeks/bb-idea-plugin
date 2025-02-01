@@ -3,10 +3,13 @@ package com.chopeks.psi
 import com.intellij.openapi.module.ModuleManager
 import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.roots.ModuleRootManager
+import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.openapi.vfs.findFile
 import com.intellij.openapi.vfs.toNioPathOrNull
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import okio.Path.Companion.toPath
+import java.nio.file.Path
 import java.nio.file.Paths
 import kotlin.io.path.exists
 
@@ -64,8 +67,23 @@ val PsiFile.sourceDirs: List<String>
 		return sourceDirs.toList()
 	}
 
-fun PsiFile.checkIfFileExists(relativePath: String): Boolean {
+
+fun PsiFile.checkIfFileExists(relativePath: String?): Boolean {
 	return sourceDirs
 		.map { Paths.get(it, relativePath) }
 		.any { project.guessProjectDir()?.toNioPathOrNull()?.resolve(it)?.exists() == true }
 }
+
+fun PsiFile.checkIfFileExists(relativePath: Path?) =
+	checkIfFileExists(relativePath?.toString())
+
+
+fun PsiFile.getFile(relativePath: String?): VirtualFile? {
+	return sourceDirs
+		.map { Paths.get(it, relativePath) }
+		.firstOrNull { project.guessProjectDir()?.toNioPathOrNull()?.resolve(it)?.exists() == true }
+		?.let { project.guessProjectDir()?.findFile(it.toString()) }
+}
+
+fun PsiFile.getFile(relativePath: Path?) =
+	getFile(relativePath?.toString())

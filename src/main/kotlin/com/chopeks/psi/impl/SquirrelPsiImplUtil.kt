@@ -5,7 +5,10 @@ import com.chopeks.psi.*
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.module.ModuleUtil
 import com.intellij.openapi.roots.ProjectRootManager
+import com.intellij.openapi.util.TextRange
+import com.intellij.openapi.util.io.toNioPathOrNull
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.openapi.vfs.findPsiFile
 import com.intellij.psi.*
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.GlobalSearchScope
@@ -26,33 +29,29 @@ object SquirrelPsiImplUtil {
 
 	@JvmStatic
 	fun getReference(element: SquirrelStringLiteral): PsiReference? {
-		val statement = PsiTreeUtil.findFirstParent(element) { psiElement -> psiElement is SquirrelExpressionStatement }
-
-		if (statement == null) {
+		var text = element.string.text.trim('"')
+		if (!text.startsWith("scripts/") && !text.startsWith("ui/"))
 			return null
+
+		if (text.startsWith("scripts"))
+			text += ".nut"
+
+		if (text.startsWith("ui/"))
+			text = "gfx/$text"
+
+		val file = element.containingFile.getFile(text.toNioPathOrNull())
+			?: return null
+
+		return object : PsiReferenceBase<SquirrelStringLiteral>(element) {
+			override fun resolve() = file.findPsiFile(element.project)
+			override fun getVariants() = emptyArray<Any>()
+			override fun getRangeInElement() = TextRange.allOf(element.string.text)
 		}
-
-		val statementText = statement.text
-		if (!statementText.startsWith("device.send") && !statementText.startsWith("agent.send") && !statementText.startsWith("device.on") && !statementText.startsWith("agent.on")) {
-			return null
-		}
-
-
-		val projectFilePath = Objects.requireNonNull(element.project.projectFilePath) + false
-
-		if (!projectFiles.containsKey(projectFilePath)) {
-			val containingFiles = FileBasedIndex.getInstance().getContainingFiles(
-				FileTypeIndex.NAME, SquirrelFileType.INSTANCE,
-				GlobalSearchScope.moduleRuntimeScope(ModuleUtil.findModuleForPsiElement(element)!!, false)
-			)
-			projectFiles.putIfAbsent(projectFilePath, containingFiles)
-		}
-
-		return AgentDeviceReference(element, statementText, projectFiles[projectFilePath]!!)
 	}
 
 	@JvmStatic
 	fun getReference(element: SquirrelStdIdentifier): PsiReference? {
+		LOG.warn("getReference called with: element = ${element.name}")
 		return null
 	}
 
@@ -254,23 +253,6 @@ object SquirrelPsiImplUtil {
 				e.printStackTrace()
 				throw e
 			}
-		}
-	}
-
-	private class AgentDeviceReference(element: SquirrelStringLiteral, private val statementText: String, private val virtualFiles: Collection<VirtualFile>) : PsiPolyVariantReferenceBase<PsiElement?>(element) {
-		override fun multiResolve(b: Boolean): Array<ResolveResult> {
-			for (vf in virtualFiles) {
-				val squirrelFile = PsiManager.getInstance(myElement!!.project).findFile(vf) as SquirrelFile?
-				val childrenOfType = PsiTreeUtil.findChildrenOfType(squirrelFile, SquirrelExpressionStatement::class.java)
-
-				for (squirrelExpressionStatement in childrenOfType) {
-					val prefix = (if (statementText.startsWith("agent")) "device" else "agent") + "." + (if (statementText.contains("send")) "on" else "send") + "(" + myElement.text
-					if (squirrelExpressionStatement.text.startsWith(prefix)) {
-						return arrayOf(PsiElementResolveResult(squirrelExpressionStatement))
-					}
-				}
-			}
-			return emptyArray()
 		}
 	}
 }

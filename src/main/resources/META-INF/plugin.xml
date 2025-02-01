@@ -55,6 +55,9 @@
         <configurationType implementation="com.chopeks.runner.SquirrelConfigurationType"/>
         <runConfigurationProducer implementation="com.chopeks.runner.SquirrelRunConfigProducer"/>
 
+        <!-- annotators-->
+        <annotator language="Squirrel" implementationClass="com.chopeks.annotator.ScriptAndImageAnnotator"/>
+        <!-- inspections-->
         <localInspection language="Squirrel" groupName="Squirrel" enabledByDefault="true" implementationClass="com.chopeks.inspection.TableInspection" displayName="Check tables"/>
         <localInspection language="Squirrel" groupName="Squirrel" enabledByDefault="true" implementationClass="com.chopeks.inspection.BBClassInspection" displayName="Check BB classes"/>
         <!-- indexes -->
