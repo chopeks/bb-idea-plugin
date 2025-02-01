@@ -57,6 +57,9 @@
 
         <!-- annotators-->
         <annotator language="Squirrel" implementationClass="com.chopeks.annotator.ScriptAndImageAnnotator"/>
+        <!-- line markers -->
+        <codeInsight.lineMarkerProvider language="Squirrel" implementationClass="com.chopeks.linemarker.GfxLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="Squirrel" implementationClass="com.chopeks.linemarker.ColorLineMarkerProvider"/>
         <!-- inspections-->
         <localInspection language="Squirrel" groupName="Squirrel" enabledByDefault="true" implementationClass="com.chopeks.inspection.TableInspection" displayName="Check tables"/>
         <localInspection language="Squirrel" groupName="Squirrel" enabledByDefault="true" implementationClass="com.chopeks.inspection.BBClassInspection" displayName="Check BB classes"/>
