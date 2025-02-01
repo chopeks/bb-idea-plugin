@@ -4,6 +4,7 @@ import com.chopeks.SquirrelFileType
 import com.chopeks.psi.*
 import com.chopeks.psi.reference.SquirrelGfxReference
 import com.chopeks.psi.reference.SquirrelScriptReference
+import com.chopeks.psi.reference.SquirrelStdIdReference
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.module.ModuleUtil
 import com.intellij.openapi.roots.ProjectRootManager
@@ -63,8 +64,7 @@ object SquirrelPsiImplUtil {
 
 	@JvmStatic
 	fun getReference(element: SquirrelStdIdentifier): PsiReference? {
-		LOG.warn("getReference called with: element = ${element.name}")
-		return null
+		return SquirrelStdIdReference(element)
 	}
 
 	@JvmStatic

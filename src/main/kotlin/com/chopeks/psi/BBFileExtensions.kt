@@ -22,10 +22,10 @@ import kotlin.io.path.exists
 val PsiFile.isBBClass: Boolean
 	get() {
 		// BB classes start with expression, but there can be comment as far I'm aware
-		val expression = PsiTreeUtil.findChildOfType(this, SquirrelExpressionStatement::class.java)
-		if (expression !is SquirrelExpressionStatement)
+		val expressions = children.filterIsInstance<SquirrelExpressionStatement>()
+		if (expressions.size > 1)
 			return false
-		val assign = expression.children.firstOrNull()
+		val assign = expressions.first().children.firstOrNull()
 		if (assign !is SquirrelAssignExpression)
 			return false
 		if (assign.children.size != 3)
