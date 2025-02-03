@@ -2,7 +2,6 @@ package com.chopeks.codecompletion
 
 import com.chopeks.psi.SquirrelReferenceExpression
 import com.chopeks.psi.SquirrelStdIdentifier
-import com.chopeks.psi.SquirrelStringLiteral
 import com.chopeks.psi.impl.LOG
 import com.chopeks.psi.isBBClass
 import com.chopeks.psi.reference.BBClassPsiInheritanceStorage
@@ -36,8 +35,8 @@ class BBmTableCompletionProvider : CompletionProvider<CompletionParameters>() {
 					return
 				}
 				element.containingFile.hooks.hookDefinitions.forEach {
-					if (PsiTreeUtil.isAncestor(it.second, element, true)) {
-						PsiTreeUtil.findChildOfType(it.second, SquirrelStringLiteral::class.java)?.reference?.resolve()?.also { element ->
+					if (PsiTreeUtil.isAncestor(it.hookContainer, element, true)) {
+						it.scriptRef?.resolve()?.also { element ->
 							BBClassPsiInheritanceStorage(element.containingFile).allSymbols.filter { it.startsWith("m_") }.forEach {
 								result.addElement(LookupElementBuilder.create(it.substring(it.indexOf('_') + 1)).withIcon(AllIcons.Nodes.Field))
 							}

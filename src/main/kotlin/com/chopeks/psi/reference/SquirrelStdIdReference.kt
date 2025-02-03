@@ -60,7 +60,7 @@ class SquirrelStdIdReference(
 					?.also(results::add)
 			} else {
 				file.hooks.hookDefinitions.forEach {
-					BBModdingHooksPsiStorage(it.second).findMField(element)
+					BBModdingHooksPsiStorage(it.hookContainer, it.hookedObjectRef).findMField(element)
 						?.also(results::add)
 				}
 			}
@@ -94,7 +94,7 @@ class SquirrelStdIdReference(
 					?.also(results::add)
 			} else {
 				file.hooks.hookDefinitions.forEach {
-					BBModdingHooksPsiStorage(it.second).findFunction(element)
+					BBModdingHooksPsiStorage(it.hookContainer, it.hookedObjectRef).findFunction(element)
 						?.also(results::add)
 				}
 			}

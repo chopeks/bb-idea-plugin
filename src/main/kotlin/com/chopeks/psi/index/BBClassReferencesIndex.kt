@@ -21,7 +21,7 @@ import com.intellij.util.io.EnumeratorStringDescriptor
  */
 class BBClassReferencesIndex : ScalarIndexExtension<String>() {
 	override fun getName() = BBIndexes.BBClassReferences
-	override fun getVersion() = 1
+	override fun getVersion() = 3
 	override fun dependsOnFileContent() = true
 	override fun getKeyDescriptor() = EnumeratorStringDescriptor.INSTANCE!!
 	override fun getInputFilter() = FileBasedIndex.InputFilter { file ->
@@ -54,7 +54,7 @@ class BBClassReferencesIndex : ScalarIndexExtension<String>() {
 				return listOf(projectPath.relativize(path).toString())
 			val list = mutableListOf<String>()
 			file.hooks.hookDefinitions.forEach {
-				list.add("${it.first}.nut".replace("/", "\\"))
+				list.add("${it.script}.nut".replace("/", "\\"))
 			}
 			return list
 		}

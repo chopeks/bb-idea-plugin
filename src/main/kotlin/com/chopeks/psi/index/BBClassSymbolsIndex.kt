@@ -22,7 +22,7 @@ import java.io.DataOutput
 
 class BBClassSymbolsIndex : FileBasedIndexExtension<String, String>() {
 	override fun getName() = BBIndexes.BBClassSymbols
-	override fun getVersion() = 2
+	override fun getVersion() = 3
 	override fun dependsOnFileContent() = true
 	override fun getKeyDescriptor() = EnumeratorStringDescriptor.INSTANCE!!
 	override fun getValueExternalizer(): DataExternalizer<String> {
@@ -74,11 +74,11 @@ class BBClassSymbolsIndex : FileBasedIndexExtension<String, String>() {
 			} else {
 				file.hooks.hookDefinitions.forEach {
 					fields.clear()
-					BBModdingHooksPsiStorage(it.second).also {
+					BBModdingHooksPsiStorage(it.hookContainer, it.hookedObjectRef).also {
 						it.mTableIds.forEach { fields.add("m_${it.key}") }
 						it.functionIds.forEach { fields.add("fn_${it.key}") }
 					}
-					files.add("${it.first}.nut".replace("/", "\\") to fields.toSet().toList())
+					files.add("${it.script}.nut".replace("/", "\\") to fields.toSet().toList())
 				}
 			}
 			return files
