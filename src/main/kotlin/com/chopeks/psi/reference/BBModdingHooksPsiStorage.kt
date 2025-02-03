@@ -4,7 +4,6 @@ import com.chopeks.psi.SquirrelAssignExpression
 import com.chopeks.psi.SquirrelFunctionBody
 import com.chopeks.psi.SquirrelReferenceExpression
 import com.chopeks.psi.SquirrelStdIdentifier
-import com.chopeks.psi.impl.LOG
 import com.intellij.psi.util.PsiTreeUtil
 
 class BBModdingHooksPsiStorage(
@@ -15,7 +14,6 @@ class BBModdingHooksPsiStorage(
 	val functionIds: HashMap<String, SquirrelStdIdentifier> = hashMapOf()
 
 	init {
-		LOG.warn("eh? \"$hookedObjectRef.\"")
 		if (wrapper != null) {
 			setupFields(wrapper)
 		}
@@ -49,8 +47,6 @@ class BBModdingHooksPsiStorage(
 						?: continue
 					functionIds[item.text] = item
 				}
-			} else {
-				LOG.warn("didn't find function expression in \"$hookedObjectRef.\"")
 			}
 		}
 	}

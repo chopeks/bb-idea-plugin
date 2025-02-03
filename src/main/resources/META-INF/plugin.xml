@@ -45,7 +45,8 @@
         <directoryProjectGenerator implementation="com.chopeks.SquirrelProjectGenerator"/>
 
         <!-- code completion -->
-        <completion.contributor language="Squirrel" implementationClass="com.chopeks.codecompletion.SquirrelCompletionContributor"/>
+        <completion.contributor language="Squirrel" implementationClass="com.chopeks.codecompletion.contributor.SquirrelFunctionCompletionContributor"/>
+        <completion.contributor language="Squirrel" implementationClass="com.chopeks.codecompletion.contributor.SquirrelArgumentsCompletionContributor"/>
         <!-- annotators-->
         <annotator language="Squirrel" implementationClass="com.chopeks.annotator.ScriptAndImageAnnotator"/>
         <!-- line markers -->
