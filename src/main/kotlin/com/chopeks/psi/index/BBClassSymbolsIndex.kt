@@ -77,9 +77,7 @@ class BBClassSymbolsIndex : FileBasedIndexExtension<String, String>() {
 					files.add("${it.first}.nut".replace("/", "\\") to fields.toSet().toList())
 				}
 			}
-			return files.also {
-
-			}
+			return files
 		}
 	}
 }

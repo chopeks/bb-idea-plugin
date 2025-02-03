@@ -24,4 +24,10 @@ class BBHookUtils(private val file: PsiFile) {
 			// todo add modern hooks too
 			return functionContainers
 		}
+
+	fun findHookClass(element: SquirrelStdIdentifier): PsiFile? {
+		return hookDefinitions.firstOrNull { PsiTreeUtil.isAncestor(it.second, element, true) }
+			?.let { PsiTreeUtil.findChildOfType(it.second, SquirrelStringLiteral::class.java) }
+			?.reference?.resolve()?.containingFile
+	}
 }

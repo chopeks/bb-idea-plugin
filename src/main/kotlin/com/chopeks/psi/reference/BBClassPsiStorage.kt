@@ -38,23 +38,6 @@ class BBClassPsiStorage(
 		}
 	}
 
-	fun getMTableRef(id: SquirrelStdIdentifier): SquirrelStdIdentifier? {
-
-		return mTableIds[id.text] ?: superClass?.getMTableRef(id)
-	}
-
-	fun getFunctionRef(id: SquirrelStdIdentifier): SquirrelStdIdentifier? {
-		return functionIds[id.text] ?: superClass?.getFunctionRef(id)
-	}
-
-	fun getMTableFields(): List<SquirrelStdIdentifier> {
-		return mutableListOf<SquirrelStdIdentifier>().apply {
-			addAll(mTableIds.toList().map { it.second })
-			if (superClass != null)
-				addAll(superClass.getMTableFields())
-		}
-	}
-
 	private fun setupInheritance(file: PsiFile): BBClassPsiStorage? {
 		val scriptReference: SquirrelFile = PsiTreeUtil.findChildOfType(file, SquirrelCallExpression::class.java)?.let {
 			PsiTreeUtil.findChildOfType(it, SquirrelArgumentList::class.java)

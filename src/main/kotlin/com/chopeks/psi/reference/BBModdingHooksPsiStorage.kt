@@ -6,44 +6,19 @@ import com.intellij.psi.util.PsiTreeUtil
 class BBModdingHooksPsiStorage(
 	wrapper: SquirrelCallExpression?
 ) {
-	private val superClass: BBClassPsiStorage?
 	val mTableIds: HashMap<String, SquirrelStdIdentifier> = hashMapOf()
-	private val functionIds: HashMap<String, SquirrelStdIdentifier> = hashMapOf()
+	val functionIds: HashMap<String, SquirrelStdIdentifier> = hashMapOf()
 
 	init {
 		if (wrapper != null) {
-//			superClass = setupInheritance(wrapper)
 			setupFields(wrapper)
 		}
-			superClass = null
-//		}
 	}
 
-	fun getMTableRef(id: SquirrelStdIdentifier): SquirrelStdIdentifier? {
-		return mTableIds[id.text] ?: superClass?.getMTableRef(id)
+
+	fun findMField(element: SquirrelStdIdentifier): SquirrelStdIdentifier? {
+		return mTableIds[element.identifier.text]
 	}
-
-	fun getFunctionRef(id: SquirrelStdIdentifier): SquirrelStdIdentifier? {
-		return functionIds[id.text] ?: superClass?.getFunctionRef(id)
-	}
-
-	fun getMTableFields(): List<SquirrelStdIdentifier> {
-
-		return mutableListOf<SquirrelStdIdentifier>().apply {
-			addAll(mTableIds.toList().map { it.second })
-			if (superClass != null)
-				addAll(superClass.getMTableFields())
-		}
-	}
-
-//	fun findMField(element: SquirrelStdIdentifier): PsiNameIdentifierOwner? {
-//		val name = "m_" + element.identifier.text
-//		if (name !in superClass.symbols)
-//			return superClass?.findMField(element)
-//		return PsiTreeUtil.findChildrenOfType(file, SquirrelTableItem::class.java)
-//			.firstOrNull { "m_${it.key?.text}" == name }?.key?.stdIdentifier
-//	}
-
 
 	private fun setupFields(wrapper: SquirrelCallExpression) {
 		val hookBody = PsiTreeUtil.findChildOfType(wrapper, SquirrelFunctionBody::class.java)
@@ -70,14 +45,5 @@ class BBModdingHooksPsiStorage(
 				}
 			}
 		}
-	}
-
-	private fun setupInheritance(wrapper: SquirrelCallExpression): BBClassPsiStorage? {
-		val scriptReference: SquirrelFile = PsiTreeUtil.findChildOfType(wrapper, SquirrelArgumentList::class.java)?.let {
-			PsiTreeUtil.findChildOfType(it, SquirrelStringLiteral::class.java)
-		}?.let {
-			it.reference?.resolve() as? SquirrelFile
-		} ?: return null
-		return BBClassPsiStorage(scriptReference)
 	}
 }

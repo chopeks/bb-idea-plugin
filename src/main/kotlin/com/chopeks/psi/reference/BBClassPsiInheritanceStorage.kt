@@ -3,26 +3,21 @@ package com.chopeks.psi.reference
 import com.chopeks.psi.*
 import com.chopeks.psi.index.BBIndexes
 import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiNameIdentifierOwner
 import com.intellij.psi.util.PsiTreeUtil
 
 class BBClassPsiInheritanceStorage(
-	private val file: PsiFile
+	val file: PsiFile
 ) {
-	private val superClass: BBClassPsiInheritanceStorage?
+	val superClass: BBClassPsiInheritanceStorage?
 	private val symbols: List<String>
-	private val files: List<PsiFile>
 
 	init {
 		superClass = setupInheritance(file)
 		symbols = BBIndexes.querySymbols(file)
-		files = BBIndexes.querySymbolFiles(file)
 	}
 
-	fun findMField(element: SquirrelStdIdentifier): PsiNameIdentifierOwner? {
+	fun findMField(element: SquirrelStdIdentifier): SquirrelStdIdentifier? {
 		val name = "m_" + element.identifier.text
-		if (name !in symbols)
-			return superClass?.findMField(element)
 		return PsiTreeUtil.findChildrenOfType(file, SquirrelTableItem::class.java)
 			.firstOrNull { "m_${it.key?.text}" == name }?.key?.stdIdentifier
 	}
