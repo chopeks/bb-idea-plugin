@@ -4,6 +4,7 @@ import com.chopeks.SquirrelFileType
 import com.chopeks.psi.*
 import com.chopeks.psi.reference.SquirrelGfxReference
 import com.chopeks.psi.reference.SquirrelScriptReference
+import com.chopeks.psi.reference.SquirrelStdIdPresentation
 import com.chopeks.psi.reference.SquirrelStdIdReference
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.module.ModuleUtil
@@ -63,9 +64,10 @@ object SquirrelPsiImplUtil {
 	}
 
 	@JvmStatic
-	fun getReference(element: SquirrelStdIdentifier): PsiReference? {
-		return SquirrelStdIdReference(element)
-	}
+	fun getReference(element: SquirrelStdIdentifier) = SquirrelStdIdReference(element)
+
+	@JvmStatic
+	fun getPresentation(element: SquirrelStdIdentifier) = SquirrelStdIdPresentation(element)
 
 	@JvmStatic
 	fun getNameIdentifier(element: SquirrelStdIdentifier): PsiElement? {
@@ -80,7 +82,6 @@ object SquirrelPsiImplUtil {
 	@JvmStatic
 	fun setName(element: SquirrelStdIdentifier, newName: String): PsiElement {
 		return element // todo, i have no damn clue how to do that, calling element.setName causes recursion here
-
 	}
 
 	@JvmStatic

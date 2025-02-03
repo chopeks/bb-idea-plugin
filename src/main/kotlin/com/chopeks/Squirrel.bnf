@@ -356,5 +356,5 @@ StdIdentifier ::= IDENTIFIER {
     name="identifier"
     mixin="com.chopeks.psi.impl.SquirrelNamedElementImpl"
     implements="com.chopeks.psi.SquirrelNamedElement"
-    methods=[getReference getNameIdentifier getName setName]
+    methods=[getReference getNameIdentifier getName setName getPresentation]
 }

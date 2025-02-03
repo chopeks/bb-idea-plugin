@@ -2,7 +2,6 @@ package com.chopeks.psi.reference
 
 import com.chopeks.psi.SquirrelCallExpression
 import com.chopeks.psi.SquirrelStdIdentifier
-import com.chopeks.psi.impl.LOG
 import com.chopeks.psi.impl.SquirrelReferenceExpressionImpl
 import com.chopeks.psi.index.BBIndexes
 import com.chopeks.psi.isBBClass
@@ -70,7 +69,6 @@ class SquirrelStdIdReference(
 	}
 
 	private fun resolveFunction(results: MutableList<ResolveResult>) {
-		LOG.warn("Resolve function for ${element.text}")
 		val file = if (element.containingFile.isBBClass)
 			BBClassPsiInheritanceStorage(element.containingFile)
 		else
