@@ -29,7 +29,7 @@ object SquirrelPsiImplUtil {
 		if (!looksLikeFile)
 			return null
 
-		if (text.startsWith("ui/"))
+		if (text.endsWith(".png"))
 			return lookupGfx[element] ?: element.containingFile.getFile(("gfx/$text").toNioPathOrNull())
 				?.let { SquirrelGfxReference(it, element) }
 				?.also {
