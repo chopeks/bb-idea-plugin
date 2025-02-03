@@ -25,12 +25,12 @@ class BBClassFunctionCompletionProvider : CompletionProvider<CompletionParameter
 		val referenceName = referenceExpr.text.replace(dummyRef, "").trim('.')
 
 		LOG.warn("referenceName=`$referenceName`")
-
-		if (referenceName.isBlank()) {
+		if ("this".startsWith(referenceName) && "this" !in referenceName)
 			result.addElement(LookupElementBuilder.create("this").withIcon(AllIcons.Nodes.Function))
+		if ("::".startsWith(referenceName) && "::" !in referenceName)
 			result.addElement(LookupElementBuilder.create("::").withIcon(AllIcons.Nodes.Function))
-//			SquirrelCompletionSets.LOOPS.forEach(result::addElement)
-		} else if (referenceName == "this") {
+
+		if (referenceName == "this") {
 			if (file.isBBClass) {
 				result.addElement(LookupElementBuilder.create("m").withIcon(AllIcons.Nodes.Field))
 				BBClassPsiInheritanceStorage(file).allSymbols.filter { it.startsWith("fn_") }.forEach {
