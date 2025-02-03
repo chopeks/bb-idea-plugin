@@ -13,7 +13,15 @@ class SquirrelCompletionContributor : CompletionContributor() {
 				.withElementType(SquirrelTokenTypes.IDENTIFIER)
 				.inside(psiElement().withElementType(SquirrelTokenTypes.REFERENCE_EXPRESSION))
 				.inside(psiElement().withElementType(SquirrelTokenTypes.FUNCTION_BODY)),
-			MTableCompletionProvider()
+			BBmTableCompletionProvider()
+		)
+		extend(
+			CompletionType.BASIC,
+			psiElement()
+				.withElementType(SquirrelTokenTypes.IDENTIFIER)
+				.inside(psiElement().withElementType(SquirrelTokenTypes.REFERENCE_EXPRESSION))
+				.inside(psiElement().withElementType(SquirrelTokenTypes.FUNCTION_BODY)),
+			BBClassFunctionCompletionProvider()
 		)
 	}
 }

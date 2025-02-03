@@ -28,11 +28,8 @@ class BBClassPsiInheritanceStorage(
 			.firstOrNull { "fn_${it.functionName?.stdIdentifier?.text}" == name }?.functionName?.stdIdentifier
 	}
 
-	private val prettySymbols
-		get() = symbols.filter { it.length > 2 }.map { it.substring(2) }
-
 	val allSymbols: List<String>
-		get() = if (superClass == null) prettySymbols else prettySymbols + superClass.allSymbols
+		get() = if (superClass == null) symbols else symbols + superClass.allSymbols
 
 	private fun setupInheritance(file: PsiFile): BBClassPsiInheritanceStorage? {
 		val scriptReference: SquirrelFile = PsiTreeUtil.findChildOfType(file, SquirrelCallExpression::class.java)?.let {
