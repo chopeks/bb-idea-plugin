@@ -20,6 +20,10 @@ class BBModdingHooksPsiStorage(
 		return mTableIds[element.identifier.text]
 	}
 
+	fun findFunction(element: SquirrelStdIdentifier): SquirrelStdIdentifier? {
+		return functionIds[element.identifier.text]
+	}
+
 	private fun setupFields(wrapper: SquirrelCallExpression) {
 		val hookBody = PsiTreeUtil.findChildOfType(wrapper, SquirrelFunctionBody::class.java)
 			?: return
@@ -46,4 +50,5 @@ class BBModdingHooksPsiStorage(
 			}
 		}
 	}
+
 }

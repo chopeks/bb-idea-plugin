@@ -22,7 +22,7 @@ import java.io.DataOutput
 
 class BBClassSymbolsIndex : FileBasedIndexExtension<String, String>() {
 	override fun getName() = BBIndexes.BBClassSymbols
-	override fun getVersion() = 1
+	override fun getVersion() = 2
 	override fun dependsOnFileContent() = true
 	override fun getKeyDescriptor() = EnumeratorStringDescriptor.INSTANCE!!
 	override fun getValueExternalizer(): DataExternalizer<String> {
@@ -66,14 +66,18 @@ class BBClassSymbolsIndex : FileBasedIndexExtension<String, String>() {
 			val files = mutableListOf<Pair<String, List<String>>>()
 			val fields = mutableListOf<String>()
 			if (file.isBBClass) {
-				BBClassPsiStorage(file).mTableIds
-					.forEach { fields.add("m_${it.key}") }
+				BBClassPsiStorage(file).also {
+					it.mTableIds.forEach { fields.add("m_${it.key}") }
+					it.functionIds.forEach { fields.add("fn_${it.key}") }
+				}
 				files.add(relative to fields.toSet().toList())
 			} else {
 				file.hooks.hookDefinitions.forEach {
 					fields.clear()
-					BBModdingHooksPsiStorage(it.second).mTableIds
-						.forEach { fields.add("m_${it.key}") }
+					BBModdingHooksPsiStorage(it.second).also {
+						it.mTableIds.forEach { fields.add("m_${it.key}") }
+						it.functionIds.forEach { fields.add("fn_${it.key}") }
+					}
 					files.add("${it.first}.nut".replace("/", "\\") to fields.toSet().toList())
 				}
 			}

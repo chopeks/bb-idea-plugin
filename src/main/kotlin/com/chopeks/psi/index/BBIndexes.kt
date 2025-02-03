@@ -38,7 +38,7 @@ object BBIndexes {
 		FileBasedIndex.getInstance().getFilesWithKey(BBClassReferences, setOf(relative), {
 			it.findPsiFile(file.project)?.let(files::add); true
 		}, GlobalSearchScope.allScope(file.project))
-		return files.also { LOG.warn("queryClass files: ${it.joinToString { it.virtualFile.toString() }}") }
+		return files
 	}
 
 }

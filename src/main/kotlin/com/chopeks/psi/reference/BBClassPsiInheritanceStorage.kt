@@ -22,6 +22,12 @@ class BBClassPsiInheritanceStorage(
 			.firstOrNull { "m_${it.key?.text}" == name }?.key?.stdIdentifier
 	}
 
+	fun findFunction(element: SquirrelStdIdentifier): SquirrelStdIdentifier? {
+		val name = "fn_" + element.identifier.text
+		return PsiTreeUtil.findChildrenOfType(file, SquirrelFunctionDeclaration::class.java)
+			.firstOrNull { "fn_${it.functionName?.stdIdentifier?.text}" == name }?.functionName?.stdIdentifier
+	}
+
 	private val prettySymbols
 		get() = symbols.filter { it.length > 2 }.map { it.substring(2) }
 

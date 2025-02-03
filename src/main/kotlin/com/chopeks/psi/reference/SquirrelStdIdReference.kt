@@ -1,6 +1,8 @@
 package com.chopeks.psi.reference
 
+import com.chopeks.psi.SquirrelCallExpression
 import com.chopeks.psi.SquirrelStdIdentifier
+import com.chopeks.psi.impl.LOG
 import com.chopeks.psi.impl.SquirrelReferenceExpressionImpl
 import com.chopeks.psi.index.BBIndexes
 import com.chopeks.psi.isBBClass
@@ -16,10 +18,14 @@ class SquirrelStdIdReference(
 	override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
 		val results = mutableListOf<ResolveResult>()
 
-		val fullName = qualifiedName
+		val refExpr = PsiTreeUtil.getTopmostParentOfType(element, SquirrelReferenceExpressionImpl::class.java)
+			?: return results.toTypedArray()
+		val fullName = refExpr.text
 			?: return results.toTypedArray()
 
-		if (fullName.startsWith("this.m") || fullName.startsWith("m.")) {
+		if (refExpr.parent is SquirrelCallExpression) {
+			resolveFunction(results)
+		} else if (fullName.startsWith("this.m") || fullName.startsWith("m.")) {
 			resolveMField(results)
 		}
 
@@ -28,8 +34,6 @@ class SquirrelStdIdReference(
 
 	override fun getRangeInElement() = TextRange.allOf(element.text)
 
-	private val qualifiedName: String?
-		get() = PsiTreeUtil.getTopmostParentOfType(element, SquirrelReferenceExpressionImpl::class.java)?.text
 
 	private fun resolveMField(results: MutableList<ResolveResult>) {
 		val file = if (element.containingFile.isBBClass)
@@ -46,10 +50,10 @@ class SquirrelStdIdReference(
 			currentClass = currentClass?.superClass
 		} while (currentClass != null)
 
-		results.addAll(resolveForFiles(allFiles).map(::PsiElementResolveResult))
+		results.addAll(resolveMFieldsForFiles(allFiles).map(::PsiElementResolveResult))
 	}
 
-	private fun resolveForFiles(files: List<PsiFile>): List<PsiElement> {
+	private fun resolveMFieldsForFiles(files: List<PsiFile>): List<PsiElement> {
 		val results = mutableListOf<PsiElement>()
 		for (file in files) {
 			if (file.isBBClass) {
@@ -58,6 +62,41 @@ class SquirrelStdIdReference(
 			} else {
 				file.hooks.hookDefinitions.forEach {
 					BBModdingHooksPsiStorage(it.second).findMField(element)
+						?.also(results::add)
+				}
+			}
+		}
+		return results.toSet().toList()
+	}
+
+	private fun resolveFunction(results: MutableList<ResolveResult>) {
+		LOG.warn("Resolve function for ${element.text}")
+		val file = if (element.containingFile.isBBClass)
+			BBClassPsiInheritanceStorage(element.containingFile)
+		else
+			element.containingFile.hooks.findHookClass(element)
+				?.let(::BBClassPsiInheritanceStorage)
+				?: return
+
+		val allFiles = mutableListOf<PsiFile>()
+		var currentClass: BBClassPsiInheritanceStorage? = file
+		do {
+			currentClass?.file?.let { allFiles.addAll(BBIndexes.querySymbolFiles(it)) }
+			currentClass = currentClass?.superClass
+		} while (currentClass != null)
+
+		results.addAll(resolveFunctionsForFiles(allFiles).map(::PsiElementResolveResult))
+	}
+
+	private fun resolveFunctionsForFiles(files: List<PsiFile>): List<PsiElement> {
+		val results = mutableListOf<PsiElement>()
+		for (file in files) {
+			if (file.isBBClass) {
+				BBClassPsiInheritanceStorage(file).findFunction(element)
+					?.also(results::add)
+			} else {
+				file.hooks.hookDefinitions.forEach {
+					BBModdingHooksPsiStorage(it.second).findFunction(element)
 						?.also(results::add)
 				}
 			}
