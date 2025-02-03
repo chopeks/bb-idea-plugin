@@ -8,8 +8,8 @@ class BBClassPsiStorage(
 	file: PsiFile
 ) {
 	private val superClass: BBClassPsiStorage?
-	private val mTableIds: HashMap<String, SquirrelStdIdentifier> = hashMapOf()
-	private val functionIds: HashMap<String, SquirrelStdIdentifier> = hashMapOf()
+	val mTableIds: HashMap<String, SquirrelStdIdentifier> = hashMapOf()
+	val functionIds: HashMap<String, SquirrelStdIdentifier> = hashMapOf()
 
 	init {
 		superClass = setupInheritance(file)

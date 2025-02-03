@@ -56,6 +56,8 @@
         <localInspection language="Squirrel" groupName="Squirrel" enabledByDefault="true" implementationClass="com.chopeks.inspection.BBClassInspection" displayName="Check BB classes"/>
         <!-- indexes -->
         <fileBasedIndex implementation="com.chopeks.psi.index.SquirrelInheritanceIndex" order="first"/>
+        <fileBasedIndex implementation="com.chopeks.psi.index.BBClassSymbolsIndex" order="first"/>
+        <fileBasedIndex implementation="com.chopeks.psi.index.BBClassReferencesIndex" order="first"/>
     </extensions>
 
     <application-components/>

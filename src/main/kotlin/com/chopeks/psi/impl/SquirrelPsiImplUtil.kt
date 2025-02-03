@@ -69,17 +69,18 @@ object SquirrelPsiImplUtil {
 
 	@JvmStatic
 	fun getNameIdentifier(element: SquirrelStdIdentifier): PsiElement? {
-		return element.node?.psi
+		return element.identifier.node?.psi
 	}
 
 	@JvmStatic
 	fun getName(element: SquirrelStdIdentifier?): String? {
-		return element?.node?.text
+		return element?.identifier?.node?.text
 	}
 
 	@JvmStatic
 	fun setName(element: SquirrelStdIdentifier, newName: String): PsiElement {
 		return element // todo, i have no damn clue how to do that, calling element.setName causes recursion here
+
 	}
 
 	@JvmStatic

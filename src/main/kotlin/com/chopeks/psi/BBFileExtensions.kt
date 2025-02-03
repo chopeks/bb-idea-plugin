@@ -1,8 +1,7 @@
 package com.chopeks.psi
 
-import com.intellij.openapi.module.ModuleManager
 import com.intellij.openapi.project.guessProjectDir
-import com.intellij.openapi.roots.ModuleRootManager
+import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.findFile
 import com.intellij.openapi.vfs.toNioPathOrNull
@@ -53,37 +52,32 @@ val PsiFile.inheritanceScript: SquirrelStringLiteral?
 
 val PsiFile.sourceDirs: List<String>
 	get() {
-		val sourceDirs = mutableListOf<String>()
-		val modules = ModuleManager.getInstance(project).modules
 		val basePath = project.basePath!!.toPath(true)
-		for (module in modules) {
-			val rootManager = ModuleRootManager.getInstance(module)
-			for (contentRoot in rootManager.contentRoots) {
-				val sourceFolders = rootManager.getSourceRoots(false)
-				sourceDirs.addAll(sourceFolders.map {
-					it.path.toPath(true).relativeTo(basePath).toString()
-				})
-			}
+		return ProjectRootManager.getInstance(project).contentSourceRoots.mapNotNull {
+			it.path.toPath(true).relativeTo(basePath).toString()
 		}
-		return sourceDirs.toList()
 	}
 
-
-fun PsiFile.checkIfFileExists(relativePath: String?): Boolean {
-	return sourceDirs
+fun PsiFile.checkIfFileExists(relativePath: String?) = try {
+	sourceDirs
 		.map { Paths.get(it, relativePath) }
 		.any { project.guessProjectDir()?.toNioPathOrNull()?.resolve(it)?.exists() == true }
+} catch (e: Exception) {
+	false
 }
+
 
 fun PsiFile.checkIfFileExists(relativePath: Path?) =
 	checkIfFileExists(relativePath?.toString())
 
-
-fun PsiFile.getFile(relativePath: String?): VirtualFile? {
-	return sourceDirs
+fun PsiFile.getFile(relativePath: String?): VirtualFile? = try {
+//	LOG.warn("relative path: $relativePath")
+	sourceDirs
 		.map { Paths.get(it, relativePath) }
 		.firstOrNull { project.guessProjectDir()?.toNioPathOrNull()?.resolve(it)?.exists() == true }
 		?.let { project.guessProjectDir()?.findFile(it.toString()) }
+} catch (e: Exception) {
+	null
 }
 
 fun PsiFile.getFile(relativePath: Path?) =

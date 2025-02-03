@@ -15,7 +15,7 @@ import java.io.DataInput
 import java.io.DataOutput
 
 class SquirrelInheritanceIndex : FileBasedIndexExtension<String, String>() {
-	override fun getName() = Indexes.Inheritance
+	override fun getName() = BBIndexes.Inheritance
 	override fun getVersion() = 1
 	override fun dependsOnFileContent() = true
 	override fun getKeyDescriptor() = EnumeratorStringDescriptor.INSTANCE!!
