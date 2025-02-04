@@ -5,7 +5,6 @@ import com.chopeks.codecompletion.BBClassFunctionCompletionProvider
 import com.chopeks.codecompletion.BBmTableCompletionProvider
 import com.chopeks.psi.SquirrelArgumentList
 import com.chopeks.psi.SquirrelFunctionBody
-import com.chopeks.psi.impl.LOG
 import com.intellij.codeInsight.completion.CompletionContributor
 import com.intellij.codeInsight.completion.CompletionInitializationContext
 import com.intellij.codeInsight.completion.CompletionType
@@ -40,7 +39,6 @@ class SquirrelFunctionCompletionContributor : CompletionContributor() {
 
 	class InsideFunctionPattern : PatternCondition<PsiElement>("function-pattern") {
 		override fun accepts(psi: PsiElement, context: ProcessingContext?): Boolean {
-			LOG.warn("Inside InsideFunctionPattern ${psi.parents(false).toList()}")
 			val parent = psi.parents(false).firstOrNull { it is SquirrelArgumentList || it is SquirrelFunctionBody }
 			if (parent is SquirrelArgumentList)
 				return false

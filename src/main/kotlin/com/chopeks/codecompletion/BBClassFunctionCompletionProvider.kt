@@ -33,13 +33,13 @@ class BBClassFunctionCompletionProvider : CompletionProvider<CompletionParameter
 				BBClassPsiInheritanceStorage(file).allSymbols.filter { it.startsWith("fn_") }.forEach {
 					result.addElement(makeMethodHandler(it.substring(it.indexOf('_') + 1)))
 				}
-				return
-			}
-			element.containingFile.hooks.hookDefinitions.forEach {
-				if (PsiTreeUtil.isAncestor(it.hookContainer, element, true)) {
-					it.scriptRef?.resolve()?.also { element ->
-						BBClassPsiInheritanceStorage(element.containingFile).allSymbols.filter { it.startsWith("fn_") }.forEach {
-							result.addElement(makeMethodHandler(it.substring(it.indexOf('_') + 1)))
+			} else {
+				element.containingFile.hooks.hookDefinitions.forEach {
+					if (PsiTreeUtil.isAncestor(it.hookContainer, element, true)) {
+						it.scriptRef?.resolve()?.also { element ->
+							BBClassPsiInheritanceStorage(element.containingFile).allSymbols.filter { it.startsWith("fn_") }.forEach {
+								result.addElement(makeMethodHandler(it.substring(it.indexOf('_') + 1)))
+							}
 						}
 					}
 				}
