@@ -290,7 +290,7 @@ PrefixOperator ::= '++' | '--'
 
 CommaExpression ::= Expression ',' Expression
 AssignExpression ::= Expression AssignmentOperator Expression { rightAssociative=true }
-TernaryExpression ::= Expression '?' Expression ':' Expression
+TernaryExpression ::= Expression '?' ExpressionWithNoComma ':' ExpressionWithNoComma
 LogicOrExpression ::= Expression '||' Expression
 LogicAndExpression ::= Expression '&&' Expression
 InExpression ::= Expression in Expression
@@ -322,7 +322,7 @@ private array_list_recover ::= !(']')
 private ArrayListPart ::= ExpressionWithNoComma {recoverWhile="array_list_part_recover"}
 private array_list_part_recover ::= !(']' | ',')
 
-ArrayItemExpression ::= Expression '[' ExpressionWithNoComma ']' PrefixOperator?
+ArrayItemExpression ::= Expression '[' ExpressionWithNoComma ']'
 
 TableExpression ::= '{' KeyValuePairs? '}'
 private TableItemSeparator ::= ',' | '<NL>'
@@ -332,7 +332,7 @@ private KeyValuePair ::= Key '=' ExpressionWithNoComma
 Key ::= StdIdentifier | '[' Expression ']'
 
 private NamedElementExpression ::= SimpleRefExpression | ReferenceExpression | ArrayItemExpression
-ReferenceExpression ::= Expression '.' Id
+ReferenceExpression ::= Expression '.' Id PrefixOperator?
 
 SimpleRefExpression ::= Id PrefixOperator? {elementType=ReferenceExpression}
 LiteralExpression ::= Literal
