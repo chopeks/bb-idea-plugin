@@ -20,7 +20,7 @@ class SquirrelFunctionCompletionContributor : CompletionContributor() {
 	init {
 		extend(
 			CompletionType.BASIC,
-			psiElement(SquirrelTokenTypes.IDENTIFIER)
+			psiElement().withElementType(SquirrelTokenTypes.IDENTIFIER)
 				.with(InsideFunctionPattern()),
 			BBmTableCompletionProvider()
 		)
