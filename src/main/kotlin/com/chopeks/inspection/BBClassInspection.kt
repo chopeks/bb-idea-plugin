@@ -5,9 +5,7 @@ import com.chopeks.psi.*
 import com.intellij.codeInspection.InspectionManager
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.ProblemDescriptor
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiRecursiveElementVisitor
 import com.intellij.psi.util.PsiTreeUtil
 
 @Suppress("InspectionDescriptionNotFoundInspection")
@@ -20,18 +18,19 @@ class BBClassInspection : LocalInspectionTool() {
 	}
 
 	private fun checkDuplicatedFunctions(file: PsiFile, problemDescriptors: MutableList<ProblemDescriptor>, manager: InspectionManager, isOnTheFly: Boolean) {
+		if (!file.isBBClass)
+			return
 		val seenFunctions = mutableSetOf<String>()
-		file.accept(object : PsiRecursiveElementVisitor() {
-			override fun visitElement(element: PsiElement) {
-				if (element is SquirrelFunctionDeclaration) {
-					val functionName = element.functionName?.text ?: ""
-					if (!seenFunctions.add(functionName)) {
-						problemDescriptors.add(manager.error(element.functionName!!, "Duplicated function '$functionName' definition.", isOnTheFly))
-					}
-				}
-				super.visitElement(element)
+		val table = PsiTreeUtil.findChildOfType(file, SquirrelTableExpression::class.java)
+			?: return
+		val functions = table.tableItemList.mapNotNull { it.functionDeclaration }
+
+		for (function in functions) {
+			val functionName = function.functionName?.text ?: ""
+			if (!seenFunctions.add(functionName)) {
+				problemDescriptors.add(manager.error(function.functionName!!, "Duplicated function '$functionName' definition.", isOnTheFly))
 			}
-		})
+		}
 	}
 
 	private fun checkClassName(file: PsiFile, problemDescriptors: MutableList<ProblemDescriptor>, manager: InspectionManager, isOnTheFly: Boolean) {
