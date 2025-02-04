@@ -59,6 +59,10 @@
         <fileBasedIndex implementation="com.chopeks.psi.index.SquirrelInheritanceIndex" order="first"/>
         <fileBasedIndex implementation="com.chopeks.psi.index.BBClassSymbolsIndex" order="first"/>
         <fileBasedIndex implementation="com.chopeks.psi.index.BBClassReferencesIndex" order="first"/>
+
+        <newProjectWizard.languageGenerator implementation="com.chopeks.project.SquirrelNewProjectWizard"/>
+
+        <moduleBuilder id="MOD" builderClass="com.chopeks.project.module.ModWizardStep" order="first"/>
     </extensions>
 
     <application-components/>
@@ -66,9 +70,11 @@
     <project-components/>
 
     <actions>
-        <action id="Squirrel.NewSquirrelFile" class="com.chopeks.actions.NewSquirrelFileAction"
-                text="Squirrel File" description="Create new Squirrel file">
+        <action id="Squirrel.NewSquirrelFile" class="com.chopeks.actions.NewSquirrelFileAction" text="Squirrel File" description="Create new Squirrel file">
             <add-to-group group-id="NewGroup" relative-to-action="NewFile" anchor="after"/>
+        </action>
+        <action class="com.chopeks.actions.NewProjectAction" description="Create new Squirrel project" text="BB Modding Project" id="Squirrel.NewProject">
+            <add-to-group group-id="NewProjectOrModuleGroup" anchor="last"/>
         </action>
     </actions>
 

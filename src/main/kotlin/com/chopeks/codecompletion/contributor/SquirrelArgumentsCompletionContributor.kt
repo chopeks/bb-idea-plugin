@@ -16,7 +16,7 @@ class SquirrelArgumentsCompletionContributor : CompletionContributor() {
 	init {
 		extend(
 			CompletionType.BASIC,
-			psiElement(SquirrelTokenTypes.IDENTIFIER)
+			psiElement().withElementType(SquirrelTokenTypes.IDENTIFIER)
 				.with(InsideArgumentListPattern()),
 			BBmTableCompletionProvider()
 		)

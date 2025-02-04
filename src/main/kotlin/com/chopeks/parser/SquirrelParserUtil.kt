@@ -7,6 +7,7 @@ import com.intellij.lang.parser.GeneratedParserUtilBase
 import com.intellij.psi.tree.IElementType
 
 object SquirrelParserUtil : GeneratedParserUtilBase() {
+	@OptIn(ExperimentalStdlibApi::class)
 	@JvmStatic
 	fun prevIsBrace(builder: PsiBuilder, level: Int): Boolean {
 		var type: IElementType? = null

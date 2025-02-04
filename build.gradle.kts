@@ -2,6 +2,7 @@ plugins {
 	id("java")
 	id("org.jetbrains.kotlin.jvm") version "1.9.24"
 	id("org.jetbrains.intellij") version "1.17.3"
+	id("org.jetbrains.compose") version "1.7.3"
 }
 
 group = "com.chopeks"
@@ -9,6 +10,13 @@ version = "1.0.0"
 
 repositories {
 	mavenCentral()
+	google()
+	maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+	maven("https://packages.jetbrains.team/maven/p/kpm/public")
+}
+
+configurations.all {
+	exclude("org.jetbrains.compose.material")
 }
 
 // Configure Gradle IntelliJ Plugin
@@ -22,6 +30,20 @@ intellij {
 
 sourceSets["main"].java
 	.srcDirs("src/main/kotlin", "src/main/gen")
+
+dependencies {
+	implementation("org.jetbrains.jewel:jewel-ide-laf-bridge-242:0.27.0")
+	implementation(compose.desktop.currentOs) {
+		exclude(group = "org.jetbrains.compose.material")
+		exclude(group = "org.jetbrains.kotlinx")
+	}
+	implementation("androidx.lifecycle:lifecycle-runtime-desktop:2.8.7") {
+		exclude(group = "org.jetbrains.kotlinx")
+	}
+	implementation("androidx.lifecycle:lifecycle-common-jvm:2.8.7") {
+		exclude(group = "org.jetbrains.kotlinx")
+	}
+}
 
 tasks {
 	// Set the JVM compatibility versions
@@ -50,4 +72,16 @@ tasks {
 //  publishPlugin {
 //    token.set(System.getenv("PUBLISH_TOKEN"))
 //  }
+}
+
+kotlin {
+	jvmToolchain(17)
+	sourceSets {
+		all {
+			languageSettings {
+				optIn("org.jetbrains.jewel.ExperimentalJewelApi")
+				optIn("androidx.compose.ui.ExperimentalComposeUiApi")
+			}
+		}
+	}
 }

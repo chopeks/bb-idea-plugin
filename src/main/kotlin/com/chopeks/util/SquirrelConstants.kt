@@ -15,17 +15,6 @@
  */
 package com.chopeks.util
 
-import com.intellij.notification.NotificationGroup
-import com.intellij.openapi.wm.ToolWindowId
-import org.jetbrains.annotations.NonNls
-
 object SquirrelConstants {
 	const val MODULE_TYPE_ID: String = "SQUIRREL_MODULE"
-	const val SDK_TYPE_ID: String = "SQUIRREL_SDK"
-	const val SQUIRREL_VERSION_FILE_PATH: @NonNls String = "include/squirrel.h"
-	const val SQUIRREL_COMPILER_NAME: @NonNls String = "sq"
-	const val SQUIRREL: @NonNls String = "squirrel"
-
-	val SQUIRREL_NOTIFICATION_GROUP: NotificationGroup = NotificationGroup.balloonGroup("Squirrel plugin notifications")
-	val SQUIRREL_EXECUTION_NOTIFICATION_GROUP: NotificationGroup = NotificationGroup.toolWindowGroup("Squirrel Execution", ToolWindowId.RUN)
 }

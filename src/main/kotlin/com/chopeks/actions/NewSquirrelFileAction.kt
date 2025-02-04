@@ -29,6 +29,7 @@ class NewSquirrelFileAction : CreateFileFromTemplateAction(SquirrelBundle.messag
 	override fun getActionName(directory: PsiDirectory?, newName: String, templateName: String?) =
 		SquirrelBundle.message("newfile.command.name")
 
+	@OptIn(ExperimentalStdlibApi::class)
 	override fun buildDialog(project: Project, directory: PsiDirectory, builder: CreateFileFromTemplateDialog.Builder) {
 		builder.setTitle(SquirrelBundle.message("newfile.dialog.title"))
 		SquirrelFileTemplate.entries.forEach {
@@ -54,6 +55,7 @@ class NewSquirrelFileAction : CreateFileFromTemplateAction(SquirrelBundle.messag
 }
 
 class NewSquirrelCreateFromTemplateHandler : DefaultCreateFromTemplateHandler() {
+	@OptIn(ExperimentalStdlibApi::class)
 	override fun prepareProperties(props: MutableMap<String, Any>) {
 		val dirPath = props[FileTemplate.ATTRIBUTE_DIR_PATH] as? String
 		if (!dirPath.isNullOrEmpty()) {
