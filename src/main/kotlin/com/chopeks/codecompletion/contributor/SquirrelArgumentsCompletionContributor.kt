@@ -4,7 +4,6 @@ import com.chopeks.SquirrelTokenTypes
 import com.chopeks.codecompletion.BBClassFunctionCompletionProvider
 import com.chopeks.codecompletion.BBmTableCompletionProvider
 import com.chopeks.psi.SquirrelArgumentList
-import com.chopeks.psi.SquirrelFunctionBody
 import com.intellij.codeInsight.completion.CompletionContributor
 import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.patterns.PatternCondition
@@ -29,11 +28,8 @@ class SquirrelArgumentsCompletionContributor : CompletionContributor() {
 		)
 	}
 
-	class InsideArgumentListPattern : PatternCondition<PsiElement>("function-pattern") {
+	class InsideArgumentListPattern : PatternCondition<PsiElement>("arguments-pattern") {
 		override fun accepts(psi: PsiElement, context: ProcessingContext?): Boolean {
-			val parent = psi.parents(false).firstOrNull { it is SquirrelFunctionBody }
-			if (parent !is SquirrelFunctionBody)
-				return false
 			psi.node
 				?: return false
 			return psi.parents(false).firstOrNull { it is SquirrelArgumentList } != null

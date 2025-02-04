@@ -1,18 +1,37 @@
 # BB Squirrel Intellij plugin
 
-Adds support for BB version of Squirrel plus some templates for modding.
+Adds support for version of Squirrel used in Battle Brothers game, plus modding helpers.
 
-Original [README.md](ORIGINAL_README.md)
+Roughly based on original Squirrel plugin for Intellij [README.md](ORIGINAL_README.md), but mostly rewritten from scratch.
 
 ## Installation
-* Uninstall the Squirrel ide plugin
+
+* Get Intellij IDEA with version at least 2024.2, Community or Ultimate, doesn't matter
+* Uninstall old Squirrel IDE plugin
 * Download the latest zip from the [releases page](../../releases).
 * Follow the [install plugin from disk](https://www.jetbrains.com/help/idea/managing-plugins.html) instructions
+* Add unpacked vanilla to the project and mark as source `Right click | Mark directory as | Sources root`
+* Mark mod directories as sources `Right click | Mark directory as | Sources root`
+* Rebuild indexes, on project root directory `Right click | Cache Recovery | Rescan Project Indexes`
 
-## Prerequisites
+## Features
+
+- Reworked BNF based parser that fits BB version of Squirrel better
+- New file templates for classes and modding related stuff
+- Code highlighting
+- BB aware .nut file structure validation
+- Block folding
+- Customizable code formatter
+- Live code validation and various on-demand inspections
+- Code completion for BB classes, modding hooks and modern hooks (WIP)
+- String reference tracking (scripts and gfx files)
+- Images and colors used in code show on gutter
+- ... more coming, maybe
+
+## Plugin development prerequisites
 
 * Java 17+
-* IntelliJ at least 2024.2.x
+* IntelliJ
 
 ## Plugin development environment
 
@@ -26,5 +45,5 @@ Original [README.md](ORIGINAL_README.md)
 
 ### Testing the plugin locally
 
-* Either drag & drop the zip file into the running IntelliJ, which will need restarting to apply
-* Alternatively run the Gradle `runIde` task which will start a new IntelliJ instance with the plugin installed
+* Run the Gradle `runIde` task which will start a new IntelliJ instance with the plugin installed.
+* Install [PsiViewer](https://plugins.jetbrains.com/plugin/227-psiviewer) on that instance to see how files are structured (`Tools | View PSI structure for Current File...`). It helps greatly when changing code in plugin.
