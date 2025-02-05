@@ -197,7 +197,7 @@ CatchPart ::= catch '(' Id ')' StatementOrEmpty {pin=1}
 private ExpressionWithRecoverUntilParen ::= Expression {recoverWhile=parenthesesRecovery}
 private parenthesesRecovery ::= !')'
 
-ExpressionStatement ::= Expression { recoverWhile=statement_recover };
+ExpressionStatement ::= Expression;
 
 Expression ::=
   CommaExpression
