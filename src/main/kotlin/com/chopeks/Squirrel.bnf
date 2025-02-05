@@ -180,7 +180,8 @@ YieldStatement ::= yield Expression {pin=1}
 ThrowStatement ::= throw Expression {pin=1}
 
 ForStatement ::= for '(' ForLoopParts ')' StatementOrEmpty {pin=1}
-ForLoopParts::= [LocalDeclaration | Expression] ';' Expression? ';' Expression?
+ForLoopParts::= (Expression | LocalDeclaration) ';' Expression? ';' Expression?
+
 
 ForeachStatement ::= foreach '(' [Id ','] Id in Expression ')' StatementOrEmpty {pin=1}
 WhileStatement ::= while '(' ExpressionWithRecoverUntilParen ')' StatementOrEmpty {pin=1}
