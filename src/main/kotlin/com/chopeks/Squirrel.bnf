@@ -99,42 +99,6 @@
 //
 // 2. Also, you should put semicolons after } in places where you expect the virtual semicolon to be placed.
 
-//// TEST DATA:
-//
-//i = 2;
-//i = 02;
-//i = 0x222;
-//i = 'c';
-//f = 0.52;
-//f = 1.e2;
-//f = 1.e-2;
-//s = "I'm a string"<NL>
-//s = @"I'm a string verbatim string"<NL>
-//s = @"I'm a multiline
-//string verbatim string"<NL>
-//b = true;
-//b = false;
-//n = null;
-//exp = a ? i + 2 : b > -3 + +23 * i++ / 34 % ~ 3
-//nc = i++ + ++i - --i - i-- + +i - -i - -(-i) + -i-- + errors_on_right + ---i + --(-i) + --i--i
-//
-//const a=-2;
-//const b=2;
-//enum c {};
-//enum c {a,b,c=4, h="23", h=23, h=-2};
-//local o, a=2, b=23, c = (1,2), d = function(a,b=2,c=2){}, e = @(a,b,...) a + (b, f = 2), g=[123, function(){}, @()(1+2)], c = class {};
-//function a(a, b, a=2, a=2) {};
-//a(a, 2, g[1]);
-//class Test.B extends Test {
-//    constructor (a) {
-//    }
-//    a = function (asd){
-//    }
-//    function sds() {
-//    }
-//    g = "234"
-//}
-
 SquirrelFile ::= !<<eof>> Statements
 
 private semi ::= SEMICOLON_SYNTHETIC | ';' {name="semicolon"}
@@ -145,7 +109,7 @@ private Statements ::= multisemi? StatementWithSemi*
 
 private StatementWithSemi ::= Statement delimiter { pin=1 recoverWhile=statement_recover }
 
-private statement_recover ::= !(<<eof>> | delimiter | '{' | '}' | const | enum | local | function | class | return | break | continue | yield | throw | for | foreach | while | do | if | else | switch | case | default | try | catch | '@include')
+private statement_recover ::= !(<<eof>> | delimiter | '{' | '}' | const | enum | local | function | class | return | break | continue | yield | throw | for | foreach | while | do | if | else | switch | case | default | try | catch )
 
 Statement ::= Block
     | ExpressionStatement
@@ -180,7 +144,7 @@ EnumDeclaration ::= enum Id '{' EnumItemDeclarations? '}' {pin=1}
 private EnumItemDeclarations ::= EnumItem (',' EnumItem)* ','?
 EnumItem ::= Id [ '=' Literal ]
 
-LocalDeclaration ::= local VariableOrFunctionDeclarations {pin=1}
+LocalDeclaration ::= local VariableOrFunctionDeclarations {pin=1 recoverWhile=statement_recover }
 private VariableOrFunctionDeclarations ::= VarDeclarationList | FunctionDeclaration { name="variable or function declarations" }
 VarDeclarationList ::= VarItem (',' VarItem)*
 VarItem ::= Id VarInit?
@@ -233,7 +197,7 @@ CatchPart ::= catch '(' Id ')' StatementOrEmpty {pin=1}
 private ExpressionWithRecoverUntilParen ::= Expression {recoverWhile=parenthesesRecovery}
 private parenthesesRecovery ::= !')'
 
-ExpressionStatement ::= Expression;
+ExpressionStatement ::= Expression { recoverWhile=statement_recover };
 
 Expression ::=
   CommaExpression
