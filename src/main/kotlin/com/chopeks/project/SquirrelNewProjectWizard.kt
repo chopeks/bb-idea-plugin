@@ -17,7 +17,7 @@ class SquirrelNewProjectWizard : LanguageGeneratorNewProjectWizard {
 		get() = SquirrelIcons.SQUIRREL
 
 	override val name: String
-		get() = "BB modding eh?"
+		get() = "BB modding"
 
 	override fun createStep(parent: NewProjectWizardStep): NewProjectWizardStep {
 		return object : NewProjectWizardStep {

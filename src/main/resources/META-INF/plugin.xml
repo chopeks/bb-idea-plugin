@@ -60,13 +60,12 @@
         <fileBasedIndex implementation="com.chopeks.psi.index.BBClassSymbolsIndex" order="first"/>
         <fileBasedIndex implementation="com.chopeks.psi.index.BBClassReferencesIndex" order="first"/>
 
-        <newProjectWizard.languageGenerator implementation="com.chopeks.project.SquirrelNewProjectWizard"/>
+        <!--        <newProjectWizard.languageGenerator implementation="com.chopeks.project.SquirrelNewProjectWizard"/>-->
 
-        <moduleBuilder id="mod-module" builderClass="com.chopeks.project.module.ModModuleBuilder" order="first"/>
-        <moduleBuilder id="vanilla-module" builderClass="com.chopeks.project.module.VanillaModuleBuilder" order="first"/>
-
-        <moduleType id="mod-module" implementationClass="com.chopeks.project.module.ModuleTypes$Mod" order="first"/>
-        <moduleType id="vanilla-module" implementationClass="com.chopeks.project.module.ModuleTypes$Vanilla" order="first"/>
+        <!--        <moduleBuilder id="mod-module" builderClass="com.chopeks.project.module.ModModuleBuilder" order="first"/>-->
+        <!--        <moduleBuilder id="vanilla-module" builderClass="com.chopeks.project.module.VanillaModuleBuilder" order="first"/>-->
+        <!--        <moduleType id="mod-module" implementationClass="com.chopeks.project.module.ModuleTypes$Mod" order="first"/>-->
+        <!--        <moduleType id="vanilla-module" implementationClass="com.chopeks.project.module.ModuleTypes$Vanilla" order="first"/>-->
     </extensions>
 
     <application-components/>
