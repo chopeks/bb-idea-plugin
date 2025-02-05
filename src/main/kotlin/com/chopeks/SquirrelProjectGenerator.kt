@@ -31,4 +31,5 @@ class SquirrelProjectGenerator : DirectoryProjectGenerator<Any?> {
 	override fun validate(baseDirPath: String): ValidationResult {
 		return ValidationResult.OK
 	}
+
 }

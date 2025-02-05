@@ -17,6 +17,7 @@ import java.io.IOException
 import java.nio.charset.Charset
 import java.util.*
 
+@Deprecated("to be removed, left for reference for now")
 class SquirrelModuleBuilder : ModuleBuilder() {
 	override fun getName() = message("squirrel.title")
 	override fun getPresentableName() = message("squirrel.title")
