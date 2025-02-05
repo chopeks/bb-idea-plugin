@@ -1,6 +1,7 @@
 package com.chopeks.codecompletion
 
 import com.chopeks.psi.*
+import com.chopeks.psi.impl.LOG
 import com.chopeks.psi.reference.BBClassPsiInheritanceStorage
 import com.chopeks.util.hooks
 import com.intellij.codeInsight.completion.CompletionParameters
@@ -11,7 +12,6 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parents
-import com.intellij.psi.util.siblings
 import com.intellij.util.ProcessingContext
 
 class BBmTableCompletionProvider : CompletionProvider<CompletionParameters>() {
@@ -21,7 +21,9 @@ class BBmTableCompletionProvider : CompletionProvider<CompletionParameters>() {
 		if (element.parent is SquirrelStdIdentifier) {
 			val referenceExpr = PsiTreeUtil.getParentOfType(element, SquirrelReferenceExpression::class.java)
 				?: return
-			val referenceName = referenceExpr.text.replace(CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED, "").trim('.')
+			val referenceName = referenceExpr.text.replace(CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED, "").trim('.').trim()
+
+			LOG.warn("referenceName $referenceName")
 
 			if (referenceName.startsWith("this.m")) {
 				if (file.isBBClass) {
@@ -40,23 +42,25 @@ class BBmTableCompletionProvider : CompletionProvider<CompletionParameters>() {
 					}
 				}
 			}
-			// function parameters
-			element.parents(false).filterIsInstance<SquirrelFunctionDeclaration>().firstOrNull()
-				?.let { it.parameters?.parameterList?.parameterList?.mapNotNull { it.id.stdIdentifier?.identifier?.text } }
-				?.forEach {
-					if (referenceName in it && referenceName != it) {
-						result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Parameter))
+			// local variables
+			element.parents(false).toList().reversed().let { it.subList(it.indexOf(it.firstOrNull { it is SquirrelFunctionDeclaration }!!), it.size - 1) }.also {
+				it.filterIsInstance<SquirrelFunctionDeclaration>().map { it.parameters?.parameterList?.parameterList }.mapNotNull { it?.mapNotNull { it.id.stdIdentifier?.identifier?.text } }.flatten().forEach {
+					if (referenceName.isEmpty() || referenceName.startsWith(it)) result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
+				}
+				it.filterIsInstance<SquirrelForeachStatement>().map { it.idList }.map { it.mapNotNull { it.stdIdentifier?.identifier?.text } }.flatten().forEach {
+					if (referenceName.isEmpty() || referenceName.startsWith(it)) result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
+				}
+				it.filterIsInstance<SquirrelForStatement>().forEach { loop ->
+					loop.forLoopParts?.localDeclaration?.varDeclarationList?.varItemList?.mapNotNull { it.id.stdIdentifier?.identifier?.text }?.forEach {
+						if (referenceName.isEmpty() || referenceName.startsWith(it)) result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
 					}
 				}
-			// local variables
-			element.parents(false).firstOrNull { it is SquirrelExpressionStatement && it.parent is SquirrelBlock }?.let {
-				it.siblings(false).filterIsInstance<SquirrelLocalDeclaration>().map {
-					it.varDeclarationList?.varItemList?.mapNotNull { it.id.stdIdentifier?.identifier?.text }
-				}
-			}?.forEach { variables ->
-				variables?.forEach { variable ->
-					if (referenceName in variable && referenceName != variable) {
-						result.addElement(LookupElementBuilder.create(variable).withIcon(AllIcons.Nodes.Variable))
+				it.filterIsInstance<SquirrelBlock>().forEach { block ->
+					block.children.filterIsInstance<SquirrelLocalDeclaration>().forEach { local ->
+						if (PsiTreeUtil.findCommonParent(local, element) != null && local.textOffset < element.textOffset)
+							local.varDeclarationList?.varItemList?.mapNotNull { it.id.stdIdentifier?.identifier?.text }?.forEach {
+								if (referenceName.isEmpty() || referenceName.startsWith(it)) result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
+							}
 					}
 				}
 			}
