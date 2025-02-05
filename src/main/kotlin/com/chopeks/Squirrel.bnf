@@ -73,7 +73,8 @@
     IDENTIFIER = "regexp:[a-zA-Z_]+[a-zA-Z_0-9]*"
     INT = "regexp:((0[1-9][0-7]*)|(0x[0-9a-fA-F]*)|('\p{Alpha}')|(0|([1-9][0-9]*)))"
     FLOAT = "regexp:((([0-9]+\.[0-9]*)|([0-9]*\.[0-9]+))([eE][+-]?[0-9]+)?)|([0-9]+([eE][+-]?[0-9]+))"
-    STRING = "regexp:(@\"([^\"]|\"\")*\"|\"(\\.|[^\"\n\r])*\")"
+    STRING = "regexp:(//[^\n]*|@\"([^\"]|\"\")*\"|\"(\\\\.|[^\n\r\"]|\\x[0-9A-Fa-f]{4}|[bfnrtv])*\")"
+    CHAR = "regexp:('[^\n\r\"]')"
 
     NL="NL"
     WS="WS"
@@ -306,10 +307,12 @@ Literal ::=
     '-'? INT
   | '-'? FLOAT
   | StringLiteral
+  | CharLiteral
   | true | false
   | null
 
 StringLiteral ::= STRING {methods =[getReference]}
+CharLiteral ::= CHAR
 
 GlobalReference ::= '::'
 ThisReference ::= THIS '.'
