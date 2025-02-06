@@ -181,7 +181,7 @@ YieldStatement ::= yield Expression {pin=1}
 ThrowStatement ::= throw Expression {pin=1}
 
 ForStatement ::= for '(' ForLoopParts ')' StatementOrEmpty {pin=1}
-ForLoopParts::= (Expression | LocalDeclaration) ';' Expression? ';' Expression?
+ForLoopParts::= (Expression | LocalDeclaration)? ';' Expression? ';' Expression?
 
 
 ForeachStatement ::= foreach '(' [Id ','] Id in Expression ')' StatementOrEmpty {pin=1}
