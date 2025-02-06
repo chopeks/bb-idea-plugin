@@ -145,7 +145,7 @@ EnumDeclaration ::= enum Id '{' EnumItemDeclarations? '}' {pin=1}
 private EnumItemDeclarations ::= EnumItem (',' EnumItem)* ','?
 EnumItem ::= Id [ '=' Literal ]
 
-LocalDeclaration ::= local VariableOrFunctionDeclarations {pin=1 recoverWhile=statement_recover }
+LocalDeclaration ::= local VariableOrFunctionDeclarations {pin=1 }
 private VariableOrFunctionDeclarations ::= VarDeclarationList | FunctionDeclaration { name="variable or function declarations" }
 VarDeclarationList ::= VarItem (',' VarItem)*
 VarItem ::= Id VarInit?

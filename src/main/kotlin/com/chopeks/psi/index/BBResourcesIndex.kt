@@ -13,7 +13,7 @@ import com.intellij.util.io.EnumeratorStringDescriptor
  */
 class BBResourcesIndex : ScalarIndexExtension<String>() {
 	override fun getName() = BBIndexes.BBResources
-	override fun getVersion() = 2
+	override fun getVersion() = 3
 	override fun dependsOnFileContent() = false
 	override fun getKeyDescriptor() = EnumeratorStringDescriptor.INSTANCE!!
 	override fun getInputFilter() = FileBasedIndex.InputFilter { file ->

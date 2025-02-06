@@ -16,6 +16,16 @@ class SquirrelStdIdReference(
 	override fun getVariants() = emptyArray<Any>()
 	override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
 		val results = mutableListOf<ResolveResult>()
+//		val parents = element.parents(false)
+//
+//		val isReference = parents.filterIsInstance<SquirrelReferenceExpression>().count() > 0
+//		val isTableItem = parents.filterIsInstance<SquirrelTableItem>().count() > 0
+//		val isTopMostDefinition = parents.filterIsInstance<SquirrelFunctionDeclaration>().count() == 0
+//
+//		// resolve class name click
+//		if (isReference && isTopMostDefinition && !isTableItem) {
+//			LOG.warn("reference is ${element.text} from ${element.parents(false).joinToString(", ")}")
+//		}
 
 		val refExpr = PsiTreeUtil.getTopmostParentOfType(element, SquirrelReferenceExpressionImpl::class.java)
 			?: return results.toTypedArray()
