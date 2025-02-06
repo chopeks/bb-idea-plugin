@@ -8,8 +8,9 @@ import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 
-@Suppress("InspectionDescriptionNotFoundInspection")
 class BBClassInspection : LocalInspectionTool() {
+	override fun getStaticDescription() = "BB Class Inspection"
+
 	override fun checkFile(file: PsiFile, manager: InspectionManager, isOnTheFly: Boolean): Array<ProblemDescriptor> {
 		val problemDescriptors = mutableListOf<ProblemDescriptor>()
 		checkDuplicatedFunctions(file, problemDescriptors, manager, isOnTheFly)

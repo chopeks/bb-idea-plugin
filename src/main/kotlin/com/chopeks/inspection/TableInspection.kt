@@ -10,8 +10,9 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiRecursiveElementVisitor
 
-@Suppress("InspectionDescriptionNotFoundInspection")
 class TableInspection : LocalInspectionTool() {
+	override fun getStaticDescription() = "Table Inspection"
+
 	override fun checkFile(file: PsiFile, manager: InspectionManager, isOnTheFly: Boolean): Array<ProblemDescriptor> {
 		val problemDescriptors = mutableListOf<ProblemDescriptor>()
 		file.accept(object : PsiRecursiveElementVisitor() {
