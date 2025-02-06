@@ -2,11 +2,13 @@ package com.chopeks.psi.reference
 
 import com.chopeks.psi.SquirrelCallExpression
 import com.chopeks.psi.SquirrelStdIdentifier
+import com.chopeks.psi.getFile
 import com.chopeks.psi.impl.SquirrelReferenceExpressionImpl
 import com.chopeks.psi.index.BBIndexes
 import com.chopeks.psi.isBBClass
 import com.chopeks.util.hooks
 import com.intellij.openapi.util.TextRange
+import com.intellij.openapi.vfs.findPsiFile
 import com.intellij.psi.*
 import com.intellij.psi.util.PsiTreeUtil
 
@@ -34,6 +36,10 @@ class SquirrelStdIdReference(
 
 		if (refExpr.parent is SquirrelCallExpression) {
 			resolveFunction(results)
+		} else if (refExpr.text == "this.${element.containingFile.virtualFile.nameWithoutExtension}") {
+			element.containingFile.virtualFile.path.substringAfter("/scripts/").let { "scripts/$it" }
+				.let { element.containingFile.getFile(it)?.findPsiFile(element.project) }
+				?.let { results.add(PsiElementResolveResult(it)) }
 		} else if (fullName.startsWith("this.m") || fullName.startsWith("m.")) {
 			resolveMField(results)
 		}

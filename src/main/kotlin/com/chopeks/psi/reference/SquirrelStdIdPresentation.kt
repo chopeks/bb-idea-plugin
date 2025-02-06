@@ -19,7 +19,7 @@ class SquirrelStdIdPresentation(
 		return element.containingFile?.virtualFile?.toNioPathOrNull()?.toString()
 	}
 
-	// this thing seems not working at all, idk why, not called by intellij eve, though it's override
+	// this thing seems not working at all, idk why, not called by intellij even, though it's override
 	override fun getIcon(unused: Boolean): Icon {
 		if (element.parent is SquirrelTableItem)
 			return AllIcons.Nodes.Field
