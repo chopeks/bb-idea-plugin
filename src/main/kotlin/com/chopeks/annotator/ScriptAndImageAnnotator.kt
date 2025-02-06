@@ -22,9 +22,7 @@ class ScriptAndImageAnnotator : Annotator {
 		if (!looksLikeFile)
 			return
 
-		val reference = element.reference?.resolve()
-
-		if (reference?.containingFile?.virtualFile == null) {
+		if (element.references.all { it.resolve()?.containingFile?.virtualFile == null }) {
 			holder.newAnnotation(HighlightSeverity.WARNING, "It looks like defined file, but can't be found in current project.")
 				.highlightType(ProblemHighlightType.WARNING)
 				.range(element)
