@@ -11,9 +11,11 @@ import com.intellij.util.indexing.FileBasedIndex
 import com.intellij.util.indexing.ID
 
 object BBIndexes {
+	val resourceFiles = arrayOf("png", "wav", "ogg")
 	val Inheritance = ID.create<String, String>("${javaClass.packageName}.InheritanceIndex")
 	val BBClassSymbols = ID.create<String, String>("${javaClass.packageName}.BBClassSymbols")
 	val BBClassReferences = ID.create<String, Void?>("${javaClass.packageName}.BBClassReferences")
+	val BBResources = ID.create<String, Void?>("${javaClass.packageName}.BBResourcesIndex")
 
 	fun querySymbols(file: PsiFile): List<String> {
 		val projectPath = ProjectRootManager.getInstance(file.project).contentSourceRoots

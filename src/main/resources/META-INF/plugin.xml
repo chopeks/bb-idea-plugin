@@ -59,6 +59,7 @@
         <fileBasedIndex implementation="com.chopeks.psi.index.SquirrelInheritanceIndex" order="first"/>
         <fileBasedIndex implementation="com.chopeks.psi.index.BBClassSymbolsIndex" order="first"/>
         <fileBasedIndex implementation="com.chopeks.psi.index.BBClassReferencesIndex" order="first"/>
+        <fileBasedIndex implementation="com.chopeks.psi.index.BBResourcesIndex" order="first"/>
 
         <!--        <newProjectWizard.languageGenerator implementation="com.chopeks.project.SquirrelNewProjectWizard"/>-->
 
