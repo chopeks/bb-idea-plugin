@@ -12,21 +12,30 @@ Roughly based on original Squirrel plugin for Intellij [README.md](ORIGINAL_READ
 * Follow the [install plugin from disk](https://www.jetbrains.com/help/idea/managing-plugins.html) instructions
 * Add unpacked vanilla to the project and mark as source `Right click | Mark directory as | Sources root`
 * Mark mod directories as sources `Right click | Mark directory as | Sources root`
-* Rebuild indexes, on project root directory `Right click | Cache Recovery | Rescan Project Indexes`
+* Mark mods or build directories you don't want indexed as `Excluded`
+* If completion doesn't work, rebuild indexes `File | Invalidate caches | check first 2 options `
 
 ## Features
 
-- Reworked BNF based parser that fits BB version of Squirrel better
+- Reworked BNF based parser to fit BB version of Squirrel better,
+    - NOTE: It's stricter when it comes to syntax than ingame interpreter, but is a bit more lenient than vanilla code is.
+    - To check if there are syntax error, add it as source, then on mod `Right click | Analyze | Inspect Code`, it's requirement for code completion to work
 - New file templates for classes and modding related stuff
 - Code highlighting
 - BB aware .nut file structure validation
 - Block folding
 - Customizable code formatter
 - Live code validation and various on-demand inspections
-- Code completion for BB classes, modding hooks and modern hooks (WIP)
-- String reference tracking (scripts and gfx files)
+- Code completion for BB classes, modding hooks and modern hooks, also non-dynamic global variables,
+    - for sanity only in `::` and `gt.` spaces, `this.` is too ambiguous to resolve references consistently, refactor to `::`
+- Find usage on 'class' names, to quickly find all hooks and references in code
+- String reference tracking (scripts, hooks and gfx files)
 - Images and colors used in code show on gutter
-- ... more coming, maybe
+- ... more coming? maybe
+
+## Contributions
+
+It's MIT, feel free.
 
 ## Plugin development prerequisites
 
