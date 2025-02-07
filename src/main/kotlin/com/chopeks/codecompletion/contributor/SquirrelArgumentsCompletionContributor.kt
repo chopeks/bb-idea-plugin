@@ -2,8 +2,10 @@ package com.chopeks.codecompletion.contributor
 
 import com.chopeks.SquirrelTokenTypes
 import com.chopeks.codecompletion.BBClassFunctionCompletionProvider
+import com.chopeks.codecompletion.BBStringCompletionProvider
 import com.chopeks.codecompletion.BBmTableCompletionProvider
 import com.chopeks.psi.SquirrelArgumentList
+import com.chopeks.psi.SquirrelStringLiteral
 import com.intellij.codeInsight.completion.CompletionContributor
 import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.patterns.PatternCondition
@@ -25,6 +27,11 @@ class SquirrelArgumentsCompletionContributor : CompletionContributor() {
 			psiElement().withElementType(SquirrelTokenTypes.IDENTIFIER)
 				.with(InsideArgumentListPattern()),
 			BBClassFunctionCompletionProvider()
+		)
+		extend(
+			CompletionType.BASIC,
+			psiElement().inside(SquirrelStringLiteral::class.java),
+			BBStringCompletionProvider()
 		)
 	}
 
