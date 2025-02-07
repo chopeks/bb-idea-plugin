@@ -42,19 +42,22 @@ class BBClassInspection : LocalInspectionTool() {
 		val assign = PsiTreeUtil.findChildOfType(file, SquirrelExpressionStatement::class.java)?.children?.firstOrNull()
 			?: return
 
+		if (assign.children[0].children.firstOrNull()?.children?.firstOrNull()?.text != "this.")
+			return
+
 		val className = assign.children[0].children.lastOrNull()?.children?.firstOrNull { it is SquirrelStdIdentifier }
 			?: return
 
 		val assigned = assign.children[2]
 		if (assigned is SquirrelTableExpression) { // new object case
-			if (className.text != file.name.split(".").first()) {
+			if (className.text != file.virtualFile.nameWithoutExtension) {
 				problemDescriptors.add(manager.error(className, "'${className.text}' is different than file name.", isOnTheFly))
 			}
 		} else if (assigned is SquirrelCallExpression) { // inheritance case
 			if (assigned.children[0] !is SquirrelReferenceExpression)
 				return
 			val reference = assigned.children[0].children.lastOrNull() ?: return
-			if (reference.text.endsWith("inherit") && className.text != file.name.split(".").first()) {
+			if (reference.text.endsWith("inherit") && className.text != file.virtualFile.nameWithoutExtension) {
 				problemDescriptors.add(manager.error(className, "'${className.text}' is different than file name.", isOnTheFly))
 			}
 		} else return

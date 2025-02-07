@@ -53,8 +53,8 @@
         <codeInsight.lineMarkerProvider language="Squirrel" implementationClass="com.chopeks.linemarker.GfxLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="Squirrel" implementationClass="com.chopeks.linemarker.ColorLineMarkerProvider"/>
         <!-- inspections-->
-        <localInspection language="Squirrel" groupName="Squirrel" enabledByDefault="true" implementationClass="com.chopeks.inspection.TableInspection" displayName="Check tables"/>
-        <localInspection language="Squirrel" groupName="Squirrel" enabledByDefault="true" implementationClass="com.chopeks.inspection.BBClassInspection" displayName="Check BB classes"/>
+        <localInspection language="Squirrel" groupName="Squirrel" enabledByDefault="true" implementationClass="com.chopeks.inspection.TableInspection" displayName="Check tables" hasStaticDescription="true"/>
+        <localInspection language="Squirrel" groupName="Squirrel" enabledByDefault="true" implementationClass="com.chopeks.inspection.BBClassInspection" displayName="Check BB classes" hasStaticDescription="true"/>
         <!-- indexes -->
         <fileBasedIndex implementation="com.chopeks.psi.index.SquirrelInheritanceIndex" order="first"/>
         <fileBasedIndex implementation="com.chopeks.psi.index.BBClassSymbolsIndex" order="first"/>
