@@ -47,10 +47,11 @@ class BBClassFunctionCompletionProvider : CompletionProvider<CompletionParameter
 			}
 		}
 
-		BBIndexes.queryGlobalSymbols(file, referenceName).forEach {
-			if (it != "<eof>")
-				result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Constant))
-		}
+		if (referenceName.startsWith("::"))
+			BBIndexes.queryGlobalSymbols(file, referenceName).forEach {
+				if (it != "<eof>")
+					result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Constant))
+			}
 	}
 
 	private fun makeMethodHandler(name: String) = LookupElementBuilder.create(name)
