@@ -1,8 +1,11 @@
 package com.chopeks.psi.reference
 
-import com.chopeks.psi.*
+import com.chopeks.psi.SquirrelCallExpression
+import com.chopeks.psi.SquirrelStdIdentifier
+import com.chopeks.psi.getFile
 import com.chopeks.psi.impl.SquirrelReferenceExpressionImpl
 import com.chopeks.psi.index.BBIndexes
+import com.chopeks.psi.isBBClass
 import com.chopeks.util.hooks
 import com.intellij.openapi.util.TextRange
 import com.intellij.openapi.vfs.VfsUtil
@@ -113,8 +116,10 @@ class SquirrelStdIdReference(
 		BBIndexes.queryGlobalSymbol(element.containingFile, fullName).forEach {
 			val targetFile = VfsUtil.findFile(Paths.get(it), true)
 			targetFile?.findPsiFile(element.project)?.also { file ->
-				PsiTreeUtil.findChildrenOfType(file, SquirrelReferenceExpression::class.java)
-					.filter { it.text.replace("gt.", "::") == fullName }
+				PsiTreeUtil.findChildrenOfType(file, SquirrelStdIdentifier::class.java)
+					.filter { it.name == fullName.split(".").last() }
+//					.onEach { LOG.warn("found element ${it.text}, `${it.qualifiedName}` <?> `$fullName`") }
+					.filter { it.qualifiedName == fullName }
 					.forEach { results.add(PsiElementResolveResult(it)) }
 			}
 		}
