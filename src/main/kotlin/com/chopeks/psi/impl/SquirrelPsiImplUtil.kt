@@ -1,8 +1,6 @@
 package com.chopeks.psi.impl
 
-import com.chopeks.psi.SquirrelStdIdentifier
-import com.chopeks.psi.SquirrelStringLiteral
-import com.chopeks.psi.getFile
+import com.chopeks.psi.*
 import com.chopeks.psi.index.BBIndexes
 import com.chopeks.psi.reference.BBResourceReference
 import com.chopeks.psi.reference.SquirrelScriptReference
@@ -12,6 +10,7 @@ import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.util.io.toNioPathOrNull
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
+import com.intellij.psi.util.childrenOfType
 import java.util.concurrent.ConcurrentHashMap
 
 
@@ -68,5 +67,25 @@ object SquirrelPsiImplUtil {
 	fun setName(element: SquirrelStdIdentifier, newName: String): PsiElement {
 		return element // todo, i have no damn clue how to do that, calling element.setName causes recursion here
 	}
+
+	@JvmStatic
+	fun isTable(element: SquirrelTableItem) = element.expression is SquirrelTableExpression
+
+	@JvmStatic
+	fun flatten(element: SquirrelTableItem): List<String> {
+		return if (!element.isTable())
+			listOf(element.key?.text ?: "")
+		else {
+			val ret = listOf(element.key?.text ?: "")
+			ret + ((element.expression as? SquirrelTableExpression)?.flatten()
+				?.map { "${element.key?.text}.$it" } ?: emptyList())
+		}
+	}
+
+	@JvmStatic
+	fun flatten(element: SquirrelTableExpression): List<String> {
+		return element.childrenOfType<SquirrelTableItem>().flatMap { it.flatten() }
+	}
+
 
 }

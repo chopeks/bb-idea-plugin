@@ -1,6 +1,7 @@
 package com.chopeks.codecompletion
 
 import com.chopeks.psi.SquirrelReferenceExpression
+import com.chopeks.psi.index.BBIndexes
 import com.chopeks.psi.isBBClass
 import com.chopeks.psi.reference.BBClassPsiInheritanceStorage
 import com.chopeks.util.hooks
@@ -44,6 +45,11 @@ class BBClassFunctionCompletionProvider : CompletionProvider<CompletionParameter
 					}
 				}
 			}
+		}
+
+		BBIndexes.queryGlobalSymbols(file, referenceName).forEach {
+			if (it != "<eof>")
+				result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Constant))
 		}
 	}
 

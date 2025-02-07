@@ -1,16 +1,15 @@
 package com.chopeks.psi.reference
 
-import com.chopeks.psi.SquirrelCallExpression
-import com.chopeks.psi.SquirrelStdIdentifier
-import com.chopeks.psi.getFile
+import com.chopeks.psi.*
 import com.chopeks.psi.impl.SquirrelReferenceExpressionImpl
 import com.chopeks.psi.index.BBIndexes
-import com.chopeks.psi.isBBClass
 import com.chopeks.util.hooks
 import com.intellij.openapi.util.TextRange
+import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.findPsiFile
 import com.intellij.psi.*
 import com.intellij.psi.util.PsiTreeUtil
+import java.nio.file.Paths
 
 class SquirrelStdIdReference(
 	element: SquirrelStdIdentifier
@@ -18,22 +17,15 @@ class SquirrelStdIdReference(
 	override fun getVariants() = emptyArray<Any>()
 	override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
 		val results = mutableListOf<ResolveResult>()
-//		val parents = element.parents(false)
-//
-//		val isReference = parents.filterIsInstance<SquirrelReferenceExpression>().count() > 0
-//		val isTableItem = parents.filterIsInstance<SquirrelTableItem>().count() > 0
-//		val isTopMostDefinition = parents.filterIsInstance<SquirrelFunctionDeclaration>().count() == 0
-//
-//		// resolve class name click
-//		if (isReference && isTopMostDefinition && !isTableItem) {
-//			LOG.warn("reference is ${element.text} from ${element.parents(false).joinToString(", ")}")
-//		}
 
 		val refExpr = PsiTreeUtil.getTopmostParentOfType(element, SquirrelReferenceExpressionImpl::class.java)
 			?: return results.toTypedArray()
 		val fullName = refExpr.text
 			?: return results.toTypedArray()
 
+		if (fullName.startsWith("::") || fullName.startsWith("this.")) {
+			resolveGlobal(results, fullName.replace("gt.", "::").replace("this.", "::"))
+		}
 		if (refExpr.parent is SquirrelCallExpression) {
 			resolveFunction(results)
 		} else if (refExpr.text == "this.${element.containingFile.virtualFile.nameWithoutExtension}") {
@@ -48,7 +40,6 @@ class SquirrelStdIdReference(
 	}
 
 	override fun getRangeInElement() = TextRange.allOf(element.text)
-
 
 	private fun resolveMField(results: MutableList<ResolveResult>) {
 		val file = if (element.containingFile.isBBClass)
@@ -116,5 +107,16 @@ class SquirrelStdIdReference(
 			}
 		}
 		return results.toSet().toList()
+	}
+
+	private fun resolveGlobal(results: MutableList<ResolveResult>, fullName: String) {
+		BBIndexes.queryGlobalSymbol(element.containingFile, fullName).forEach {
+			val targetFile = VfsUtil.findFile(Paths.get(it), true)
+			targetFile?.findPsiFile(element.project)?.also { file ->
+				PsiTreeUtil.findChildrenOfType(file, SquirrelReferenceExpression::class.java)
+					.filter { it.text.replace("gt.", "::") == fullName }
+					.forEach { results.add(PsiElementResolveResult(it)) }
+			}
+		}
 	}
 }

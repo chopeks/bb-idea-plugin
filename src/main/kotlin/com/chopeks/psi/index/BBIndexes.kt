@@ -14,6 +14,7 @@ object BBIndexes {
 	val resourceFiles = arrayOf("png", "wav", "ogg")
 	val Inheritance = ID.create<String, String>("${javaClass.packageName}.InheritanceIndex")
 	val BBClassSymbols = ID.create<String, String>("${javaClass.packageName}.BBClassSymbols")
+	val BBGlobalSymbols = ID.create<String, String>("${javaClass.packageName}.BBGlobalSymbols")
 	val BBClassReferences = ID.create<String, Void?>("${javaClass.packageName}.BBClassReferences")
 	val BBResources = ID.create<String, Void?>("${javaClass.packageName}.BBResourcesIndex")
 
@@ -41,6 +42,28 @@ object BBIndexes {
 			it.findPsiFile(file.project)?.let(files::add); true
 		}, GlobalSearchScope.allScope(file.project))
 		return files
+	}
+
+	fun queryGlobalSymbols(file: PsiFile, reference: String): List<String> {
+		val ret = FileBasedIndex.getInstance().getValues(BBGlobalSymbols, reference, GlobalSearchScope.allScope(file.project)).mapNotNull {
+			it.split("@@").firstOrNull()?.split("$$")
+		}.flatten().toSet().toList()
+		if (ret.isNotEmpty())
+			return ret
+		// if it's empty, it's highly likely it's partial reference, trim it and retry
+		return if ("." in reference) {
+			queryGlobalSymbols(file, reference.substringBeforeLast(".")).let {
+				if (it.all { it == "<eof>" }) emptyList() else it
+			}
+		} else {
+			if (reference.isNotBlank()) queryGlobalSymbols(file, "::") else emptyList()
+		}
+	}
+
+	fun queryGlobalSymbol(file: PsiFile, reference: String): List<String> {
+		return FileBasedIndex.getInstance().getValues(BBGlobalSymbols, reference, GlobalSearchScope.allScope(file.project)).mapNotNull {
+			it.split("@@").lastOrNull()
+		}.toList()
 	}
 
 }

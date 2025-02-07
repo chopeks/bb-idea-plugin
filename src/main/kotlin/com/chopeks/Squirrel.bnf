@@ -291,10 +291,10 @@ private array_list_part_recover ::= !(']' | ',')
 
 ArrayItemExpression ::= Expression '[' ExpressionWithNoComma ']'
 
-TableExpression ::= '{' KeyValuePairs? '}'
+TableExpression ::= '{' KeyValuePairs? '}' { methods=[flatten] }
 private TableItemSeparator ::= ',' | '<NL>'
 private KeyValuePairs ::= TableItem (TableItemSeparator* TableItem)* TableItemSeparator?
-TableItem ::= KeyValuePair | FunctionDeclaration
+TableItem ::= KeyValuePair | FunctionDeclaration { methods=[isTable flatten] }
 private KeyValuePair ::= Key '=' ExpressionWithNoComma
 Key ::= StdIdentifier | '[' Expression ']'
 
