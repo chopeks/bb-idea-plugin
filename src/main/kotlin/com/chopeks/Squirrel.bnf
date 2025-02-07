@@ -137,7 +137,6 @@ Statement ::= Block
 
 private StatementOrEmpty ::= Statement | ';'
 
-Block ::= '{' Statements? '}' {pin=1}
 
 ConstDeclaration ::= const Id '=' Literal {pin=1}
 
@@ -163,13 +162,14 @@ Parameter ::= Id (!'=')
 DefaultParameter ::= Id '=' ExpressionWithNoComma
 VariableLengthParameter ::= '...'
 
-ClassDeclaration ::= class ClassName [extends ClassName] ClassBody {pin=1}
+ClassDeclaration ::= ReferenceExpression AssignmentOperator class ClassName? [extends ReferenceExpression] ClassBody {pin=3}
 ClassName ::= Id ('.' Id)*
-ClassBody ::= '{' ClassMembers? '}'
+ClassBody ::= '{' ClassMembers? '}' {pin=1}
 
 private ClassMembers ::= ClassMember (semi* ClassMember)* semi?
 ClassMember ::= ClassAttribute? static? (ConstructorDeclaration | RegularClassMember)
-private RegularClassMember ::= KeyValuePair | MethodDeclaration
+private RegularClassMember ::= StaticDeclaration | KeyValuePair | MethodDeclaration
+StaticDeclaration ::= static KeyValuePair
 ConstructorDeclaration ::= constructor Parameters FunctionBody
 MethodDeclaration ::= function FunctionName Parameters FunctionBody
 ClassAttribute ::= '</' KeyValuePairs? '/>'
@@ -182,7 +182,6 @@ ThrowStatement ::= throw Expression {pin=1}
 
 ForStatement ::= for '(' ForLoopParts ')' StatementOrEmpty {pin=1}
 ForLoopParts::= (Expression | LocalDeclaration)? ';' Expression? ';' Expression?
-
 
 ForeachStatement ::= foreach '(' [Id ','] Id in Expression ')' StatementOrEmpty {pin=1}
 WhileStatement ::= while '(' ExpressionWithRecoverUntilParen ')' StatementOrEmpty {pin=1}
@@ -198,6 +197,8 @@ CatchPart ::= catch '(' Id ')' StatementOrEmpty {pin=1}
 
 private ExpressionWithRecoverUntilParen ::= Expression {recoverWhile=parenthesesRecovery}
 private parenthesesRecovery ::= !')'
+
+Block ::= '{' Statements? '}' {pin=1}
 
 ExpressionStatement ::= Expression;
 
@@ -238,7 +239,7 @@ private ExpressionWithNoComma ::=
   | b_expr_group
   | a_expr_group {name="expression"}
 
-private a_expr_group ::= (SimpleRefExpression | LiteralExpression | ParenthesizedExpression)
+private a_expr_group ::= (SimpleRefExpression | LiteralExpression | JsonExpression | ParenthesizedExpression)
 private b_expr_group ::= (ArrayItemExpression | ReferenceExpression | CallExpression)
 private c_expr_group ::= (ClassExpression | TableExpression | ArrayExpression | FunctionExpression | LambdaFunctionExpression )
 private first_expr_group ::= (UnaryExpression | PrefixExpression | InstanceOfExpression )
@@ -314,11 +315,19 @@ Literal ::=
 StringLiteral ::= STRING {methods =[getReference]}
 CharLiteral ::= CHAR
 
+JsonExpression ::= Json
+Json ::= JsonObject | JsonArray
+JsonArray ::= '[' [!']' JsonValue (!']' ',' JsonValue) *] ']' {pin(".*")=1}
+JsonObject ::= '{' [!'}' JsonProp (!'}' ',' JsonProp) *] '}' {pin(".*")=1}
+JsonProp ::= STRING ':' JsonValue {pin=1 recoverWhile=JsonRecover}
+JsonValue ::= Literal | Expression | Json
+private JsonRecover ::= !(',' | ']' | '}' | '[' | '{')
+
 GlobalReference ::= '::'
 ThisReference ::= THIS '.'
 
 FunctionName ::= StdIdentifier
-Id ::= ((GlobalReference | ThisReference)? StdIdentifier) | THIS
+Id ::= ((GlobalReference | ThisReference)? StdIdentifier) | THIS | constructor
 
 StdIdentifier ::= IDENTIFIER {
     name="identifier"
