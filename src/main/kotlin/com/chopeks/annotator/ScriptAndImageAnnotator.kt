@@ -18,7 +18,7 @@ class ScriptAndImageAnnotator : Annotator {
 			return
 		val text = element.string.text.trim('"')
 
-		val looksLikeFile = "/" in text && " " !in text
+		val looksLikeFile = "/" in text && " " !in text && !text.endsWith("/")
 		if (!looksLikeFile)
 			return
 
