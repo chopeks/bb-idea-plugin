@@ -17,6 +17,7 @@ Roughly based on original Squirrel plugin for Intellij [README.md](ORIGINAL_READ
 
 ## Features
 
+- Supports multi-mod environment by tracking references in all relevant mods,
 - Reworked BNF based parser to fit BB version of Squirrel better,
     - NOTE: It's stricter when it comes to syntax than ingame interpreter, but is a bit more lenient than vanilla code is.
     - To check if there are syntax error, add it as source, then on mod `Right click | Analyze | Inspect Code`, it's requirement for code completion to work
@@ -31,7 +32,12 @@ Roughly based on original Squirrel plugin for Intellij [README.md](ORIGINAL_READ
 - Find usage on 'class' names, to quickly find all hooks and references in code
 - String reference tracking (scripts, hooks and gfx files)
 - Images and colors used in code show on gutter
+- Marking directories as sources/exclude affects reference resolution scope
 - ... more coming? maybe
+
+<img src="doc/img0.png">
+<img src="doc/img1.png">
+<img src="doc/img2.png">
 
 ## Contributions
 
