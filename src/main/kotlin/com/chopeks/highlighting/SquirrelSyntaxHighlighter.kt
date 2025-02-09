@@ -19,7 +19,7 @@ class SquirrelSyntaxHighlighter : SyntaxHighlighterBase() {
 	}
 
 	companion object {
-		private val ATTRIBUTES: MutableMap<IElementType, TextAttributesKey> = mutableMapOf()
+		val ATTRIBUTES: MutableMap<IElementType, TextAttributesKey> = mutableMapOf()
 
 		init {
 			fillMap(ATTRIBUTES, SquirrelSyntaxHighlightingColors.SINGLE_LINE_COMMENT, SquirrelTokenTypes.SINGLE_LINE_COMMENT)
@@ -35,6 +35,7 @@ class SquirrelSyntaxHighlighter : SyntaxHighlighterBase() {
 			fillMap(ATTRIBUTES, SquirrelSyntaxHighlightingColors.SEMICOLON, SquirrelTokenTypes.SEMICOLON)
 			fillMap(ATTRIBUTES, SquirrelSyntaxHighlightingColors.COMMA, SquirrelTokenTypes.COMMA)
 			fillMap(ATTRIBUTES, SquirrelSyntaxHighlightingColors.DOT, SquirrelTokenTypes.DOT)
+			fillMap(ATTRIBUTES, SquirrelSyntaxHighlightingColors.FUNCTION_CALL, SquirrelTokenTypes.CALL_EXPRESSION)
 			fillMap(ATTRIBUTES, SquirrelTokenTypesSets.OPERATORS, SquirrelSyntaxHighlightingColors.OPERATOR)
 			fillMap(ATTRIBUTES, SquirrelTokenTypesSets.KEYWORDS, SquirrelSyntaxHighlightingColors.KEYWORD)
 			fillMap(ATTRIBUTES, SquirrelTokenTypesSets.NUMBERS, SquirrelSyntaxHighlightingColors.NUMBER)

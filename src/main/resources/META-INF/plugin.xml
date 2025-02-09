@@ -36,6 +36,7 @@
         <fileType language="Squirrel" name="Squirrel file" extensions="nut" implementationClass="com.chopeks.SquirrelFileType"/>
         <lang.parserDefinition language="Squirrel" implementationClass="com.chopeks.SquirrelParserDefinition"/>
         <lang.syntaxHighlighterFactory language="Squirrel" implementationClass="com.chopeks.highlighting.SquirrelSyntaxHighlighterFactory"/>
+        <highlightingPassFactory implementation="com.chopeks.highlighting.SquirrelHighlightingPassFactory"/>
         <lang.foldingBuilder language="Squirrel" implementationClass="com.chopeks.folding.SquirrelFoldingBuilder"/>
         <lang.formatter language="Squirrel" implementationClass="com.chopeks.formatter.SquirrelFormattingModelBuilder"/>
         <lang.braceMatcher language="Squirrel" implementationClass="com.chopeks.SquirrelBraceMatcher"/>

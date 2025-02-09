@@ -39,10 +39,8 @@ object SquirrelSyntaxHighlightingColors {
 		TextAttributesKey.createTextAttributesKey("SQ_COMMA", DefaultLanguageHighlighterColors.COMMA)
 	val BAD_CHARACTER: TextAttributesKey =
 		TextAttributesKey.createTextAttributesKey("SQ_BAD_TOKEN", HighlighterColors.BAD_CHARACTER)
-	val DIRECTIVE: TextAttributesKey =
-		TextAttributesKey.createTextAttributesKey("SQ_DIRECTIVE", DefaultLanguageHighlighterColors.KEYWORD)
-	val ONCE: TextAttributesKey =
-		TextAttributesKey.createTextAttributesKey("SQ_ONCE", DefaultLanguageHighlighterColors.KEYWORD)
 	val CLASS_NAME: TextAttributesKey =
 		TextAttributesKey.createTextAttributesKey("SQ_CLASS_NAME", DefaultLanguageHighlighterColors.CLASS_NAME)
+	val FUNCTION_CALL: TextAttributesKey =
+		TextAttributesKey.createTextAttributesKey("SQ_FUNCTION_CALL", DefaultLanguageHighlighterColors.FUNCTION_CALL)
 }
