@@ -36,10 +36,10 @@ class SquirrelSyntaxHighlighter : SyntaxHighlighterBase() {
 			fillMap(ATTRIBUTES, SquirrelSyntaxHighlightingColors.COMMA, SquirrelTokenTypes.COMMA)
 			fillMap(ATTRIBUTES, SquirrelSyntaxHighlightingColors.DOT, SquirrelTokenTypes.DOT)
 			fillMap(ATTRIBUTES, SquirrelSyntaxHighlightingColors.FUNCTION_CALL, SquirrelTokenTypes.CALL_EXPRESSION)
+			fillMap(ATTRIBUTES, SquirrelSyntaxHighlightingColors.STRING, SquirrelTokenTypes.STRING)
 			fillMap(ATTRIBUTES, SquirrelTokenTypesSets.OPERATORS, SquirrelSyntaxHighlightingColors.OPERATOR)
 			fillMap(ATTRIBUTES, SquirrelTokenTypesSets.KEYWORDS, SquirrelSyntaxHighlightingColors.KEYWORD)
 			fillMap(ATTRIBUTES, SquirrelTokenTypesSets.NUMBERS, SquirrelSyntaxHighlightingColors.NUMBER)
-			fillMap(ATTRIBUTES, SquirrelTokenTypesSets.STRING_LITERALS, SquirrelSyntaxHighlightingColors.STRING)
 		}
 	}
 }
