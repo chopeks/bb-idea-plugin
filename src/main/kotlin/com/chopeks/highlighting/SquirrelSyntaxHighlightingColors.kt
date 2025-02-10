@@ -43,4 +43,6 @@ object SquirrelSyntaxHighlightingColors {
 		TextAttributesKey.createTextAttributesKey("SQ_CLASS_NAME", DefaultLanguageHighlighterColors.CLASS_NAME)
 	val FUNCTION_CALL: TextAttributesKey =
 		TextAttributesKey.createTextAttributesKey("SQ_FUNCTION_CALL", DefaultLanguageHighlighterColors.FUNCTION_CALL)
+	val STRING_LINK: TextAttributesKey =
+		TextAttributesKey.createTextAttributesKey("SQ_STRING_LINK", DefaultLanguageHighlighterColors.STRING)
 }

@@ -16,6 +16,7 @@ class SquirrelColorSettingsPage : ColorSettingsPage {
 		AttributesDescriptor("Identifier", SquirrelSyntaxHighlightingColors.IDENTIFIER),
 		AttributesDescriptor("Function call", SquirrelSyntaxHighlightingColors.FUNCTION_CALL),
 		AttributesDescriptor("Strings", SquirrelSyntaxHighlightingColors.STRING),
+		AttributesDescriptor("Referenced strings", SquirrelSyntaxHighlightingColors.STRING_LINK),
 		AttributesDescriptor("Keywords", SquirrelSyntaxHighlightingColors.KEYWORD),
 		AttributesDescriptor("Numbers", SquirrelSyntaxHighlightingColors.NUMBER),
 		AttributesDescriptor("Operators", SquirrelSyntaxHighlightingColors.OPERATOR),
@@ -27,10 +28,11 @@ class SquirrelColorSettingsPage : ColorSettingsPage {
 	override fun getAdditionalHighlightingTagToDescriptorMap() = mapOf(
 		"keyword" to SquirrelSyntaxHighlightingColors.KEYWORD,
 		"fn_call" to SquirrelSyntaxHighlightingColors.FUNCTION_CALL,
+		"link" to SquirrelSyntaxHighlightingColors.STRING_LINK,
 	)
 
 	override fun getDemoText(): String = """
-		<keyword>this</keyword>.typical_skill <- this.<fn_call>inherit</fn_call>("scripts/skills/skill", {
+		<keyword>this</keyword>.typical_skill <- this.<fn_call>inherit</fn_call>(<link>"scripts/skills/skill"</link>, {
 			m = {
 				Rounds = 0
 			},

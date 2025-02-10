@@ -46,7 +46,7 @@
 
         <!-- highlighting-->
         <lang.syntaxHighlighterFactory language="Squirrel" implementationClass="com.chopeks.highlighting.SquirrelSyntaxHighlighterFactory"/>
-        <highlightingPassFactory implementation="com.chopeks.highlighting.SquirrelHighlightingPassFactory"/>
+        <highlightingPassFactory implementation="com.chopeks.highlighting.SquirrelHighlightingPassFactoryRegistrar"/>
         <colorSettingsPage implementation="com.chopeks.highlighting.SquirrelColorSettingsPage"/>
         <!-- code completion -->
         <completion.contributor language="Squirrel" implementationClass="com.chopeks.codecompletion.contributor.SquirrelFunctionCompletionContributor"/>

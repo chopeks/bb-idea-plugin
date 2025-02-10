@@ -12,7 +12,6 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.childrenOfType
-import java.util.concurrent.ConcurrentHashMap
 
 
 internal val LOG by lazy(LazyThreadSafetyMode.PUBLICATION) {
@@ -20,8 +19,6 @@ internal val LOG by lazy(LazyThreadSafetyMode.PUBLICATION) {
 }
 
 object SquirrelPsiImplUtil {
-	private val lookupScripts = ConcurrentHashMap<SquirrelStringLiteral, SquirrelScriptReference>()
-
 	@JvmStatic
 	fun getReference(element: SquirrelStringLiteral): PsiReference? {
 		val text = element.string.text.trim('"')
@@ -33,19 +30,11 @@ object SquirrelPsiImplUtil {
 			return BBResourceReference(element)
 
 		if (text.startsWith("scripts"))
-			return lookupScripts[element] ?: element.containingFile.getFile(("$text.nut").toNioPathOrNull())
+			return element.containingFile.getFile(("$text.nut").toNioPathOrNull())
 				?.let { SquirrelScriptReference(it, element) }
-				?.also {
-					if (!lookupScripts.containsKey(element))
-						lookupScripts.putIfAbsent(element, it)
-				}
 
-		return lookupScripts[element] ?: element.containingFile.getFile(("scripts/$text.nut").toNioPathOrNull())
+		return element.containingFile.getFile(("scripts/$text.nut").toNioPathOrNull())
 			?.let { SquirrelScriptReference(it, element) }
-			?.also {
-				if (!lookupScripts.containsKey(element))
-					lookupScripts.putIfAbsent(element, it)
-			}
 	}
 
 	@JvmStatic
