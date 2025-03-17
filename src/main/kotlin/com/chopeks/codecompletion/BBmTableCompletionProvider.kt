@@ -45,27 +45,31 @@ class BBmTableCompletionProvider : CompletionProvider<CompletionParameters>() {
 			// local variables
 			element.parents(false).toList().reversed()
 				.let {
-					val value = it.firstOrNull { it is SquirrelFunctionDeclaration }
+					val value = it.firstOrNull { it is SquirrelFunctionExpression }
 						?: return@let emptyList()
 					it.subList(it.indexOf(value), it.size - 1)
 				}
 				.also {
-					it.filterIsInstance<SquirrelFunctionDeclaration>().map { it.parameters?.parameterList?.parameterList }.mapNotNull { it?.mapNotNull { it.id.stdIdentifier?.identifier?.text } }.flatten().forEach {
-						if (referenceName.isEmpty() || referenceName.startsWith(it)) result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
+					it.filterIsInstance<SquirrelFunctionExpression>().map { it.parameters.parameterList?.parameterList }.mapNotNull { it?.mapNotNull { it.id.stdIdentifier?.identifier?.text } }.flatten().forEach {
+						if (referenceName.isEmpty() || referenceName.startsWith(it))
+							result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
 					}
 					it.filterIsInstance<SquirrelForeachStatement>().map { it.idList }.map { it.mapNotNull { it.stdIdentifier?.identifier?.text } }.flatten().forEach {
-						if (referenceName.isEmpty() || referenceName.startsWith(it)) result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
+						if (referenceName.isEmpty() || referenceName.startsWith(it))
+							result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
 					}
 					it.filterIsInstance<SquirrelForStatement>().forEach { loop ->
 						loop.forLoopParts?.localDeclaration?.varDeclarationList?.varItemList?.mapNotNull { it.id.stdIdentifier?.identifier?.text }?.forEach {
-							if (referenceName.isEmpty() || referenceName.startsWith(it)) result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
+							if (referenceName.isEmpty() || referenceName.startsWith(it))
+								result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
 						}
 					}
 					it.filterIsInstance<SquirrelBlock>().forEach { block ->
 						block.children.filterIsInstance<SquirrelLocalDeclaration>().forEach { local ->
 							if (PsiTreeUtil.findCommonParent(local, element) != null && local.textOffset < element.textOffset)
 								local.varDeclarationList?.varItemList?.mapNotNull { it.id.stdIdentifier?.identifier?.text }?.forEach {
-									if (referenceName.isEmpty() || referenceName.startsWith(it)) result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
+									if (referenceName.isEmpty() || referenceName.startsWith(it))
+										result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
 								}
 						}
 					}

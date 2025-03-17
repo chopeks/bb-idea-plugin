@@ -4,6 +4,7 @@ import com.chopeks.SquirrelTokenTypes
 import com.chopeks.codecompletion.BBClassFunctionCompletionProvider
 import com.chopeks.codecompletion.BBmTableCompletionProvider
 import com.chopeks.psi.SquirrelArgumentList
+import com.chopeks.psi.SquirrelArrayExpression
 import com.intellij.codeInsight.completion.CompletionContributor
 import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.patterns.PatternCondition
@@ -37,7 +38,8 @@ class SquirrelArgumentsCompletionContributor : CompletionContributor() {
 		override fun accepts(psi: PsiElement, context: ProcessingContext?): Boolean {
 			psi.node
 				?: return false
-			return psi.parents(false).firstOrNull { it is SquirrelArgumentList } != null
+			return psi.parents(false).firstOrNull { it is SquirrelArgumentList } != null || // argument list
+					psi.parents(false).firstOrNull { it is SquirrelArrayExpression } != null // inside array
 		}
 	}
 }
