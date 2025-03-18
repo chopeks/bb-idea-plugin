@@ -10,6 +10,7 @@ import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.completion.CompletionUtilCore
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
+import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.parents
 import com.intellij.util.ProcessingContext
@@ -45,6 +46,19 @@ class BBmTableCompletionProvider : CompletionProvider<CompletionParameters>() {
 			// local variables
 			element.parents(false).toList().reversed()
 				.let {
+					val value = it.firstOrNull { it is SquirrelFunctionDeclaration }
+						?: return@let emptyList()
+					it.subList(it.indexOf(value), it.size - 1)
+				}
+				.also {
+					it.filterIsInstance<SquirrelFunctionDeclaration>().map { it.parameters?.parameterList?.parameterList }.mapNotNull { it?.mapNotNull { it.id.stdIdentifier?.identifier?.text } }.flatten().forEach {
+						if (referenceName.isEmpty() || referenceName.startsWith(it))
+							result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
+					}
+					addControlsVars(element, it, referenceName, result)
+				}
+			element.parents(false).toList().reversed()
+				.let {
 					val value = it.firstOrNull { it is SquirrelFunctionExpression }
 						?: return@let emptyList()
 					it.subList(it.indexOf(value), it.size - 1)
@@ -54,26 +68,30 @@ class BBmTableCompletionProvider : CompletionProvider<CompletionParameters>() {
 						if (referenceName.isEmpty() || referenceName.startsWith(it))
 							result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
 					}
-					it.filterIsInstance<SquirrelForeachStatement>().map { it.idList }.map { it.mapNotNull { it.stdIdentifier?.identifier?.text } }.flatten().forEach {
+					addControlsVars(element, it, referenceName, result)
+				}
+		}
+	}
+
+	private fun addControlsVars(element: PsiElement, it: List<PsiElement>, referenceName: String, result: CompletionResultSet) {
+		it.filterIsInstance<SquirrelForeachStatement>().map { it.idList }.map { it.mapNotNull { it.stdIdentifier?.identifier?.text } }.flatten().forEach {
+			if (referenceName.isEmpty() || referenceName.startsWith(it))
+				result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
+		}
+		it.filterIsInstance<SquirrelForStatement>().forEach { loop ->
+			loop.forLoopParts?.localDeclaration?.varDeclarationList?.varItemList?.mapNotNull { it.id.stdIdentifier?.identifier?.text }?.forEach {
+				if (referenceName.isEmpty() || referenceName.startsWith(it))
+					result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
+			}
+		}
+		it.filterIsInstance<SquirrelBlock>().forEach { block ->
+			block.children.filterIsInstance<SquirrelLocalDeclaration>().forEach { local ->
+				if (PsiTreeUtil.findCommonParent(local, element) != null && local.textOffset < element.textOffset)
+					local.varDeclarationList?.varItemList?.mapNotNull { it.id.stdIdentifier?.identifier?.text }?.forEach {
 						if (referenceName.isEmpty() || referenceName.startsWith(it))
 							result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
 					}
-					it.filterIsInstance<SquirrelForStatement>().forEach { loop ->
-						loop.forLoopParts?.localDeclaration?.varDeclarationList?.varItemList?.mapNotNull { it.id.stdIdentifier?.identifier?.text }?.forEach {
-							if (referenceName.isEmpty() || referenceName.startsWith(it))
-								result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
-						}
-					}
-					it.filterIsInstance<SquirrelBlock>().forEach { block ->
-						block.children.filterIsInstance<SquirrelLocalDeclaration>().forEach { local ->
-							if (PsiTreeUtil.findCommonParent(local, element) != null && local.textOffset < element.textOffset)
-								local.varDeclarationList?.varItemList?.mapNotNull { it.id.stdIdentifier?.identifier?.text }?.forEach {
-									if (referenceName.isEmpty() || referenceName.startsWith(it))
-										result.addElement(LookupElementBuilder.create(it).withIcon(AllIcons.Nodes.Variable))
-								}
-						}
-					}
-				}
+			}
 		}
 	}
 }
