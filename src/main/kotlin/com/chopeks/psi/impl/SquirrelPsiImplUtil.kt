@@ -19,12 +19,16 @@ internal val LOG by lazy(LazyThreadSafetyMode.PUBLICATION) {
 }
 
 object SquirrelPsiImplUtil {
+	val pathRegex = """^([a-zA-Z0-9_-]+(?:/[a-zA-Z0-9_-]+)+)(?:\.[a-zA-Z0-9]+)?$""".toRegex()
+
 	@JvmStatic
 	fun getReference(element: SquirrelStringLiteral): PsiReference? {
-		val text = element.string.text.trim('"')
-		val looksLikeFile = "/" in text && " " !in text
-		if (!looksLikeFile)
+		var text = element.string.text.trim('"')
+		pathRegex.find(text) ?:
 			return null
+
+		if (text.startsWith("ui/campfire/"))
+			text += ".png" // special case for campfire icons
 
 		if (BBIndexes.resourceFiles.any(text::endsWith))
 			return BBResourceReference(element)

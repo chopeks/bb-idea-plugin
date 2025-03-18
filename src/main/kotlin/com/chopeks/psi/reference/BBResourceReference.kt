@@ -16,8 +16,14 @@ class BBResourceReference(
 		if (incompleteCode)
 			return emptyArray()
 		val references = mutableListOf<ResolveResult>()
+
+		var path = element.text.trim('"')
+
+		if (path.startsWith("ui/campfire/"))
+			path += ".png" // special case for campfire icons
+
 		// check resources index
-		FileBasedIndex.getInstance().getFilesWithKey(BBIndexes.BBResources, setOf(element.text.trim('"')), {
+		FileBasedIndex.getInstance().getFilesWithKey(BBIndexes.BBResources, setOf(path), {
 			it.findPsiFile(element.project)?.let(::PsiElementResolveResult)?.also(references::add); true
 		}, GlobalSearchScope.allScope(element.project))
 

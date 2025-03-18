@@ -14,7 +14,7 @@ Roughly based on original Squirrel plugin for Intellij [README.md](ORIGINAL_READ
 * Mark mod directories as sources `Right click | Mark directory as | Sources root`
 * Mark mods or build directories you don't want indexed as `Excluded`
 * If completion doesn't work, rebuild indexes `File | Invalidate caches | check first 2 options `
-* Create `.stub` directory in your project and copy `stub/stub_engine.nut` from this repo into that directory, mark as source. This will add global functions and object provided by the engine to code completion lookup
+* Create `.stub` directory in your project and copy `stub/stub_engine.nut` from this repo into that directory, mark as source. This will add global functions and objects provided by the engine to code completion lookup
 
 ## Features
 

@@ -34,7 +34,7 @@ class SquirrelHighlightingPassStringReferences(
 		holder.clear()
 		PsiTreeUtil.findChildrenOfType(file, SquirrelStringLiteral::class.java).forEach { string ->
 			val range = string.textRange
-			val attributes = if (string.references.isNotEmpty())
+			val attributes = if (string.references.any { it.resolve() != null })
 				SquirrelSyntaxHighlightingColors.STRING_LINK
 			else
 				SquirrelSyntaxHighlightingColors.STRING
