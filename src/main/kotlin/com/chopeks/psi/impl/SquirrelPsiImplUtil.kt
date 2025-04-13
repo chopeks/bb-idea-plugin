@@ -83,9 +83,9 @@ object SquirrelPsiImplUtil {
 
 	@JvmStatic
 	fun flatten(element: SquirrelTableItem): List<String> {
-		return if (!element.isTable())
-			listOf(element.key?.text ?: "")
-		else {
+		return if (!element.isTable()) {
+			listOf(element.key?.text ?: element.functionDeclaration?.functionName?.stdIdentifier?.text ?: "")
+		} else {
 			val ret = listOf(element.key?.text ?: "")
 			ret + ((element.expression as? SquirrelTableExpression)?.flatten()
 				?.map { "${element.key?.text}.$it" } ?: emptyList())
