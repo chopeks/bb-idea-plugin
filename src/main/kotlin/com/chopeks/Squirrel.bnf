@@ -239,7 +239,7 @@ private ExpressionWithNoComma ::=
   | b_expr_group
   | a_expr_group {name="expression"}
 
-private a_expr_group ::= (SimpleRefExpression | LiteralExpression | JsonExpression | ParenthesizedExpression)
+private a_expr_group ::= (SimpleRefExpression | LiteralExpression | ParenthesizedExpression)
 private b_expr_group ::= (ArrayItemExpression | ReferenceExpression | CallExpression)
 private c_expr_group ::= (ClassExpression | TableExpression | ArrayExpression | FunctionExpression | LambdaFunctionExpression )
 private first_expr_group ::= (UnaryExpression | PrefixExpression | InstanceOfExpression )
