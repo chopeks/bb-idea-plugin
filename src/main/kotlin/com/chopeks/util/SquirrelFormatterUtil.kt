@@ -31,10 +31,11 @@ object SquirrelFormatterUtil {
 			return element.getChildren(TokenSet.create(SquirrelTokenTypes.CLASS_MEMBER)).size <= 1
 		} else if (element.elementType === SquirrelTokenTypes.BLOCK) {
 			return element.getChildren(SquirrelTokenTypesSets.STATEMENTS).size <= 1
+		} else if (element.elementType === SquirrelTokenTypes.ARRAY_EXPRESSION) {
+			return element.getChildren(SquirrelTokenTypesSets.STATEMENTS).size <= 1
 		}
 		return false
 	}
-
 	/**
 	 * True if element inside block, class body, table or enum.
 	 */

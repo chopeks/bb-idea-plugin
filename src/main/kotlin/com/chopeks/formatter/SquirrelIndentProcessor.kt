@@ -85,6 +85,12 @@ object SquirrelIndentProcessor {
 			}
 			return Indent.getContinuationIndent()
 		}
+		if (parentType === SquirrelTokenTypes.ARRAY_EXPRESSION) {
+			if (elementType === SquirrelTokenTypes.LBRACKET || elementType === SquirrelTokenTypes.RBRACKET) {
+				return Indent.getNoneIndent()
+			}
+			return Indent.getContinuationIndent()
+		}
 		if (SquirrelTokenTypesSets.BINARY_EXPRESSIONS.contains(parentType) && prevSibling != null) {
 			return Indent.getContinuationIndent()
 		}
@@ -166,7 +172,6 @@ object SquirrelIndentProcessor {
 		if (parentType === SquirrelTokenTypes.CATCH_PART && SquirrelFormatterUtil.isSimpleStatement(node) && prevSiblingType === SquirrelTokenTypes.RPAREN) {
 			return Indent.getNormalIndent()
 		}
-
 		return Indent.getNoneIndent()
 	}
 }

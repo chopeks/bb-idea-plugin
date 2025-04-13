@@ -336,11 +336,16 @@ class SquirrelLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvi
 				"    }\n" +
 				"}"
 
-		const val WRAPPING_CODE_SAMPLE: String = "enum f { a = 2, b = 2, c = 2, d, e, f = 2, g = 2, h = 2, i = \"32\" }\n" +
-				"local s = { a = 2, b = 2, c = 2, f = 2, g = 2, h = 2, i = \"32\" }\n" +
-				"class zero { </ a = 2/>a = 2;\n" +
-				"    </ a = 2, b = 2, c = \"los angeles\", s = 2, l = 2 />\n" +
-				"    b = 2; c = function () { k = 2; k = 3 }; g = 2; function s() {} }\n" +
+		const val WRAPPING_CODE_SAMPLE: String = "" +
+				"enum f { a = 2, b = 2, c = 2, d, e, f = 2, g = 2, h = 2, i = \"32\" };\n" +
+				"local s = { a = 2, b = 2, c = 2, f = 2, g = 2, h = 2, i = \"32\" };\n" +
+				"local arr = [\n" +
+				"   2,\n" +
+				"   2,\n" +
+				"   2\n" +
+				"];\n" +
+				"if (!(\"Retinue\" in ::Legends))\n" +
+				"    ::Legends.Retinue <- {};\n" +
 				"class Foo {\n" +
 				"    // function fBar (x,y);\n" +
 				"    function fOne(argA, argB, argC, argD, argE, argF, argG = 30, argH = 40) {\n" +

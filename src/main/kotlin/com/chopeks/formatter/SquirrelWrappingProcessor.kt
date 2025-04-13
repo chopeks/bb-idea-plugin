@@ -20,7 +20,22 @@ object SquirrelWrappingProcessor {
 	fun createChildWrap(child: ASTNode, defaultWrap: Wrap, myNode: ASTNode, cmSettings: CommonCodeStyleSettings, sqSettings: SquirrelCodeStyleSettings?): Wrap {
 		val childType = child.elementType
 		val elementType = myNode.elementType
-		if (childType === SquirrelTokenTypes.COMMA || childType === SquirrelTokenTypes.SEMICOLON) return defaultWrap
+		if (childType === SquirrelTokenTypes.COMMA || childType === SquirrelTokenTypes.SEMICOLON)
+			return defaultWrap
+
+		if ((elementType == SquirrelTokenTypes.IF_STATEMENT ||
+					elementType == SquirrelTokenTypes.WHILE_STATEMENT ||
+					elementType == SquirrelTokenTypes.FOR_STATEMENT ||
+					elementType == SquirrelTokenTypes.FOREACH_STATEMENT)
+			&& child !== myNode.firstChildNode
+			&& childType != SquirrelTokenTypes.BLOCK // only if there's no block
+		) {
+			val prev = child.treePrev?.skipWhitespaceAndComments()
+			if (prev?.elementType == SquirrelTokenTypes.RPAREN) {
+				// Apply wrap after condition if next is a simple statement
+				return Wrap.createWrap(WrapType.NORMAL, true)
+			}
+		}
 
 		if (elementType === SquirrelTokenTypes.IF_STATEMENT && childType === SquirrelTokenTypes.ELSE) {
 			return createWrap(cmSettings.ELSE_ON_NEW_LINE)
@@ -108,11 +123,18 @@ object SquirrelWrappingProcessor {
 				return wrap ?: Wrap.createWrap(WrappingUtil.getWrapType(cmSettings.CALL_PARAMETERS_WRAP), false)
 			}
 		}
-
 		return defaultWrap
 	}
 
 	private fun createWrap(isNormal: Boolean): Wrap {
 		return Wrap.createWrap(if (isNormal) WrapType.NORMAL else WrapType.NONE, true)
+	}
+
+	private fun ASTNode.skipWhitespaceAndComments(): ASTNode {
+		var current = this
+		while (current.elementType in SquirrelTokenTypesSets.WHITE_SPACES || current.elementType in SquirrelTokenTypesSets.COMMENTS) {
+			current = current.treePrev
+		}
+		return current
 	}
 }

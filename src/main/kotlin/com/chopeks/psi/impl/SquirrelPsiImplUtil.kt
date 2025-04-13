@@ -21,6 +21,12 @@ internal val LOG by lazy(LazyThreadSafetyMode.PUBLICATION) {
 object SquirrelPsiImplUtil {
 	val pathRegex = """^([a-zA-Z0-9_-]+(?:/[a-zA-Z0-9_-]+)+)(?:\.[a-zA-Z0-9]+)?$""".toRegex()
 
+	private fun SquirrelStringLiteral.getScriptReference(dir: String = ""): SquirrelScriptReference? {
+		val text = this.string.text.trim('"');
+		return this.containingFile.getFile(("$dir$text.nut").toNioPathOrNull())
+			?.let { SquirrelScriptReference(it, this) }
+	}
+
 	@JvmStatic
 	fun getReference(element: SquirrelStringLiteral): PsiReference? {
 		var text = element.string.text.trim('"')
@@ -33,12 +39,9 @@ object SquirrelPsiImplUtil {
 		if (BBIndexes.resourceFiles.any(text::endsWith))
 			return BBResourceReference(element)
 
-		if (text.startsWith("scripts"))
-			return element.containingFile.getFile(("$text.nut").toNioPathOrNull())
-				?.let { SquirrelScriptReference(it, element) }
-
-		return element.containingFile.getFile(("scripts/$text.nut").toNioPathOrNull())
-			?.let { SquirrelScriptReference(it, element) }
+		return element.getScriptReference()
+			?: element.getScriptReference("scripts/")
+			?: element.getScriptReference("scripts/items/")
 	}
 
 	@JvmStatic
