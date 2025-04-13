@@ -24,9 +24,9 @@ Roughly based on original Squirrel plugin for Intellij [README.md](ORIGINAL_READ
     - To check if there are syntax error, add it as source, then on mod `Right click | Analyze | Inspect Code`, it's requirement for code completion to work
 - New file templates for classes and modding related stuff
 - Code highlighting
+- Code formatter
 - BB aware .nut file structure validation
 - Block folding
-- Customizable code formatter
 - Live code validation and various on-demand inspections
 - Code completion for BB classes, modding hooks and modern hooks, also non-dynamic global variables,
     - for sanity only in `::` and `gt.` spaces, `this.` is too ambiguous to resolve references consistently, refactor to `::`
