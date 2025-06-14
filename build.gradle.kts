@@ -1,37 +1,36 @@
 plugins {
 	id("java")
-	id("org.jetbrains.kotlin.jvm") version "1.9.24"
-	id("org.jetbrains.intellij") version "1.17.3"
-	id("org.jetbrains.compose") version "1.7.3"
+	alias(libs.plugins.kotlin.jvm)
+	alias(libs.plugins.intellij)
+	alias(libs.plugins.jetbrainsCompose)
+	alias(libs.plugins.compose.compiler)
 }
 
 group = "com.chopeks"
-version = "1.0.7"
-
-repositories {
-	mavenCentral()
-	google()
-	maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-	maven("https://packages.jetbrains.team/maven/p/kpm/public")
-}
+version = "1.1.0"
 
 configurations.all {
 	exclude("org.jetbrains.compose.material")
 }
 
-// Configure Gradle IntelliJ Plugin
-// Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
-intellij {
-	version.set("2024.3.2.2")
-	type.set("IC") // Target IDE Platform
-
-	plugins.set(listOf("com.intellij.java"))
+repositories {
+	mavenCentral()
+	intellijPlatform {
+		defaultRepositories()
+	}
+	gradlePluginPortal()
+	google()
+	maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+	maven("https://packages.jetbrains.team/maven/p/kpm/public")
 }
 
-sourceSets["main"].java
-	.srcDirs("src/main/kotlin", "src/main/gen")
+sourceSets["main"].java.srcDirs("src/main/kotlin", "src/main/gen")
 
 dependencies {
+	intellijPlatform {
+		intellijIdeaCommunity("2025.1")
+		bundledPlugin("com.intellij.java")
+	}
 	implementation("org.jetbrains.jewel:jewel-ide-laf-bridge-242:0.27.0")
 	implementation(compose.desktop.currentOs) {
 		exclude(group = "org.jetbrains.compose.material")
@@ -45,37 +44,32 @@ dependencies {
 	}
 }
 
+intellijPlatform {
+	buildSearchableOptions = true
+	pluginConfiguration {
+		ideaVersion {
+			sinceBuild = "251"
+			untilBuild = "999"
+		}
+
+		changeNotes = """
+            Initial version
+        """.trimIndent()
+	}
+}
+
 tasks {
-	// Set the JVM compatibility versions
 	withType<JavaCompile> {
-		sourceCompatibility = "17"
-		targetCompatibility = "17"
+		sourceCompatibility = "21"
+		targetCompatibility = "21"
 	}
 	withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-		kotlinOptions.jvmTarget = "17"
+		kotlinOptions.jvmTarget = "21"
 	}
-
-	buildSearchableOptions {
-		enabled = false
-	}
-
-	patchPluginXml {
-		sinceBuild.set("242")
-	}
-
-//  signPlugin {
-//    certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
-//    privateKey.set(System.getenv("PRIVATE_KEY"))
-//    password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
-//  }
-//
-//  publishPlugin {
-//    token.set(System.getenv("PUBLISH_TOKEN"))
-//  }
 }
 
 kotlin {
-	jvmToolchain(17)
+	jvmToolchain(21)
 	sourceSets {
 		all {
 			languageSettings {

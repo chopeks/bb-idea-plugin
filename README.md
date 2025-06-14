@@ -6,7 +6,7 @@ Roughly based on original Squirrel plugin for Intellij [README.md](ORIGINAL_READ
 
 ## Installation
 
-* Get Intellij IDEA with version at least 2024.2, Community or Ultimate, doesn't matter
+* Get Intellij IDEA with version at least 2025.1, Community or Ultimate, doesn't matter
 * Uninstall old Squirrel IDE plugin
 * Download the latest zip from the [releases page](../../releases).
 * Follow the [install plugin from disk](https://www.jetbrains.com/help/idea/managing-plugins.html) instructions
@@ -46,7 +46,7 @@ It's MIT, feel free.
 
 ## Plugin development prerequisites
 
-* Java 17+
+* Java 21
 * IntelliJ
 
 ## Plugin development environment
