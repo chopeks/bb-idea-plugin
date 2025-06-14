@@ -46,7 +46,7 @@ It's MIT, feel free.
 
 ## Plugin development prerequisites
 
-* Java 21
+* Java 17
 * IntelliJ
 
 ## Plugin development environment

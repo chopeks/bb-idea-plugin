@@ -6,6 +6,8 @@
 
 # gradle
 .gradle
+.kotlin
+.intellijPlatform
 build
 out
 gen
